@@ -1,46 +1,74 @@
 const express = require("express");
-const dotenv = require("dotenv");
-const cors = require("cors");
-const OpenAI = require("openai");
-
-dotenv.config();
+const axios = require("axios");
+require("dotenv").config();
 
 const app = express();
 
-app.use(cors());
 app.use(express.json());
-
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
 
 app.get("/", (req, res) => {
   res.send("Chatbot IA Online 🚀");
 });
 
-app.post("/chat", async (req, res) => {
+app.post("/webhook", async (req, res) => {
   try {
-    const { message } = req.body;
 
-    const response = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
-      messages: [
-        {
-          role: "user",
-          content: message,
-        },
-      ],
-    });
+    const message =
+      req.body.data?.body ||
+      req.body.message ||
+      "";
 
-    res.json({
-      reply: response.choices[0].message.content,
-    });
+    const phone =
+      req.body.data?.from ||
+      "";
+
+    if (!message) {
+      return res.sendStatus(200);
+    }
+
+    // OPENAI
+    const openaiResponse = await axios.post(
+      "https://api.openai.com/v1/chat/completions",
+      {
+        model: "gpt-4o-mini",
+        messages: [
+          {
+            role: "system",
+            content:
+              "Você é um especialista financeiro e atendimento empresarial."
+          },
+          {
+            role: "user",
+            content: message
+          }
+        ]
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+          "Content-Type": "application/json"
+        }
+      }
+    );
+
+    const reply =
+      openaiResponse.data.choices[0].message.content;
+
+    // ULTRAMSG
+    await axios.post(
+      `https://api.ultramsg.com/${process.env.INSTANCE_ID}/messages/chat`,
+      {
+        token: process.env.ULTRA_TOKEN,
+        to: phone,
+        body: reply
+      }
+    );
+
+    res.sendStatus(200);
+
   } catch (error) {
-    console.log(error);
-
-    res.status(500).json({
-      error: "Erro ao processar mensagem",
-    });
+    console.log(error.response?.data || error.message);
+    res.sendStatus(500);
   }
 });
 
