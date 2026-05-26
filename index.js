@@ -10,20 +10,32 @@ const app = express();
 
 app.use(express.json());
 
+// =========================
 // SESSÕES ADMIN
+// =========================
+
 const adminSessions = {};
 
+// =========================
 // ADMIN
+// =========================
+
 const ADMIN_USER = "AgilsIA";
 const ADMIN_PASS = "151080Sis*";
 const ADMIN_PIN = "151080";
 
+// =========================
 // STATUS
+// =========================
+
 app.get("/", (req, res) => {
   res.send("Agils IA Online 🚀");
 });
 
+// =========================
 // WEBHOOK
+// =========================
+
 app.post("/webhook", async (req, res) => {
 
   try {
@@ -43,20 +55,17 @@ app.post("/webhook", async (req, res) => {
       return res.sendStatus(200);
     }
 
-    // =====================================
-    // BLOQUEAR GRUPOS
-    // =====================================
+    // =========================
+    // IGNORAR GRUPOS
+    // =========================
 
     if (phone.includes("@g.us")) {
-
-      console.log("Grupo ignorado");
-
       return res.sendStatus(200);
     }
 
-    // =====================================
+    // =========================
     // VERIFICAR BLOQUEIO
-    // =====================================
+    // =========================
 
     const blocked =
       await prisma.blockedNumber.findUnique({
@@ -67,18 +76,19 @@ app.post("/webhook", async (req, res) => {
 
     if (blocked) {
 
-      console.log("Número bloqueado:", phone);
+      console.log("Número bloqueado");
 
       return res.sendStatus(200);
     }
 
-    // =====================================
-    // LOGIN ADMIN
-    // =====================================
+    // =========================
+    // LOGIN
+    // =========================
 
     if (message.startsWith("/login")) {
 
-      const args = message.trim().split(" ");
+      const args =
+        message.trim().split(" ");
 
       const usuario = args[1];
       const senha = args[2];
@@ -117,9 +127,9 @@ app.post("/webhook", async (req, res) => {
       return res.sendStatus(200);
     }
 
-    // =====================================
-    // LOGOUT ADMIN
-    // =====================================
+    // =========================
+    // LOGOUT
+    // =========================
 
     if (message.startsWith("/logout")) {
 
@@ -138,13 +148,14 @@ app.post("/webhook", async (req, res) => {
       return res.sendStatus(200);
     }
 
-    // =====================================
-    // RECUPERAR SENHA
-    // =====================================
+    // =========================
+    // RECUPERAR
+    // =========================
 
     if (message.startsWith("/recuperar")) {
 
-      const args = message.trim().split(" ");
+      const args =
+        message.trim().split(" ");
 
       const pin = args[1];
 
@@ -156,7 +167,7 @@ app.post("/webhook", async (req, res) => {
             token: process.env.ULTRA_TOKEN,
             to: phone,
             body:
-              `🔐 Recuperação autorizada.\n\nUsuário: ${ADMIN_USER}\nSenha: ${ADMIN_PASS}`
+              `🔐 Usuário: ${ADMIN_USER}\nSenha: ${ADMIN_PASS}`
           }
         );
 
@@ -177,102 +188,9 @@ app.post("/webhook", async (req, res) => {
       return res.sendStatus(200);
     }
 
-    // =====================================
-    // BLOQUEAR NÚMERO
-    // =====================================
-
-    if (
-      message.startsWith("/bloquear") &&
-      adminSessions[phone]
-    ) {
-
-      const numero =
-        message.replace("/bloquear", "").trim();
-
-      await prisma.blockedNumber.create({
-        data: {
-          phone: numero
-        }
-      });
-
-      await axios.post(
-        `https://api.ultramsg.com/${process.env.INSTANCE_ID}/messages/chat`,
-        {
-          token: process.env.ULTRA_TOKEN,
-          to: phone,
-          body:
-            `🚫 Número bloqueado: ${numero}`
-        }
-      );
-
-      return res.sendStatus(200);
-    }
-
-    // =====================================
-    // DESBLOQUEAR NÚMERO
-    // =====================================
-
-    if (
-      message.startsWith("/desbloquear") &&
-      adminSessions[phone]
-    ) {
-
-      const numero =
-        message.replace("/desbloquear", "").trim();
-
-      await prisma.blockedNumber.deleteMany({
-        where: {
-          phone: numero
-        }
-      });
-
-      await axios.post(
-        `https://api.ultramsg.com/${process.env.INSTANCE_ID}/messages/chat`,
-        {
-          token: process.env.ULTRA_TOKEN,
-          to: phone,
-          body:
-            `✅ Número desbloqueado: ${numero}`
-        }
-      );
-
-      return res.sendStatus(200);
-    }
-
-    // =====================================
-    // LISTAR BLOQUEADOS
-    // =====================================
-
-    if (
-      message.startsWith("/listar-bloqueados") &&
-      adminSessions[phone]
-    ) {
-
-      const blockedNumbers =
-        await prisma.blockedNumber.findMany();
-
-      const lista =
-        blockedNumbers.map(
-          n => n.phone
-        ).join("\n");
-
-      await axios.post(
-        `https://api.ultramsg.com/${process.env.INSTANCE_ID}/messages/chat`,
-        {
-          token: process.env.ULTRA_TOKEN,
-          to: phone,
-          body:
-            lista ||
-            "Nenhum número bloqueado."
-        }
-      );
-
-      return res.sendStatus(200);
-    }
-
-    // =====================================
+    // =========================
     // TREINAR IA
-    // =====================================
+    // =========================
 
     if (
       message.startsWith("/treinar")
@@ -286,7 +204,7 @@ app.post("/webhook", async (req, res) => {
             token: process.env.ULTRA_TOKEN,
             to: phone,
             body:
-              "⛔ Você precisa estar logado como administrador."
+              "⛔ Faça login administrativo."
           }
         );
 
@@ -322,9 +240,71 @@ app.post("/webhook", async (req, res) => {
       return res.sendStatus(200);
     }
 
-    // =====================================
+    // =========================
+    // BLOQUEAR
+    // =========================
+
+    if (
+      message.startsWith("/bloquear") &&
+      adminSessions[phone]
+    ) {
+
+      const numero =
+        message.replace("/bloquear", "").trim();
+
+      await prisma.blockedNumber.create({
+        data: {
+          phone: numero
+        }
+      });
+
+      await axios.post(
+        `https://api.ultramsg.com/${process.env.INSTANCE_ID}/messages/chat`,
+        {
+          token: process.env.ULTRA_TOKEN,
+          to: phone,
+          body:
+            `🚫 Número bloqueado: ${numero}`
+        }
+      );
+
+      return res.sendStatus(200);
+    }
+
+    // =========================
+    // DESBLOQUEAR
+    // =========================
+
+    if (
+      message.startsWith("/desbloquear") &&
+      adminSessions[phone]
+    ) {
+
+      const numero =
+        message.replace("/desbloquear", "").trim();
+
+      await prisma.blockedNumber.deleteMany({
+        where: {
+          phone: numero
+        }
+      });
+
+      await axios.post(
+        `https://api.ultramsg.com/${process.env.INSTANCE_ID}/messages/chat`,
+        {
+          token: process.env.ULTRA_TOKEN,
+          to: phone,
+          body:
+            `✅ Número desbloqueado: ${numero}`
+        }
+      );
+
+      return res.sendStatus(200);
+    }
+
+    // =========================
     // PROMPT SISTEMA
-    // =====================================
+    // =========================
 
     const settings =
       await prisma.adminSettings.findFirst();
@@ -333,9 +313,9 @@ app.post("/webhook", async (req, res) => {
       settings?.systemPrompt ||
       "Você é uma IA empresarial inteligente.";
 
-    // =====================================
+    // =========================
     // SALVAR USUÁRIO
-    // =====================================
+    // =========================
 
     await prisma.user.upsert({
       where: {
@@ -347,9 +327,9 @@ app.post("/webhook", async (req, res) => {
       }
     });
 
-    // =====================================
+    // =========================
     // SALVAR MENSAGEM
-    // =====================================
+    // =========================
 
     await prisma.message.create({
       data: {
@@ -359,9 +339,123 @@ app.post("/webhook", async (req, res) => {
       }
     });
 
-    // =====================================
+    // =========================
+    // IA ANALISAR INTENÇÃO
+    // =========================
+
+    const intentResponse =
+      await axios.post(
+        "https://api.openai.com/v1/chat/completions",
+        {
+          model: "gpt-4o-mini",
+          messages: [
+            {
+              role: "system",
+              content:
+                `
+Analise a mensagem do usuário e identifique se ela representa:
+- gasto
+- agendamento
+- cadastro cliente
+- ou conversa normal
+
+Responda APENAS JSON.
+
+Exemplo:
+{
+ "type":"expense"
+}
+
+Tipos:
+expense
+appointment
+client
+chat
+`
+            },
+            {
+              role: "user",
+              content: message
+            }
+          ]
+        },
+        {
+          headers: {
+            Authorization:
+              `Bearer ${process.env.OPENAI_API_KEY}`,
+            "Content-Type":
+              "application/json"
+          }
+        }
+      );
+
+    let intent = "chat";
+
+    try {
+
+      intent =
+        JSON.parse(
+          intentResponse.data
+          .choices[0]
+          .message
+          .content
+        ).type;
+
+    } catch (e) {}
+
+    // =========================
+    // DETECTAR GASTO
+    // =========================
+
+    if (intent === "expense") {
+
+      await prisma.expense.create({
+        data: {
+          phone,
+          value: 0,
+          category: "geral",
+          description: message
+        }
+      });
+
+    }
+
+    // =========================
+    // DETECTAR AGENDAMENTO
+    // =========================
+
+    if (intent === "appointment") {
+
+      await prisma.appointment.create({
+        data: {
+          clientName: phone,
+          date: "pendente",
+          time: "pendente",
+          note: message
+        }
+      });
+
+    }
+
+    // =========================
+    // DETECTAR CLIENTE
+    // =========================
+
+    if (intent === "client") {
+
+      await prisma.client.create({
+        data: {
+          name: phone,
+          phone,
+          serviceType: "consultoria"
+        }
+      });
+
+    }
+
+    // =========================
     // HISTÓRICO
-    // =====================================
+    // =========================
 
     const historico =
       await prisma.message.findMany({
@@ -374,9 +468,9 @@ app.post("/webhook", async (req, res) => {
         take: 10
       });
 
-    // =====================================
+    // =========================
     // OPENAI
-    // =====================================
+    // =========================
 
     const messages = [
       {
@@ -400,7 +494,8 @@ app.post("/webhook", async (req, res) => {
           headers: {
             Authorization:
               `Bearer ${process.env.OPENAI_API_KEY}`,
-            "Content-Type": "application/json"
+            "Content-Type":
+              "application/json"
           }
         }
       );
@@ -411,9 +506,9 @@ app.post("/webhook", async (req, res) => {
       .message
       .content;
 
-    // =====================================
-    // SALVAR RESPOSTA IA
-    // =====================================
+    // =========================
+    // SALVAR RESPOSTA
+    // =========================
 
     await prisma.message.create({
       data: {
@@ -423,9 +518,9 @@ app.post("/webhook", async (req, res) => {
       }
     });
 
-    // =====================================
-    // ENVIAR WHATSAPP
-    // =====================================
+    // =========================
+    // RESPONDER WHATSAPP
+    // =========================
 
     await axios.post(
       `https://api.ultramsg.com/${process.env.INSTANCE_ID}/messages/chat`,
@@ -450,7 +545,10 @@ app.post("/webhook", async (req, res) => {
 
 });
 
+// =========================
 // PORTA
+// =========================
+
 const PORT =
   process.env.PORT || 3000;
 
