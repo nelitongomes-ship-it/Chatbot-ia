@@ -44,6 +44,35 @@ app.post("/webhook", async (req, res) => {
     }
 
     // =====================================
+    // BLOQUEAR GRUPOS
+    // =====================================
+
+    if (phone.includes("@g.us")) {
+
+      console.log("Grupo ignorado");
+
+      return res.sendStatus(200);
+    }
+
+    // =====================================
+    // VERIFICAR BLOQUEIO
+    // =====================================
+
+    const blocked =
+      await prisma.blockedNumber.findUnique({
+        where: {
+          phone
+        }
+      });
+
+    if (blocked) {
+
+      console.log("Número bloqueado:", phone);
+
+      return res.sendStatus(200);
+    }
+
+    // =====================================
     // LOGIN ADMIN
     // =====================================
 
@@ -66,7 +95,8 @@ app.post("/webhook", async (req, res) => {
           {
             token: process.env.ULTRA_TOKEN,
             to: phone,
-            body: "✅ Login administrativo realizado com sucesso."
+            body:
+              "✅ Login administrativo realizado com sucesso."
           }
         );
 
@@ -77,7 +107,8 @@ app.post("/webhook", async (req, res) => {
           {
             token: process.env.ULTRA_TOKEN,
             to: phone,
-            body: "❌ Usuário ou senha inválidos."
+            body:
+              "❌ Usuário ou senha inválidos."
           }
         );
 
@@ -99,7 +130,8 @@ app.post("/webhook", async (req, res) => {
         {
           token: process.env.ULTRA_TOKEN,
           to: phone,
-          body: "🔒 Logout administrativo realizado."
+          body:
+            "🔒 Logout administrativo realizado."
         }
       );
 
@@ -135,11 +167,105 @@ app.post("/webhook", async (req, res) => {
           {
             token: process.env.ULTRA_TOKEN,
             to: phone,
-            body: "❌ PIN inválido."
+            body:
+              "❌ PIN inválido."
           }
         );
 
       }
+
+      return res.sendStatus(200);
+    }
+
+    // =====================================
+    // BLOQUEAR NÚMERO
+    // =====================================
+
+    if (
+      message.startsWith("/bloquear") &&
+      adminSessions[phone]
+    ) {
+
+      const numero =
+        message.replace("/bloquear", "").trim();
+
+      await prisma.blockedNumber.create({
+        data: {
+          phone: numero
+        }
+      });
+
+      await axios.post(
+        `https://api.ultramsg.com/${process.env.INSTANCE_ID}/messages/chat`,
+        {
+          token: process.env.ULTRA_TOKEN,
+          to: phone,
+          body:
+            `🚫 Número bloqueado: ${numero}`
+        }
+      );
+
+      return res.sendStatus(200);
+    }
+
+    // =====================================
+    // DESBLOQUEAR NÚMERO
+    // =====================================
+
+    if (
+      message.startsWith("/desbloquear") &&
+      adminSessions[phone]
+    ) {
+
+      const numero =
+        message.replace("/desbloquear", "").trim();
+
+      await prisma.blockedNumber.deleteMany({
+        where: {
+          phone: numero
+        }
+      });
+
+      await axios.post(
+        `https://api.ultramsg.com/${process.env.INSTANCE_ID}/messages/chat`,
+        {
+          token: process.env.ULTRA_TOKEN,
+          to: phone,
+          body:
+            `✅ Número desbloqueado: ${numero}`
+        }
+      );
+
+      return res.sendStatus(200);
+    }
+
+    // =====================================
+    // LISTAR BLOQUEADOS
+    // =====================================
+
+    if (
+      message.startsWith("/listar-bloqueados") &&
+      adminSessions[phone]
+    ) {
+
+      const blockedNumbers =
+        await prisma.blockedNumber.findMany();
+
+      const lista =
+        blockedNumbers.map(
+          n => n.phone
+        ).join("\n");
+
+      await axios.post(
+        `https://api.ultramsg.com/${process.env.INSTANCE_ID}/messages/chat`,
+        {
+          token: process.env.ULTRA_TOKEN,
+          to: phone,
+          body:
+            lista ||
+            "Nenhum número bloqueado."
+        }
+      );
 
       return res.sendStatus(200);
     }
@@ -188,7 +314,8 @@ app.post("/webhook", async (req, res) => {
         {
           token: process.env.ULTRA_TOKEN,
           to: phone,
-          body: "✅ IA treinada com sucesso."
+          body:
+            "✅ IA treinada com sucesso."
         }
       );
 
@@ -196,7 +323,7 @@ app.post("/webhook", async (req, res) => {
     }
 
     // =====================================
-    // PROMPT DO SISTEMA
+    // PROMPT SISTEMA
     // =====================================
 
     const settings =
@@ -328,7 +455,9 @@ const PORT =
   process.env.PORT || 3000;
 
 app.listen(PORT, () => {
+
   console.log(
     `Servidor rodando na porta ${PORT}`
   );
+
 });
