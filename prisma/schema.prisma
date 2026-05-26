@@ -24,3 +24,8 @@ model Message {
   content   String
   createdAt DateTime @default(now())
 }
+model BlockedNumber {
+  id        Int      @id @default(autoincrement())
+  phone     String   @unique
+  createdAt DateTime @default(now())
+}
