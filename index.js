@@ -10,16 +10,19 @@ const app = express();
 
 app.use(express.json());
 
-const ADMIN_PHONE = "16999796559";
+const adminSessions = {};
+
+// CONFIGURAÇÕES ADMIN
 const ADMIN_USER = "AgilsIA";
-const ADMIN_PASSWORD = "151080Sis*";
+const ADMIN_PASS = "151080Sis*";
+const ADMIN_PIN = "151080";
 
-const authenticatedAdmins = new Set();
-
+// STATUS
 app.get("/", (req, res) => {
-  res.send("Chatbot IA Online 🚀");
+  res.send("Agils IA Online 🚀");
 });
 
+// WEBHOOK
 app.post("/webhook", async (req, res) => {
 
   try {
@@ -33,47 +36,29 @@ app.post("/webhook", async (req, res) => {
       req.body.data?.from ||
       "";
 
+    console.log("Mensagem recebida:", message);
+
     if (!message) {
       return res.sendStatus(200);
     }
 
-    console.log("Mensagem recebida:", message);
-
-    // CRIAR USUÁRIO
-    await prisma.user.upsert({
-      where: {
-        phone
-      },
-      update: {},
-      create: {
-        phone
-      }
-    });
-
-    // SALVAR MENSAGEM
-    await prisma.message.create({
-      data: {
-        phone,
-        role: "user",
-        content: message
-      }
-    });
-
+    // =========================
     // LOGIN ADMIN
+    // =========================
+
     if (message.startsWith("/login")) {
 
-      const parts = message.split(" ");
+      const args = message.trim().split(" ");
 
-      const username = parts[1];
-      const password = parts[2];
+      const usuario = args[1];
+      const senha = args[2];
 
       if (
-        phone === ADMIN_PHONE &&
-        username === ADMIN_USER &&
-        password === ADMIN_PASSWORD
+        usuario === ADMIN_USER &&
+        senha === ADMIN_PASS
       ) {
 
-        authenticatedAdmins.add(phone);
+        adminSessions[phone] = true;
 
         await axios.post(
           `https://api.ultramsg.com/${process.env.INSTANCE_ID}/messages/chat`,
@@ -100,50 +85,65 @@ app.post("/webhook", async (req, res) => {
       return res.sendStatus(200);
     }
 
-    // COMANDO TREINAR
-    if (message.startsWith("/treinar")) {
+    // =========================
+    // RECUPERAR SENHA
+    // =========================
 
-      // VERIFICAR LOGIN
-      if (!authenticatedAdmins.has(phone)) {
+    if (message.startsWith("/recuperar")) {
+
+      const args = message.trim().split(" ");
+
+      const pin = args[1];
+
+      if (pin === ADMIN_PIN) {
 
         await axios.post(
           `https://api.ultramsg.com/${process.env.INSTANCE_ID}/messages/chat`,
           {
             token: process.env.ULTRA_TOKEN,
             to: phone,
-            body: "❌ Acesso negado. Faça login administrativo."
+            body:
+              `🔐 Recuperação autorizada.\n\nUsuário: ${ADMIN_USER}\nSenha: ${ADMIN_PASS}`
           }
         );
 
-        return res.sendStatus(200);
-      }
-
-      const newPrompt =
-        message.replace("/treinar ", "");
-
-      const existingSettings =
-        await prisma.adminSettings.findFirst();
-
-      if (existingSettings) {
-
-        await prisma.adminSettings.update({
-          where: {
-            id: existingSettings.id
-          },
-          data: {
-            systemPrompt: newPrompt
-          }
-        });
-
       } else {
 
-        await prisma.adminSettings.create({
-          data: {
-            systemPrompt: newPrompt
+        await axios.post(
+          `https://api.ultramsg.com/${process.env.INSTANCE_ID}/messages/chat`,
+          {
+            token: process.env.ULTRA_TOKEN,
+            to: phone,
+            body: "❌ PIN inválido."
           }
-        });
+        );
 
       }
+
+      return res.sendStatus(200);
+    }
+
+    // =========================
+    // TREINAR IA
+    // =========================
+
+    if (
+      message.startsWith("/treinar") &&
+      adminSessions[phone]
+    ) {
+
+      const novoPrompt = message.replace("/treinar", "").trim();
+
+      await prisma.adminSettings.upsert({
+        where: { id: 1 },
+        update: {
+          systemPrompt: novoPrompt
+        },
+        create: {
+          id: 1,
+          systemPrompt: novoPrompt
+        }
+      });
 
       await axios.post(
         `https://api.ultramsg.com/${process.env.INSTANCE_ID}/messages/chat`,
@@ -157,55 +157,97 @@ app.post("/webhook", async (req, res) => {
       return res.sendStatus(200);
     }
 
-    // BUSCAR CONFIG
-    const adminSettings =
+    // =========================
+    // BUSCAR PROMPT TREINADO
+    // =========================
+
+    const settings =
       await prisma.adminSettings.findFirst();
 
     const systemPrompt =
-      adminSettings?.systemPrompt ||
-      "Você é um especialista financeiro e atendimento empresarial.";
+      settings?.systemPrompt ||
+      "Você é uma IA empresarial inteligente.";
 
-    // HISTÓRICO
-    const history = await prisma.message.findMany({
+    // =========================
+    // SALVAR USUÁRIO
+    // =========================
+
+    await prisma.user.upsert({
       where: {
         phone
       },
-      orderBy: {
-        createdAt: "asc"
-      },
-      take: 10
+      update: {},
+      create: {
+        phone
+      }
     });
+
+    // =========================
+    // SALVAR MENSAGEM USUÁRIO
+    // =========================
+
+    await prisma.message.create({
+      data: {
+        phone,
+        role: "user",
+        content: message
+      }
+    });
+
+    // =========================
+    // HISTÓRICO
+    // =========================
+
+    const historico =
+      await prisma.message.findMany({
+        where: { phone },
+        orderBy: {
+          createdAt: "asc"
+        },
+        take: 10
+      });
+
+    // =========================
+    // OPENAI
+    // =========================
 
     const messages = [
       {
         role: "system",
         content: systemPrompt
       },
-      ...history.map(msg => ({
+      ...historico.map(msg => ({
         role: msg.role,
         content: msg.content
       }))
     ];
 
-    // OPENAI
-    const openaiResponse = await axios.post(
-      "https://api.openai.com/v1/chat/completions",
-      {
-        model: "gpt-4o-mini",
-        messages
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-          "Content-Type": "application/json"
+    const openaiResponse =
+      await axios.post(
+        "https://api.openai.com/v1/chat/completions",
+        {
+          model: "gpt-4o-mini",
+          messages
+        },
+        {
+          headers: {
+            Authorization:
+              `Bearer ${process.env.OPENAI_API_KEY}`,
+            "Content-Type": "application/json"
+          }
         }
-      }
-    );
+      );
 
     const reply =
-      openaiResponse.data.choices[0].message.content;
+      openaiResponse.data
+      .choices[0]
+      .message
+      .content;
 
-    // SALVAR RESPOSTA
+    // =========================
+    // SALVAR RESPOSTA IA
+    // =========================
+
     await prisma.message.create({
       data: {
         phone,
@@ -214,7 +256,10 @@ app.post("/webhook", async (req, res) => {
       }
     });
 
+    // =========================
     // ENVIAR WHATSAPP
+    // =========================
+
     await axios.post(
       `https://api.ultramsg.com/${process.env.INSTANCE_ID}/messages/chat`,
       {
@@ -224,7 +269,7 @@ app.post("/webhook", async (req, res) => {
       }
     );
 
-    res.sendStatus(200);
+    return res.sendStatus(200);
 
   } catch (error) {
 
@@ -233,27 +278,17 @@ app.post("/webhook", async (req, res) => {
       error.message
     );
 
-    res.sendStatus(500);
+    return res.sendStatus(500);
   }
 
 });
 
-const PORT = process.env.PORT || 3000;
+// PORTA
+const PORT =
+  process.env.PORT || 3000;
 
-app.listen(PORT, async () => {
-
-  console.log(`Servidor rodando na porta ${PORT}`);
-
-  try {
-
-    await prisma.$connect();
-
-    console.log("Banco conectado 🚀");
-
-  } catch (err) {
-
-    console.log("Erro banco:", err);
-
-  }
-
+app.listen(PORT, () => {
+  console.log(
+    `Servidor rodando na porta ${PORT}`
+  );
 });
