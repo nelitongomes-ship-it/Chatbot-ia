@@ -12,6 +12,10 @@ model User {
   phone     String   @unique
   createdAt DateTime @default(now())
 }
+model AdminSettings {
+  id           Int    @id @default(autoincrement())
+  systemPrompt String
+}
 
 model Message {
   id        Int      @id @default(autoincrement())
