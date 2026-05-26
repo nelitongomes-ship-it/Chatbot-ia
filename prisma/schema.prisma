@@ -29,3 +29,28 @@ model BlockedNumber {
   phone     String   @unique
   createdAt DateTime @default(now())
 }
+model Client {
+  id          Int      @id @default(autoincrement())
+  name        String
+  phone       String
+  serviceType String
+  createdAt   DateTime @default(now())
+}
+
+model Expense {
+  id          Int      @id @default(autoincrement())
+  phone       String
+  value       Float
+  category    String
+  description String?
+  createdAt   DateTime @default(now())
+}
+
+model Appointment {
+  id          Int      @id @default(autoincrement())
+  clientName  String
+  date        String
+  time        String
+  note        String?
+  createdAt   DateTime @default(now())
+}
