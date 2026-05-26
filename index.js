@@ -11,7 +11,7 @@ const app = express();
 app.use(express.json());
 
 const ADMIN_PHONE = "16999796559";
-const ADMIN_USER = "Agils IA";
+const ADMIN_USER = "AgilsIA";
 const ADMIN_PASSWORD = "151080Sis*";
 
 const authenticatedAdmins = new Set();
