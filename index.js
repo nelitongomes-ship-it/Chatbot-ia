@@ -10,9 +10,10 @@ const app = express();
 
 app.use(express.json());
 
+// SESSÕES ADMIN
 const adminSessions = {};
 
-// CONFIGURAÇÕES ADMIN
+// ADMIN
 const ADMIN_USER = "AgilsIA";
 const ADMIN_PASS = "151080Sis*";
 const ADMIN_PIN = "151080";
@@ -42,9 +43,9 @@ app.post("/webhook", async (req, res) => {
       return res.sendStatus(200);
     }
 
-    // =========================
+    // =====================================
     // LOGIN ADMIN
-    // =========================
+    // =====================================
 
     if (message.startsWith("/login")) {
 
@@ -85,9 +86,29 @@ app.post("/webhook", async (req, res) => {
       return res.sendStatus(200);
     }
 
-    // =========================
+    // =====================================
+    // LOGOUT ADMIN
+    // =====================================
+
+    if (message.startsWith("/logout")) {
+
+      delete adminSessions[phone];
+
+      await axios.post(
+        `https://api.ultramsg.com/${process.env.INSTANCE_ID}/messages/chat`,
+        {
+          token: process.env.ULTRA_TOKEN,
+          to: phone,
+          body: "🔒 Logout administrativo realizado."
+        }
+      );
+
+      return res.sendStatus(200);
+    }
+
+    // =====================================
     // RECUPERAR SENHA
-    // =========================
+    // =====================================
 
     if (message.startsWith("/recuperar")) {
 
@@ -123,19 +144,36 @@ app.post("/webhook", async (req, res) => {
       return res.sendStatus(200);
     }
 
-    // =========================
+    // =====================================
     // TREINAR IA
-    // =========================
+    // =====================================
 
     if (
-      message.startsWith("/treinar") &&
-      adminSessions[phone]
+      message.startsWith("/treinar")
     ) {
 
-      const novoPrompt = message.replace("/treinar", "").trim();
+      if (!adminSessions[phone]) {
+
+        await axios.post(
+          `https://api.ultramsg.com/${process.env.INSTANCE_ID}/messages/chat`,
+          {
+            token: process.env.ULTRA_TOKEN,
+            to: phone,
+            body:
+              "⛔ Você precisa estar logado como administrador."
+          }
+        );
+
+        return res.sendStatus(200);
+      }
+
+      const novoPrompt =
+        message.replace("/treinar", "").trim();
 
       await prisma.adminSettings.upsert({
-        where: { id: 1 },
+        where: {
+          id: 1
+        },
         update: {
           systemPrompt: novoPrompt
         },
@@ -157,9 +195,9 @@ app.post("/webhook", async (req, res) => {
       return res.sendStatus(200);
     }
 
-    // =========================
-    // BUSCAR PROMPT TREINADO
-    // =========================
+    // =====================================
+    // PROMPT DO SISTEMA
+    // =====================================
 
     const settings =
       await prisma.adminSettings.findFirst();
@@ -168,9 +206,9 @@ app.post("/webhook", async (req, res) => {
       settings?.systemPrompt ||
       "Você é uma IA empresarial inteligente.";
 
-    // =========================
+    // =====================================
     // SALVAR USUÁRIO
-    // =========================
+    // =====================================
 
     await prisma.user.upsert({
       where: {
@@ -182,9 +220,9 @@ app.post("/webhook", async (req, res) => {
       }
     });
 
-    // =========================
-    // SALVAR MENSAGEM USUÁRIO
-    // =========================
+    // =====================================
+    // SALVAR MENSAGEM
+    // =====================================
 
     await prisma.message.create({
       data: {
@@ -194,22 +232,24 @@ app.post("/webhook", async (req, res) => {
       }
     });
 
-    // =========================
+    // =====================================
     // HISTÓRICO
-    // =========================
+    // =====================================
 
     const historico =
       await prisma.message.findMany({
-        where: { phone },
+        where: {
+          phone
+        },
         orderBy: {
           createdAt: "asc"
         },
         take: 10
       });
 
-    // =========================
+    // =====================================
     // OPENAI
-    // =========================
+    // =====================================
 
     const messages = [
       {
@@ -244,9 +284,9 @@ app.post("/webhook", async (req, res) => {
       .message
       .content;
 
-    // =========================
+    // =====================================
     // SALVAR RESPOSTA IA
-    // =========================
+    // =====================================
 
     await prisma.message.create({
       data: {
@@ -256,9 +296,9 @@ app.post("/webhook", async (req, res) => {
       }
     });
 
-    // =========================
+    // =====================================
     // ENVIAR WHATSAPP
-    // =========================
+    // =====================================
 
     await axios.post(
       `https://api.ultramsg.com/${process.env.INSTANCE_ID}/messages/chat`,
