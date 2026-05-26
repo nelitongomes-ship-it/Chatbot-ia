@@ -10,11 +10,18 @@ const app = express();
 
 app.use(express.json());
 
+const ADMIN_PHONE = "16999796559";
+const ADMIN_USER = "Agils IA";
+const ADMIN_PASSWORD = "151080Sis*";
+
+const authenticatedAdmins = new Set();
+
 app.get("/", (req, res) => {
   res.send("Chatbot IA Online 🚀");
 });
 
 app.post("/webhook", async (req, res) => {
+
   try {
 
     const message =
@@ -43,7 +50,7 @@ app.post("/webhook", async (req, res) => {
       }
     });
 
-    // SALVAR MENSAGEM USUÁRIO
+    // SALVAR MENSAGEM
     await prisma.message.create({
       data: {
         phone,
@@ -52,8 +59,64 @@ app.post("/webhook", async (req, res) => {
       }
     });
 
-    // COMANDO ADMIN TREINAR IA
-    if (message.startsWith("/treinar ")) {
+    // LOGIN ADMIN
+    if (message.startsWith("/login")) {
+
+      const parts = message.split(" ");
+
+      const username = parts[1];
+      const password = parts[2];
+
+      if (
+        phone === ADMIN_PHONE &&
+        username === ADMIN_USER &&
+        password === ADMIN_PASSWORD
+      ) {
+
+        authenticatedAdmins.add(phone);
+
+        await axios.post(
+          `https://api.ultramsg.com/${process.env.INSTANCE_ID}/messages/chat`,
+          {
+            token: process.env.ULTRA_TOKEN,
+            to: phone,
+            body: "✅ Login administrativo realizado com sucesso."
+          }
+        );
+
+      } else {
+
+        await axios.post(
+          `https://api.ultramsg.com/${process.env.INSTANCE_ID}/messages/chat`,
+          {
+            token: process.env.ULTRA_TOKEN,
+            to: phone,
+            body: "❌ Usuário ou senha inválidos."
+          }
+        );
+
+      }
+
+      return res.sendStatus(200);
+    }
+
+    // COMANDO TREINAR
+    if (message.startsWith("/treinar")) {
+
+      // VERIFICAR LOGIN
+      if (!authenticatedAdmins.has(phone)) {
+
+        await axios.post(
+          `https://api.ultramsg.com/${process.env.INSTANCE_ID}/messages/chat`,
+          {
+            token: process.env.ULTRA_TOKEN,
+            to: phone,
+            body: "❌ Acesso negado. Faça login administrativo."
+          }
+        );
+
+        return res.sendStatus(200);
+      }
 
       const newPrompt =
         message.replace("/treinar ", "");
@@ -94,7 +157,7 @@ app.post("/webhook", async (req, res) => {
       return res.sendStatus(200);
     }
 
-    // BUSCAR CONFIG ADMIN
+    // BUSCAR CONFIG
     const adminSettings =
       await prisma.adminSettings.findFirst();
 
@@ -142,7 +205,7 @@ app.post("/webhook", async (req, res) => {
     const reply =
       openaiResponse.data.choices[0].message.content;
 
-    // SALVAR RESPOSTA IA
+    // SALVAR RESPOSTA
     await prisma.message.create({
       data: {
         phone,
@@ -172,6 +235,7 @@ app.post("/webhook", async (req, res) => {
 
     res.sendStatus(500);
   }
+
 });
 
 const PORT = process.env.PORT || 3000;
