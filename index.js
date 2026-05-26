@@ -32,7 +32,7 @@ app.post("/webhook", async (req, res) => {
 
     console.log("Mensagem recebida:", message);
 
-    // SALVAR USUÁRIO
+    // CRIAR USUÁRIO
     await prisma.user.upsert({
       where: {
         phone
@@ -43,7 +43,7 @@ app.post("/webhook", async (req, res) => {
       }
     });
 
-    // SALVAR MENSAGEM DO USUÁRIO
+    // SALVAR MENSAGEM USUÁRIO
     await prisma.message.create({
       data: {
         phone,
@@ -52,7 +52,57 @@ app.post("/webhook", async (req, res) => {
       }
     });
 
-    // BUSCAR HISTÓRICO
+    // COMANDO ADMIN TREINAR IA
+    if (message.startsWith("/treinar ")) {
+
+      const newPrompt =
+        message.replace("/treinar ", "");
+
+      const existingSettings =
+        await prisma.adminSettings.findFirst();
+
+      if (existingSettings) {
+
+        await prisma.adminSettings.update({
+          where: {
+            id: existingSettings.id
+          },
+          data: {
+            systemPrompt: newPrompt
+          }
+        });
+
+      } else {
+
+        await prisma.adminSettings.create({
+          data: {
+            systemPrompt: newPrompt
+          }
+        });
+
+      }
+
+      await axios.post(
+        `https://api.ultramsg.com/${process.env.INSTANCE_ID}/messages/chat`,
+        {
+          token: process.env.ULTRA_TOKEN,
+          to: phone,
+          body: "✅ IA treinada com sucesso."
+        }
+      );
+
+      return res.sendStatus(200);
+    }
+
+    // BUSCAR CONFIG ADMIN
+    const adminSettings =
+      await prisma.adminSettings.findFirst();
+
+    const systemPrompt =
+      adminSettings?.systemPrompt ||
+      "Você é um especialista financeiro e atendimento empresarial.";
+
+    // HISTÓRICO
     const history = await prisma.message.findMany({
       where: {
         phone
@@ -66,8 +116,7 @@ app.post("/webhook", async (req, res) => {
     const messages = [
       {
         role: "system",
-        content:
-          "Você é um especialista financeiro e atendimento empresarial."
+        content: systemPrompt
       },
       ...history.map(msg => ({
         role: msg.role,
@@ -115,7 +164,12 @@ app.post("/webhook", async (req, res) => {
     res.sendStatus(200);
 
   } catch (error) {
-    console.log(error.response?.data || error.message);
+
+    console.log(
+      error.response?.data ||
+      error.message
+    );
+
     res.sendStatus(500);
   }
 });
