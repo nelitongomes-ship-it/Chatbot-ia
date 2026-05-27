@@ -703,10 +703,8 @@ if (
 
   return res.sendStatus(200);
 }
-    // =====================================================
-// COTAÇÃO EURO
-// =====================================================
 
+   
 // =====================================================
 // COTAÇÃO EURO
 // =====================================================
@@ -797,6 +795,76 @@ if (
     await sendMessage(
       phone,
       "⚠️ Não consegui consultar a Selic agora."
+    );
+
+  }
+
+  return res.sendStatus(200);
+}
+
+    // =====================================================
+// NOTÍCIAS MERCADO FINANCEIRO
+// =====================================================
+
+if (
+
+  message.toLowerCase().includes("notícia") ||
+  message.toLowerCase().includes("noticias") ||
+  message.toLowerCase().includes("mercado financeiro") ||
+  message.toLowerCase().includes("economia mundial")
+
+) {
+
+  try {
+
+    console.log("Consultando notícias...");
+
+    const response = await axios.get(
+
+      `https://newsapi.org/v2/everything?q=mercado financeiro OR economia OR investimentos&language=pt&sortBy=publishedAt&pageSize=5&apiKey=${process.env.NEWS_API_KEY}`
+
+    );
+
+    const noticias =
+      response.data.articles;
+
+    if (!noticias.length) {
+
+      await sendMessage(
+        phone,
+        "⚠️ Nenhuma notícia encontrada."
+      );
+
+      return res.sendStatus(200);
+    }
+
+    let resumo = "📰 Notícias Financeiras:\n\n";
+
+    noticias.forEach((n, index) => {
+
+      resumo +=
+`${index + 1}️⃣ ${n.title}
+
+${n.source.name}
+
+`;
+    });
+
+    await sendMessage(
+      phone,
+      resumo
+    );
+
+  } catch (error) {
+
+    console.log(
+      "ERRO NEWS:",
+      error.message
+    );
+
+    await sendMessage(
+      phone,
+      "⚠️ Não consegui consultar notícias agora."
     );
 
   }
