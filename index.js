@@ -11,7 +11,7 @@ const app = express();
 app.use(express.json());
 
 // =====================================================
-// CONFIG
+// CONFIGURAÇÕES
 // =====================================================
 
 const ADMIN_USER = "AgilsIA";
@@ -20,6 +20,7 @@ const ADMIN_PIN = "151080";
 
 const adminSessions = {};
 const userCooldown = {};
+const pendingDeletes = {};
 
 // =====================================================
 // STATUS
@@ -30,7 +31,7 @@ app.get("/", (req, res) => {
 });
 
 // =====================================================
-// FUNÇÃO ENVIAR WHATSAPP
+// ENVIAR WHATSAPP
 // =====================================================
 
 async function sendMessage(to, body) {
@@ -63,7 +64,7 @@ app.post("/webhook", async (req, res) => {
       req.body.data?.from ||
       "";
 
-    console.log("Mensagem recebida:", message);
+    console.log("Mensagem:", message);
 
     if (!message) {
       return res.sendStatus(200);
@@ -74,6 +75,20 @@ app.post("/webhook", async (req, res) => {
     // =====================================================
 
     if (phone.includes("@g.us")) {
+      return res.sendStatus(200);
+    }
+
+    // =====================================================
+    // LIMITAR TAMANHO MSG
+    // =====================================================
+
+    if (message.length > 2000) {
+
+      await sendMessage(
+        phone,
+        "⚠️ Mensagem muito grande."
+      );
+
       return res.sendStatus(200);
     }
 
@@ -113,7 +128,7 @@ app.post("/webhook", async (req, res) => {
     }
 
     // =====================================================
-    // LOGIN
+    // LOGIN ADMIN
     // =====================================================
 
     if (message.startsWith("/login")) {
@@ -195,6 +210,32 @@ app.post("/webhook", async (req, res) => {
     }
 
     // =====================================================
+    // RESETAR TREINAMENTO
+    // =====================================================
+
+    if (
+      message.startsWith("/resettreino") &&
+      adminSessions[phone]
+    ) {
+
+      await prisma.adminSettings.deleteMany();
+
+      await prisma.adminSettings.create({
+        data: {
+          systemPrompt:
+            "Você é uma IA empresarial profissional."
+        }
+      });
+
+      await sendMessage(
+        phone,
+        "🧠 Treinamentos resetados com sucesso."
+      );
+
+      return res.sendStatus(200);
+    }
+
+    // =====================================================
     // TREINAR IA
     // =====================================================
 
@@ -270,8 +311,12 @@ app.post("/webhook", async (req, res) => {
       const numero =
         message.replace("/bloquear", "").trim();
 
-      await prisma.blockedNumber.create({
-        data: {
+      await prisma.blockedNumber.upsert({
+        where: {
+          phone: numero
+        },
+        update: {},
+        create: {
           phone: numero
         }
       });
@@ -341,22 +386,24 @@ app.post("/webhook", async (req, res) => {
 
         return res.sendStatus(200);
       }
-const existingClient =
-  await prisma.client.findFirst({
-    where: {
-      phone: telefone
-    }
-  });
 
-if (existingClient) {
+      const existingClient =
+        await prisma.client.findFirst({
+          where: {
+            phone: telefone
+          }
+        });
 
-  await sendMessage(
-    phone,
-    "⚠️ Cliente já cadastrado."
-  );
+      if (existingClient) {
 
-  return res.sendStatus(200);
-}
+        await sendMessage(
+          phone,
+          "⚠️ Cliente já cadastrado."
+        );
+
+        return res.sendStatus(200);
+      }
+
       await prisma.client.create({
         data: {
           name: nome,
@@ -420,7 +467,7 @@ Serviço: ${cliente.serviceType}
     }
 
     // =====================================================
-    // AGENDAMENTO
+    // AGENDAR
     // =====================================================
 
     if (
@@ -475,115 +522,77 @@ Descrição: ${descricao}
 
       return res.sendStatus(200);
     }
-// =====================================================
-// LIMPAR HISTÓRICO
-// =====================================================
 
-// =====================================================
-// CONFIRMAÇÃO LIMPAR HISTÓRICO
-// =====================================================
+    // =====================================================
+    // LIMPAR HISTÓRICO
+    // =====================================================
 
-const pendingDeletes = {};
+    if (
+      message.startsWith("/limparhistorico") &&
+      adminSessions[phone]
+    ) {
 
-// =====================================================
-// LIMPAR HISTÓRICO
-// =====================================================
+      const numero =
+        message.replace("/limparhistorico", "").trim();
 
-// =====================================================
-// CONFIRMAÇÃO LIMPAR HISTÓRICO
-// =====================================================
+      if (!numero) {
 
-if (
-  message.startsWith("/limparhistorico") &&
-  adminSessions[phone]
-) {
+        await sendMessage(
+          phone,
+          "⚠️ Use:\n/limparhistorico 5511999999999"
+        );
 
-  const numero =
-    message.replace("/limparhistorico", "").trim();
+        return res.sendStatus(200);
+      }
 
-  // VALIDAR
-  if (!numero) {
+      pendingDeletes[phone] = numero;
 
-    await sendMessage(
-      phone,
-      "⚠️ Use:\n/limparhistorico 5511999999999"
-    );
+      await sendMessage(
+        phone,
+        `⚠️ Confirma apagar todo histórico do número:\n\n${numero}\n\nDigite:\n/sim`
+      );
 
-    return res.sendStatus(200);
-  }
-
-  // SALVAR PENDÊNCIA
-  pendingDeletes[phone] = numero;
-
-  // PEDIR CONFIRMAÇÃO
-  await sendMessage(
-    phone,
-    `⚠️ Confirma apagar todo histórico do número:\n\n${numero}\n\nDigite:\n/sim`
-  );
-
-  return res.sendStatus(200);
-}
-
-// =====================================================
-// CONFIRMAR LIMPEZA
-// =====================================================
-
-if (
-  message.toLowerCase() === "/sim" &&
-  adminSessions[phone]
-) {
-
-  const numero =
-    pendingDeletes[phone];
-
-  // VERIFICAR PENDÊNCIA
-  if (!numero) {
-
-    await sendMessage(
-      phone,
-      "⚠️ Nenhuma limpeza pendente."
-    );
-
-    return res.sendStatus(200);
-  }
-
-  // APAGAR HISTÓRICO
-  await prisma.message.deleteMany({
-    where: {
-      phone: numero
+      return res.sendStatus(200);
     }
-  });
 
-  // REMOVER PENDÊNCIA
-  delete pendingDeletes[phone];
+    // =====================================================
+    // CONFIRMAR LIMPEZA
+    // =====================================================
 
-  // CONFIRMAÇÃO
-  await sendMessage(
-    phone,
-    `🗑️ Histórico apagado com sucesso.\n\nNúmero: ${numero}`
-  );
+    if (
+      message.toLowerCase() === "/sim" &&
+      adminSessions[phone]
+    ) {
 
-  return res.sendStatus(200);
-}"
- ;
-// =====================================================
-// RESETAR TREINAMENTO
-// =====================================================
+      const numero =
+        pendingDeletes[phone];
 
-if (
-  message.startsWith("/resettreino") &&
-  adminSessions[phone]
-) {
+      if (!numero) {
 
-  await prisma.adminSettings.deleteMany();
+        await sendMessage(
+          phone,
+          "⚠️ Nenhuma limpeza pendente."
+        );
 
-  await sendMessage(
-    phone,
-    "🧠 Todos os treinamentos foram apagados com sucesso."
-  );
+        return res.sendStatus(200);
+      }
 
-  return res.sendStatus(200);
-}
+      await prisma.message.deleteMany({
+        where: {
+          phone: numero
+        }
+      });
+
+      delete pendingDeletes[phone];
+
+      await sendMessage(
+        phone,
+        `🗑️ Histórico apagado com sucesso.\n\nNúmero: ${numero}`
+      );
+
+      return res.sendStatus(200);
+    }
+
     // =====================================================
     // PROMPT SISTEMA
     // =====================================================
@@ -593,10 +602,23 @@ if (
 
     const systemPrompt =
       settings?.systemPrompt ||
-      "Você é uma IA empresarial inteligente.";
+`
+Você é a IA Oficial da Agils Cred Financeira & Investimentos.
 
+REGRAS:
+- Nunca repetir respostas.
+- Responder naturalmente.
+- Variar linguagem.
+- Não responder roboticamente.
+- Ser humanizada.
+- Responder baseado no contexto atual.
+- Evitar mensagens prontas repetitivas.
+- Conversar naturalmente.
+- Explicar investimentos de forma simples.
+- Direcionar clientes para cadastro.
+`;
     // =====================================================
-    // SALVAR USER
+    // SALVAR USUÁRIO
     // =====================================================
 
     await prisma.user.upsert({
@@ -633,7 +655,7 @@ if (
         orderBy: {
           createdAt: "asc"
         },
-        take: 30
+        take: 15
       });
 
     // =====================================================
@@ -657,7 +679,8 @@ if (
         {
           model: "gpt-4o-mini",
           messages,
-          temperature: 0.7
+          temperature: 0.9,
+          max_tokens: 800
         },
         {
           headers: {
