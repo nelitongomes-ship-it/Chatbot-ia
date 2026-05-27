@@ -489,6 +489,10 @@ const pendingDeletes = {};
 // LIMPAR HISTÓRICO
 // =====================================================
 
+// =====================================================
+// CONFIRMAÇÃO LIMPAR HISTÓRICO
+// =====================================================
+
 if (
   message.startsWith("/limparhistorico") &&
   adminSessions[phone]
@@ -508,13 +512,13 @@ if (
     return res.sendStatus(200);
   }
 
-  // SALVAR PENDENTE
+  // SALVAR PENDÊNCIA
   pendingDeletes[phone] = numero;
 
   // PEDIR CONFIRMAÇÃO
   await sendMessage(
     phone,
-    `⚠️ Confirma apagar todo histórico do número:\n\n${numero}\n\nDigite:\n/confirmlimpeza`
+    `⚠️ Confirma apagar todo histórico do número:\n\n${numero}\n\nDigite:\n/sim`
   );
 
   return res.sendStatus(200);
@@ -525,13 +529,14 @@ if (
 // =====================================================
 
 if (
-  message.startsWith("/confirmlimpeza") &&
+  message.toLowerCase() === "/sim" &&
   adminSessions[phone]
 ) {
 
   const numero =
     pendingDeletes[phone];
 
+  // VERIFICAR PENDÊNCIA
   if (!numero) {
 
     await sendMessage(
@@ -549,7 +554,7 @@ if (
     }
   });
 
-  // LIMPAR PENDÊNCIA
+  // REMOVER PENDÊNCIA
   delete pendingDeletes[phone];
 
   // CONFIRMAÇÃO
@@ -559,7 +564,9 @@ if (
   );
 
   return res.sendStatus(200);
-}
+}"
+ ;
+
     // =====================================================
     // PROMPT SISTEMA
     // =====================================================
