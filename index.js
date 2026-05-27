@@ -660,9 +660,6 @@ REGRAS:
 // =====================================================
 // COTAÇÃO DÓLAR
 // =====================================================
-// =====================================================
-// COTAÇÃO DÓLAR
-// =====================================================
 
 if (
   message.toLowerCase().includes("dólar") ||
@@ -710,36 +707,50 @@ if (
 // COTAÇÃO EURO
 // =====================================================
 
+// =====================================================
+// COTAÇÃO EURO
+// =====================================================
+
 if (
   message.toLowerCase().includes("euro")
 ) {
 
   try {
 
-    const cotacao =
-      await axios.get(
-        "https://economia.awesomeapi.com.br/json/last/EUR-BRL"
-      );
+    console.log("Consultando euro...");
+
+    const response = await axios.get(
+      "https://economia.awesomeapi.com.br/json/last/EUR-BRL",
+      {
+        timeout: 10000
+      }
+    );
+
+    console.log(response.data);
 
     const valor =
-      cotacao.data.EURBRL.bid;
+      response.data?.EURBRL?.bid;
 
     await sendMessage(
       phone,
-      `💶 Cotação atual do euro:\nR$ ${valor}`
+      `💶 Euro atual:\nR$ ${valor}`
     );
 
-    return res.sendStatus(200);
+  } catch (error) {
 
-  } catch {
+    console.log(
+      "ERRO EURO:",
+      error.message
+    );
 
     await sendMessage(
       phone,
       "⚠️ Não consegui consultar o euro agora."
     );
 
-    return res.sendStatus(200);
   }
+
+  return res.sendStatus(200);
 }
     // =====================================================
     // OPENAI
