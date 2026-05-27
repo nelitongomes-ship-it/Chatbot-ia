@@ -660,6 +660,9 @@ REGRAS:
 // =====================================================
 // COTAÇÃO DÓLAR
 // =====================================================
+// =====================================================
+// COTAÇÃO DÓLAR
+// =====================================================
 
 if (
   message.toLowerCase().includes("dólar") ||
@@ -668,31 +671,41 @@ if (
 
   try {
 
-    const cotacao =
-      await axios.get(
-        "https://economia.awesomeapi.com.br/json/last/USD-BRL"
-      );
+    console.log("Consultando dólar...");
+
+    const response = await axios.get(
+      "https://economia.awesomeapi.com.br/json/last/USD-BRL",
+      {
+        timeout: 10000
+      }
+    );
+
+    console.log(response.data);
 
     const valor =
-      cotacao.data.USDBRL.bid;
+      response.data.USDBRL.bid;
 
     await sendMessage(
       phone,
-      `💵 Cotação atual do dólar:\nR$ ${valor}`
+      `💵 Dólar atual:\nR$ ${valor}`
     );
 
-    return res.sendStatus(200);
+  } catch (error) {
 
-  } catch {
+    console.log(
+      "ERRO DOLAR:",
+      error.message
+    );
 
     await sendMessage(
       phone,
       "⚠️ Não consegui consultar o dólar agora."
     );
 
-    return res.sendStatus(200);
   }
-      }
+
+  return res.sendStatus(200);
+}
     // =====================================================
 // COTAÇÃO EURO
 // =====================================================
