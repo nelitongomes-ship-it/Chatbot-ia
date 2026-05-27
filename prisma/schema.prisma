@@ -54,3 +54,90 @@ model Appointment {
   note        String?
   createdAt   DateTime @default(now())
 }
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           Int      @id @default(autoincrement())
+  phone        String   @unique
+  name         String?
+  cpf          String?
+  email        String?
+  password     String?
+  isAdmin      Boolean  @default(false)
+  createdAt    DateTime @default(now())
+
+  contracts    Contract[]
+  appointments Appointment[]
+}
+
+model AdminSettings {
+  id           Int    @id @default(autoincrement())
+  systemPrompt String
+}
+
+model Message {
+  id        Int      @id @default(autoincrement())
+  phone     String
+  role      String
+  content   String
+  createdAt DateTime @default(now())
+}
+
+model Contract {
+  id               Int      @id @default(autoincrement())
+  contractNumber   String   @unique
+  product          String
+  totalValue       Float
+  installmentValue Float
+  installments     Int
+  paidInstallments Int      @default(0)
+  pendingBalance   Float
+  status           String   @default("ativo")
+
+  userId           Int
+  user             User @relation(fields: [userId], references: [id])
+
+  payments         Payment[]
+
+  createdAt        DateTime @default(now())
+}
+
+model Payment {
+  id          Int      @id @default(autoincrement())
+  installment Int
+  value       Float
+  dueDate     String
+  paid        Boolean  @default(false)
+  paidAt      String?
+
+  contractId  Int
+  contract    Contract @relation(fields: [contractId], references: [id])
+
+  createdAt   DateTime @default(now())
+}
+
+model Appointment {
+  id          Int      @id @default(autoincrement())
+  clientName  String
+  date        String
+  time        String
+  description String
+
+  userId      Int
+  user        User @relation(fields: [userId], references: [id])
+
+  createdAt   DateTime @default(now())
+}
+
+model BlockedNumber {
+  id        Int      @id @default(autoincrement())
+  phone     String   @unique
+  createdAt DateTime @default(now())
+}
