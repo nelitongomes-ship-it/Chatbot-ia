@@ -8,62 +8,6 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  phone     String   @unique
-  createdAt DateTime @default(now())
-}
-model AdminSettings {
-  id           Int    @id @default(autoincrement())
-  systemPrompt String
-}
-
-model Message {
-  id        Int      @id @default(autoincrement())
-  phone     String
-  role      String
-  content   String
-  createdAt DateTime @default(now())
-}
-model BlockedNumber {
-  id        Int      @id @default(autoincrement())
-  phone     String   @unique
-  createdAt DateTime @default(now())
-}
-model Client {
-  id          Int      @id @default(autoincrement())
-  name        String
-  phone       String
-  serviceType String
-  createdAt   DateTime @default(now())
-}
-
-model Expense {
-  id          Int      @id @default(autoincrement())
-  phone       String
-  value       Float
-  category    String
-  description String?
-  createdAt   DateTime @default(now())
-}
-
-model Appointment {
-  id          Int      @id @default(autoincrement())
-  clientName  String
-  date        String
-  time        String
-  note        String?
-  createdAt   DateTime @default(now())
-}
-generator client {
-  provider = "prisma-client-js"
-}
-
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-}
-
-model User {
   id           Int      @id @default(autoincrement())
   phone        String   @unique
   name         String?
@@ -88,6 +32,42 @@ model Message {
   role      String
   content   String
   createdAt DateTime @default(now())
+}
+
+model BlockedNumber {
+  id        Int      @id @default(autoincrement())
+  phone     String   @unique
+  createdAt DateTime @default(now())
+}
+
+model Client {
+  id          Int      @id @default(autoincrement())
+  name        String
+  phone       String
+  serviceType String
+  createdAt   DateTime @default(now())
+}
+
+model Expense {
+  id          Int      @id @default(autoincrement())
+  phone       String
+  value       Float
+  category    String
+  description String?
+  createdAt   DateTime @default(now())
+}
+
+model Appointment {
+  id          Int      @id @default(autoincrement())
+  clientName  String
+  date        String
+  time        String
+  description String
+
+  userId      Int?
+  user        User? @relation(fields: [userId], references: [id])
+
+  createdAt   DateTime @default(now())
 }
 
 model Contract {
@@ -121,23 +101,4 @@ model Payment {
   contract    Contract @relation(fields: [contractId], references: [id])
 
   createdAt   DateTime @default(now())
-}
-
-model Appointment {
-  id          Int      @id @default(autoincrement())
-  clientName  String
-  date        String
-  time        String
-  description String
-
-  userId      Int
-  user        User @relation(fields: [userId], references: [id])
-
-  createdAt   DateTime @default(now())
-}
-
-model BlockedNumber {
-  id        Int      @id @default(autoincrement())
-  phone     String   @unique
-  createdAt DateTime @default(now())
 }
