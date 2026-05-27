@@ -149,7 +149,7 @@ app.post("/webhook", async (req, res) => {
     }
 
     // =========================
-    // RECUPERAR
+    // RECUPERAR SENHA
     // =========================
 
     if (message.startsWith("/recuperar")) {
@@ -192,10 +192,9 @@ app.post("/webhook", async (req, res) => {
     // TREINAR IA
     // =========================
 
-    if (
-      message.startsWith("/treinar")
-    ) {
+    if (message.startsWith("/treinar")) {
 
+      // VERIFICA ADMIN
       if (!adminSessions[phone]) {
 
         await axios.post(
@@ -211,29 +210,64 @@ app.post("/webhook", async (req, res) => {
         return res.sendStatus(200);
       }
 
+      // REMOVE /treinar
       const novoPrompt =
         message.replace("/treinar", "").trim();
 
-      await prisma.adminSettings.upsert({
-        where: {
-          id: 1
-        },
-        update: {
-          systemPrompt: novoPrompt
-        },
-        create: {
-          id: 1,
-          systemPrompt: novoPrompt
-        }
-      });
+      // VALIDAR
+      if (!novoPrompt) {
 
+        await axios.post(
+          `https://api.ultramsg.com/${process.env.INSTANCE_ID}/messages/chat`,
+          {
+            token: process.env.ULTRA_TOKEN,
+            to: phone,
+            body:
+              "⚠️ Digite um treinamento após /treinar"
+          }
+        );
+
+        return res.sendStatus(200);
+      }
+
+      // BUSCAR CONFIG
+      const currentSettings =
+        await prisma.adminSettings.findFirst();
+
+      // SOMAR TREINAMENTOS
+      if (currentSettings) {
+
+        await prisma.adminSettings.update({
+          where: {
+            id: currentSettings.id
+          },
+          data: {
+            systemPrompt:
+              currentSettings.systemPrompt +
+              "\n\n━━━━━━━━━━━━━━━\nNOVO TREINAMENTO\n━━━━━━━━━━━━━━━\n\n" +
+              novoPrompt
+          }
+        });
+
+      } else {
+
+        // PRIMEIRO TREINAMENTO
+        await prisma.adminSettings.create({
+          data: {
+            systemPrompt: novoPrompt
+          }
+        });
+
+      }
+
+      // RESPOSTA
       await axios.post(
         `https://api.ultramsg.com/${process.env.INSTANCE_ID}/messages/chat`,
         {
           token: process.env.ULTRA_TOKEN,
           to: phone,
           body:
-            "✅ IA treinada com sucesso."
+            "✅ Novo treinamento adicionado.\n🧠 Todos os treinamentos anteriores foram mantidos."
         }
       );
 
@@ -338,120 +372,6 @@ app.post("/webhook", async (req, res) => {
         content: message
       }
     });
-
-    // =========================
-    // IA ANALISAR INTENÇÃO
-    // =========================
-
-    const intentResponse =
-      await axios.post(
-        "https://api.openai.com/v1/chat/completions",
-        {
-          model: "gpt-4o-mini",
-          messages: [
-            {
-              role: "system",
-              content:
-                `
-Analise a mensagem do usuário e identifique se ela representa:
-- gasto
-- agendamento
-- cadastro cliente
-- ou conversa normal
-
-Responda APENAS JSON.
-
-Exemplo:
-{
- "type":"expense"
-}
-
-Tipos:
-expense
-appointment
-client
-chat
-`
-            },
-            {
-              role: "user",
-              content: message
-            }
-          ]
-        },
-        {
-          headers: {
-            Authorization:
-              `Bearer ${process.env.OPENAI_API_KEY}`,
-            "Content-Type":
-              "application/json"
-          }
-        }
-      );
-
-    let intent = "chat";
-
-    try {
-
-      intent =
-        JSON.parse(
-          intentResponse.data
-          .choices[0]
-          .message
-          .content
-        ).type;
-
-    } catch (e) {}
-
-    // =========================
-    // DETECTAR GASTO
-    // =========================
-
-    if (intent === "expense") {
-
-      await prisma.expense.create({
-        data: {
-          phone,
-          value: 0,
-          category: "geral",
-          description: message
-        }
-      });
-
-    }
-
-    // =========================
-    // DETECTAR AGENDAMENTO
-    // =========================
-
-    if (intent === "appointment") {
-
-      await prisma.appointment.create({
-        data: {
-          clientName: phone,
-          date: "pendente",
-          time: "pendente",
-          note: message
-        }
-      });
-
-    }
-
-    // =========================
-    // DETECTAR CLIENTE
-    // =========================
-
-    if (intent === "client") {
-
-      await prisma.client.create({
-        data: {
-          name: phone,
-          phone,
-          serviceType: "consultoria"
-        }
-      });
-
-    }
 
     // =========================
     // HISTÓRICO
