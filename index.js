@@ -460,7 +460,44 @@ Descrição: ${descricao}
 
       return res.sendStatus(200);
     }
+// =====================================================
+// LIMPAR HISTÓRICO
+// =====================================================
 
+if (
+  message.startsWith("/limparhistorico") &&
+  adminSessions[phone]
+) {
+
+  const numero =
+    message.replace("/limparhistorico", "").trim();
+
+  // VALIDAR
+  if (!numero) {
+
+    await sendMessage(
+      phone,
+      "⚠️ Use:\n/limparhistorico 5511999999999"
+    );
+
+    return res.sendStatus(200);
+  }
+
+  // APAGAR MENSAGENS
+  await prisma.message.deleteMany({
+    where: {
+      phone: numero
+    }
+  });
+
+  // CONFIRMAÇÃO
+  await sendMessage(
+    phone,
+    `🗑️ Histórico apagado com sucesso.\n\nNúmero: ${numero}`
+  );
+
+  return res.sendStatus(200);
+}
     // =====================================================
     // PROMPT SISTEMA
     // =====================================================
