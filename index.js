@@ -657,7 +657,42 @@ REGRAS:
         },
         take: 15
       });
+// =====================================================
+// COTAÇÃO DÓLAR
+// =====================================================
 
+if (
+  message.toLowerCase().includes("dólar") ||
+  message.toLowerCase().includes("dolar")
+) {
+
+  try {
+
+    const cotacao =
+      await axios.get(
+        "https://economia.awesomeapi.com.br/json/last/USD-BRL"
+      );
+
+    const valor =
+      cotacao.data.USDBRL.bid;
+
+    await sendMessage(
+      phone,
+      `💵 Cotação atual do dólar:\nR$ ${valor}`
+    );
+
+    return res.sendStatus(200);
+
+  } catch {
+
+    await sendMessage(
+      phone,
+      "⚠️ Não consegui consultar o dólar agora."
+    );
+
+    return res.sendStatus(200);
+  }
+      }
     // =====================================================
     // OPENAI
     // =====================================================
