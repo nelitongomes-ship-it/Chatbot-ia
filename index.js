@@ -838,14 +838,289 @@ if (
       return res.sendStatus(200);
     }
 
-    let resumo = "📰 Notícias Financeiras:\n\n";
+// =====================================================
+// DÓLAR
+// =====================================================
+
+if (
+  message.toLowerCase().includes("dólar") ||
+  message.toLowerCase().includes("dolar")
+) {
+
+  try {
+
+    console.log("Consultando dólar...");
+
+    const response = await axios.get(
+      "https://economia.awesomeapi.com.br/json/last/USD-BRL",
+      {
+        timeout: 10000
+      }
+    );
+
+    const valor =
+      response.data?.USDBRL?.bid;
+
+    await sendMessage(
+      phone,
+      `💵 Cotação atual do dólar:\nR$ ${valor}`
+    );
+
+  } catch (error) {
+
+    console.log(
+      "ERRO DOLAR:",
+      error.message
+    );
+
+    await sendMessage(
+      phone,
+      "⚠️ Não consegui consultar o dólar agora."
+    );
+
+  }
+
+  return res.sendStatus(200);
+}
+
+// =====================================================
+// EURO
+// =====================================================
+
+if (
+  message.toLowerCase().includes("euro")
+) {
+
+  try {
+
+    console.log("Consultando euro...");
+
+    const response = await axios.get(
+      "https://economia.awesomeapi.com.br/json/last/EUR-BRL",
+      {
+        timeout: 10000
+      }
+    );
+
+    const valor =
+      response.data?.EURBRL?.bid;
+
+    await sendMessage(
+      phone,
+      `💶 Cotação atual do euro:\nR$ ${valor}`
+    );
+
+  } catch (error) {
+
+    console.log(
+      "ERRO EURO:",
+      error.message
+    );
+
+    await sendMessage(
+      phone,
+      "⚠️ Não consegui consultar o euro agora."
+    );
+
+  }
+
+  return res.sendStatus(200);
+}
+
+// =====================================================
+// SELIC
+// =====================================================
+
+if (
+  message.toLowerCase().includes("selic")
+) {
+
+  try {
+
+    console.log("Consultando Selic...");
+
+    const response = await axios.get(
+      "https://brasilapi.com.br/api/taxas/v1",
+      {
+        timeout: 10000
+      }
+    );
+
+    const taxas =
+      response.data;
+
+    const selic =
+      taxas.find(
+        item =>
+          item.nome.toLowerCase()
+          .includes("selic")
+      );
+
+    await sendMessage(
+      phone,
+      `📈 Taxa Selic atual:\n${selic.valor}%`
+    );
+
+  } catch (error) {
+
+    console.log(
+      "ERRO SELIC:",
+      error.message
+    );
+
+    await sendMessage(
+      phone,
+      "⚠️ Não consegui consultar a Selic agora."
+    );
+
+  }
+
+  return res.sendStatus(200);
+}
+
+// =====================================================
+// CDI
+// =====================================================
+
+if (
+  message.toLowerCase().includes("cdi")
+) {
+
+  try {
+
+    console.log("Consultando CDI...");
+
+    const response = await axios.get(
+      "https://brasilapi.com.br/api/taxas/v1",
+      {
+        timeout: 10000
+      }
+    );
+
+    const taxas =
+      response.data;
+
+    const cdi =
+      taxas.find(
+        item =>
+          item.nome.toLowerCase()
+          .includes("cdi")
+      );
+
+    await sendMessage(
+      phone,
+      `💰 CDI atual:\n${cdi.valor}%`
+    );
+
+  } catch (error) {
+
+    console.log(
+      "ERRO CDI:",
+      error.message
+    );
+
+    await sendMessage(
+      phone,
+      "⚠️ Não consegui consultar o CDI agora."
+    );
+
+  }
+
+  return res.sendStatus(200);
+}
+
+// =====================================================
+// BITCOIN
+// =====================================================
+
+if (
+  message.toLowerCase().includes("bitcoin")
+) {
+
+  try {
+
+    console.log("Consultando Bitcoin...");
+
+    const response = await axios.get(
+      "https://economia.awesomeapi.com.br/json/last/BTC-BRL",
+      {
+        timeout: 10000
+      }
+    );
+
+    const valor =
+      response.data?.BTCBRL?.bid;
+
+    await sendMessage(
+      phone,
+      `🪙 Bitcoin atual:\nR$ ${valor}`
+    );
+
+  } catch (error) {
+
+    console.log(
+      "ERRO BITCOIN:",
+      error.message
+    );
+
+    await sendMessage(
+      phone,
+      "⚠️ Não consegui consultar o Bitcoin agora."
+    );
+
+  }
+
+  return res.sendStatus(200);
+}
+
+// =====================================================
+// NOTÍCIAS FINANCEIRAS
+// =====================================================
+
+if (
+
+  message.toLowerCase().includes("notícias") ||
+  message.toLowerCase().includes("noticia") ||
+  message.toLowerCase().includes("manchetes")
+
+) {
+
+  try {
+
+    console.log("Consultando notícias...");
+
+    const response = await axios.get(
+
+      `https://newsapi.org/v2/everything?q=mercado financeiro OR economia OR investimentos&language=pt&sortBy=publishedAt&pageSize=5&apiKey=${process.env.NEWS_API_KEY}`,
+
+      {
+        timeout: 10000
+      }
+
+    );
+
+    const noticias =
+      response.data.articles;
+
+    if (!noticias.length) {
+
+      await sendMessage(
+        phone,
+        "⚠️ Nenhuma notícia encontrada."
+      );
+
+      return res.sendStatus(200);
+    }
+
+    let resumo =
+      "📰 Notícias Financeiras:\n\n";
 
     noticias.forEach((n, index) => {
 
       resumo +=
 `${index + 1}️⃣ ${n.title}
 
-${n.source.name}
+Fonte: ${n.source.name}
 
 `;
     });
