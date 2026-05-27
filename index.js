@@ -694,6 +694,41 @@ if (
   }
       }
     // =====================================================
+// COTAÇÃO EURO
+// =====================================================
+
+if (
+  message.toLowerCase().includes("euro")
+) {
+
+  try {
+
+    const cotacao =
+      await axios.get(
+        "https://economia.awesomeapi.com.br/json/last/EUR-BRL"
+      );
+
+    const valor =
+      cotacao.data.EURBRL.bid;
+
+    await sendMessage(
+      phone,
+      `💶 Cotação atual do euro:\nR$ ${valor}`
+    );
+
+    return res.sendStatus(200);
+
+  } catch {
+
+    await sendMessage(
+      phone,
+      "⚠️ Não consegui consultar o euro agora."
+    );
+
+    return res.sendStatus(200);
+  }
+}
+    // =====================================================
     // OPENAI
     // =====================================================
 
