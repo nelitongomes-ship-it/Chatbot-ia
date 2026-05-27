@@ -341,7 +341,22 @@ app.post("/webhook", async (req, res) => {
 
         return res.sendStatus(200);
       }
+const existingClient =
+  await prisma.client.findFirst({
+    where: {
+      phone: telefone
+    }
+  });
 
+if (existingClient) {
+
+  await sendMessage(
+    phone,
+    "⚠️ Cliente já cadastrado."
+  );
+
+  return res.sendStatus(200);
+}
       await prisma.client.create({
         data: {
           name: nome,
