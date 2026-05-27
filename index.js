@@ -566,7 +566,24 @@ if (
   return res.sendStatus(200);
 }"
  ;
+// =====================================================
+// RESETAR TREINAMENTO
+// =====================================================
 
+if (
+  message.startsWith("/resettreino") &&
+  adminSessions[phone]
+) {
+
+  await prisma.adminSettings.deleteMany();
+
+  await sendMessage(
+    phone,
+    "🧠 Todos os treinamentos foram apagados com sucesso."
+  );
+
+  return res.sendStatus(200);
+}
     // =====================================================
     // PROMPT SISTEMA
     // =====================================================
