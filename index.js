@@ -479,6 +479,16 @@ Descrição: ${descricao}
 // LIMPAR HISTÓRICO
 // =====================================================
 
+// =====================================================
+// CONFIRMAÇÃO LIMPAR HISTÓRICO
+// =====================================================
+
+const pendingDeletes = {};
+
+// =====================================================
+// LIMPAR HISTÓRICO
+// =====================================================
+
 if (
   message.startsWith("/limparhistorico") &&
   adminSessions[phone]
@@ -498,12 +508,49 @@ if (
     return res.sendStatus(200);
   }
 
-  // APAGAR MENSAGENS
+  // SALVAR PENDENTE
+  pendingDeletes[phone] = numero;
+
+  // PEDIR CONFIRMAÇÃO
+  await sendMessage(
+    phone,
+    `⚠️ Confirma apagar todo histórico do número:\n\n${numero}\n\nDigite:\n/confirmlimpeza`
+  );
+
+  return res.sendStatus(200);
+}
+
+// =====================================================
+// CONFIRMAR LIMPEZA
+// =====================================================
+
+if (
+  message.startsWith("/confirmlimpeza") &&
+  adminSessions[phone]
+) {
+
+  const numero =
+    pendingDeletes[phone];
+
+  if (!numero) {
+
+    await sendMessage(
+      phone,
+      "⚠️ Nenhuma limpeza pendente."
+    );
+
+    return res.sendStatus(200);
+  }
+
+  // APAGAR HISTÓRICO
   await prisma.message.deleteMany({
     where: {
       phone: numero
     }
   });
+
+  // LIMPAR PENDÊNCIA
+  delete pendingDeletes[phone];
 
   // CONFIRMAÇÃO
   await sendMessage(
