@@ -1340,6 +1340,28 @@ Fonte: ${n.source.name}
   return res.sendStatus(200);
 }
     // =====================================================
+// VALIDAR CLIENTE
+// =====================================================
+
+const cliente =
+  await prisma.client.findFirst({
+    where: {
+      phone: phone.replace("@c.us", "")
+    }
+  });
+
+if (cliente && !cliente.isActive) {
+
+  await sendMessage(
+    phone,
+`🚫 Seu acesso está desativado.
+
+Entre em contato com a Agils IA.`
+  );
+
+  return res.sendStatus(200);
+}
+    // =====================================================
     // OPENAI
     // =====================================================
 
