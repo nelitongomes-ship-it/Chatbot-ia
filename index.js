@@ -503,117 +503,307 @@ console.log(
       return res.sendStatus(200);
     }
 
-    // =====================================================
-    // CADASTRAR CLIENTE
-    // =====================================================
+// =====================================================
+// CADASTRAR CLIENTE
+// =====================================================
 
-    if (
-      message.startsWith("/cadastrarcliente") &&
-      adminSessions[phone]
-    ) {
+if (
+  message.startsWith("/cadastrarcliente") &&
+  adminSessions[phone]
+) {
 
-      const dados =
-        message.replace("/cadastrarcliente", "")
-        .trim()
-        .split("|");
+  const dados =
+    message.replace("/cadastrarcliente", "")
+    .trim()
+    .split("|");
 
-      const nome = dados[0]?.trim();
-      const telefone = dados[1]?.trim();
-      const servico = dados[2]?.trim();
+  const nome = dados[0]?.trim();
+  const telefone = dados[1]?.trim();
+  const senha = dados[2]?.trim();
+  const plano = dados[3]?.trim();
 
-      if (
-        !nome ||
-        !telefone ||
-        !servico
-      ) {
+  if (
+    !nome ||
+    !telefone ||
+    !senha ||
+    !plano
+  ) {
 
-        await sendMessage(
-          phone,
-          "⚠️ Formato:\n/cadastrarcliente Nome | Telefone | Serviço"
-        );
+    await sendMessage(
+      phone,
+`⚠️ Formato:
 
-        return res.sendStatus(200);
+/cadastrarcliente Nome | Telefone | Senha | Plano`
+    );
+
+    return res.sendStatus(200);
+  }
+
+  const existingClient =
+    await prisma.client.findUnique({
+      where: {
+        phone: telefone
       }
+    });
 
-      const existingClient =
-        await prisma.client.findFirst({
-          where: {
-            phone: telefone
-          }
-        });
+  if (existingClient) {
 
-      if (existingClient) {
+    await sendMessage(
+      phone,
+      "⚠️ Cliente já cadastrado."
+    );
 
-        await sendMessage(
-          phone,
-          "⚠️ Cliente já cadastrado."
-        );
+    return res.sendStatus(200);
+  }
 
-        return res.sendStatus(200);
-      }
-
-      await prisma.client.create({
-        data: {
-          name: nome,
-          phone: telefone,
-          serviceType: servico
-        }
-      });
-
-      await sendMessage(
-        phone,
-        `✅ Cliente cadastrado.\n\n👤 ${nome}`
-      );
-
-      return res.sendStatus(200);
+  await prisma.client.create({
+    data: {
+      name: nome,
+      phone: telefone,
+      password: senha,
+      planType: plano,
+      serviceType: plano,
+      isActive: true
     }
+  });
 
-    // =====================================================
-    // CONSULTAR CLIENTE
-    // =====================================================
-
-    if (
-      message.startsWith("/cliente") &&
-      adminSessions[phone]
-    ) {
-
-      const nome =
-        message.replace("/cliente", "").trim();
-
-      const cliente =
-        await prisma.client.findFirst({
-          where: {
-            name: {
-              contains: nome,
-              mode: "insensitive"
-            }
-          }
-        });
-
-      if (!cliente) {
-
-        await sendMessage(
-          phone,
-          "❌ Cliente não encontrado."
-        );
-
-        return res.sendStatus(200);
-      }
-
-      await sendMessage(
-        phone,
+  await sendMessage(
+    phone,
 `
-👤 CLIENTE ENCONTRADO
+✅ CLIENTE CADASTRADO
+
+👤 Nome: ${nome}
+📱 Telefone: ${telefone}
+📦 Plano: ${plano}
+🔐 Senha: ${senha}
+`
+  );
+
+  return res.sendStatus(200);
+}
+
+    // =====================================================
+// ALTERAR SENHA
+// =====================================================
+
+if (
+  message.startsWith("/alterarsenha") &&
+  adminSessions[phone]
+) {
+
+  const dados =
+    message.replace("/alterarsenha", "")
+    .trim()
+    .split("|");
+
+  const telefone = dados[0]?.trim();
+  const novaSenha = dados[1]?.trim();
+
+  if (!telefone || !novaSenha) {
+
+    await sendMessage(
+      phone,
+`⚠️ Use:
+
+/alterarsenha Telefone | NovaSenha`
+    );
+
+    return res.sendStatus(200);
+  }
+
+  await prisma.client.updateMany({
+    where: {
+      phone: telefone
+    },
+    data: {
+      password: novaSenha
+    }
+  });
+
+  await sendMessage(
+    phone,
+`🔐 Senha alterada com sucesso
+
+📱 ${telefone}`
+  );
+
+  return res.sendStatus(200);
+  }
+
+    // =====================================================
+// ALTERAR PLANO
+// =====================================================
+
+if (
+  message.startsWith("/alterarplano") &&
+  adminSessions[phone]
+) {
+
+  const dados =
+    message.replace("/alterarplano", "")
+    .trim()
+    .split("|");
+
+  const telefone = dados[0]?.trim();
+  const novoPlano = dados[1]?.trim();
+
+  await prisma.client.updateMany({
+    where: {
+      phone: telefone
+    },
+    data: {
+      planType: novoPlano
+    }
+  });
+
+  await sendMessage(
+    phone,
+`
+📦 Plano alterado
+
+📱 ${telefone}
+📌 Novo Plano: ${novoPlano}
+`
+  );
+
+  return res.sendStatus(200);
+}
+    // =====================================================
+// DESATIVAR CLIENTE
+// =====================================================
+
+if (
+  message.startsWith("/desativarcliente") &&
+  adminSessions[phone]
+) {
+
+  const telefone =
+    message.replace("/desativarcliente", "")
+    .trim();
+
+  await prisma.client.updateMany({
+    where: {
+      phone: telefone
+    },
+    data: {
+      isActive: false
+    }
+  });
+
+  await sendMessage(
+    phone,
+`🚫 Cliente desativado
+
+📱 ${telefone}`
+  );
+
+  return res.sendStatus(200);
+}
+    // =====================================================
+// REATIVAR CLIENTE
+// =====================================================
+
+if (
+  message.startsWith("/reativarcliente") &&
+  adminSessions[phone]
+) {
+
+  const telefone =
+    message.replace("/reativarcliente", "")
+    .trim();
+
+  await prisma.client.updateMany({
+    where: {
+      phone: telefone
+    },
+    data: {
+      isActive: true
+    }
+  });
+
+  await sendMessage(
+    phone,
+`✅ Cliente reativado
+
+📱 ${telefone}`
+  );
+
+  return res.sendStatus(200);
+}
+    // =====================================================
+// EXCLUIR CLIENTE
+// =====================================================
+
+if (
+  message.startsWith("/excluircliente") &&
+  adminSessions[phone]
+) {
+
+  const telefone =
+    message.replace("/excluircliente", "")
+    .trim();
+
+  await prisma.client.deleteMany({
+    where: {
+      phone: telefone
+    }
+  });
+
+  await sendMessage(
+    phone,
+`🗑️ Cliente excluído
+
+📱 ${telefone}`
+  );
+
+  return res.sendStatus(200);
+}
+    // =====================================================
+// CONSULTAR CLIENTE
+// =====================================================
+
+if (
+  message.startsWith("/cliente") &&
+  adminSessions[phone]
+) {
+
+  const telefone =
+    message.replace("/cliente", "")
+    .trim();
+
+  const cliente =
+    await prisma.client.findFirst({
+      where: {
+        phone: telefone
+      }
+    });
+
+  if (!cliente) {
+
+    await sendMessage(
+      phone,
+      "❌ Cliente não encontrado."
+    );
+
+    return res.sendStatus(200);
+  }
+
+  await sendMessage(
+    phone,
+`
+👤 CLIENTE
 
 Nome: ${cliente.name}
 Telefone: ${cliente.phone}
-Serviço: ${cliente.serviceType}
+Plano: ${cliente.planType}
+Status: ${cliente.isActive ? "Ativo" : "Inativo"}
+Senha: ${cliente.password}
 `
-      );
+  );
 
-      return res.sendStatus(200);
-    }
-
+  return res.sendStatus(200);
+}
+    
     // =====================================================
     // AGENDAR
     // =====================================================
