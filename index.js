@@ -90,40 +90,60 @@ if (
     );
 
     const audioUrl =
+      req.body.data?.media ||
       req.body.data?.url;
+
+    console.log("URL AUDIO:", audioUrl);
+
+    // =====================================================
+    // BAIXAR ÁUDIO
+    // =====================================================
 
     const audioResponse =
       await axios({
         method: "GET",
         url: audioUrl,
-        responseType: "stream"
+        responseType: "arraybuffer"
       });
 
+    const timestamp =
+      Date.now();
+
     const audioPath =
-      `./audio_${Date.now()}_${phone}.ogg`;
+      `./audio_${timestamp}.ogg`;
 
-    const writer =
-      fs.createWriteStream(audioPath);
+    const mp3Path =
+      `./audio_${timestamp}.mp3`;
 
-    audioResponse.data.pipe(writer);
+    fs.writeFileSync(
+      audioPath,
+      audioResponse.data
+    );
+
+    // =====================================================
+    // CONVERTER MP3
+    // =====================================================
 
     await new Promise((resolve, reject) => {
 
-      writer.on("finish", resolve);
-      writer.on("error", reject);
+      ffmpeg(audioPath)
+        .toFormat("mp3")
+        .on("end", resolve)
+        .on("error", reject)
+        .save(mp3Path);
 
     });
+
+    // =====================================================
+    // WHISPER
+    // =====================================================
 
     const form =
       new FormData();
 
     form.append(
       "file",
-      fs.createReadStream(audioPath),
-      {
-        filename: "audio.ogg",
-        contentType: "audio/ogg"
-      }
+      fs.createReadStream(mp3Path)
     );
 
     form.append(
@@ -148,21 +168,33 @@ if (
     audioText =
       whisper.data.text;
 
-    message = audioText;
-
-    fs.unlinkSync(audioPath);
+    message =
+      audioText;
 
     console.log(
       "Áudio convertido:",
       audioText
     );
 
+    // =====================================================
+    // APAGAR
+    // =====================================================
+
+    if (fs.existsSync(audioPath)) {
+      fs.unlinkSync(audioPath);
+    }
+
+    if (fs.existsSync(mp3Path)) {
+      fs.unlinkSync(mp3Path);
+    }
+
   } catch (error) {
 
     console.log(
       "ERRO ÁUDIO:",
       error.response?.data ||
-      error.message
+      error.message ||
+      error
     );
 
     await sendMessage(
@@ -172,7 +204,7 @@ if (
 
     return res.sendStatus(200);
   }
-}
+           }
       
     // =====================================================
     // IGNORAR GRUPOS
