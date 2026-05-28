@@ -24,14 +24,16 @@ model User {
 
   isAdmin         Boolean  @default(false)
 
-  // =========================
   // PLANOS
-  // =========================
 
   planType        String   @default("free")
+
   messagesToday   Int      @default(0)
+
   lastMessageDay  String?
+
   planExpiresAt   String?
+
   isActive        Boolean  @default(false)
 
   createdAt       DateTime @default(now())
@@ -39,6 +41,7 @@ model User {
   // RELAÇÕES
 
   contracts       Contract[]
+
   appointments    Appointment[]
 }
 
@@ -62,7 +65,9 @@ model Message {
   id        Int      @id @default(autoincrement())
 
   phone     String
+
   role      String
+
   content   String
 
   createdAt DateTime @default(now())
@@ -90,7 +95,9 @@ model Client {
   id          Int      @id @default(autoincrement())
 
   name        String
+
   phone       String
+
   serviceType String
 
   createdAt   DateTime @default(now())
@@ -105,96 +112,14 @@ model Expense {
   id          Int      @id @default(autoincrement())
 
   phone       String
+
   value       Float
+
   category    String
+
   description String?
 
   createdAt   DateTime @default(now())
 }
 
-// =====================================================
-// AGENDAMENTOS
-// =====================================================
-
-model Appointment {
-
-  id          Int      @id @default(autoincrement())
-
-  clientName  String
-  date        String
-  time        String
-  description String
-
-  userId      Int?
-
-  user        User? @relation(
-    fields: [userId],
-    references: [id]
-  )
-
-  createdAt   DateTime @default(now())
-}
-
-// =====================================================
-// CONTRATOS
-// =====================================================
-
-model Contract {
-
-  id               Int      @id @default(autoincrement())
-
-  contractNumber   String   @unique
-
-  product          String
-
-  totalValue       Float
-
-  installmentValue Float
-
-  installments     Int
-
-  paidInstallments Int      @default(0)
-
-  pendingBalance   Float
-
-  status           String   @default("ativo")
-
-  userId           Int
-
-  user             User @relation(
-    fields: [userId],
-    references: [id]
-  )
-
-  payments         Payment[]
-
-  createdAt        DateTime @default(now())
-}
-
-// =====================================================
-// PAGAMENTOS
-// =====================================================
-
-model Payment {
-
-  id          Int      @id @default(autoincrement())
-
-  installment Int
-
-  value       Float
-
-  dueDate     String
-
-  paid        Boolean  @default(false)
-
-  paidAt      String?
-
-  contractId  Int
-
-  contract    Contract @relation(
-    fields: [contractId],
-    references: [id]
-  )
-
-  createdAt   DateTime @default(now())
-}
+// =================================================
