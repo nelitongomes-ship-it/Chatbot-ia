@@ -58,7 +58,7 @@ app.post("/webhook", async (req, res) => {
 
   try {
 
-    const message =
+    let message =
       req.body.data?.body ||
       req.body.message ||
       "";
@@ -67,6 +67,98 @@ app.post("/webhook", async (req, res) => {
       req.body.data?.from ||
       "";
 
+// =====================================================
+// ÁUDIO WHATSAPP
+// =====================================================
+
+let audioText = "";
+
+if (
+  req.body.data?.type === "audio"
+) {
+
+  try {
+
+    await sendMessage(
+      phone,
+      "🎤 Áudio recebido. Transcrevendo..."
+    );
+
+    const audioUrl =
+      req.body.data?.url;
+
+    const audioResponse =
+      await axios({
+        method: "GET",
+        url: audioUrl,
+        responseType: "stream"
+      });
+
+    const audioPath =
+      "./audio.ogg";
+
+    const writer =
+      fs.createWriteStream(audioPath);
+
+    audioResponse.data.pipe(writer);
+
+    await new Promise((resolve, reject) => {
+
+      writer.on("finish", resolve);
+      writer.on("error", reject);
+
+    });
+
+    const form =
+      new FormData();
+
+    form.append(
+      "file",
+      fs.createReadStream(audioPath)
+    );
+
+    form.append(
+      "model",
+      "whisper-1"
+    );
+
+    const whisper =
+      await axios.post(
+        "https://api.openai.com/v1/audio/transcriptions",
+        form,
+        {
+          headers: {
+            Authorization:
+              `Bearer ${process.env.OPENAI_API_KEY}`,
+            ...form.getHeaders()
+          }
+        }
+      );
+
+    audioText =
+      whisper.data.text;
+
+    console.log(
+      "Áudio convertido:",
+      audioText
+    );
+
+  } catch (error) {
+
+    console.log(
+      "ERRO ÁUDIO:",
+      error.message
+    );
+
+    await sendMessage(
+      phone,
+      "⚠️ Não consegui entender o áudio."
+    );
+
+    return res.sendStatus(200);
+  }
+}
+    
     console.log("Mensagem:", message);
 
     if (!message) {
