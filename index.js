@@ -1158,8 +1158,10 @@ Fonte: ${n.source.name}
     );
 
     return res.sendStatus(500);
-  });
 
+  }
+
+});
 
 // =====================================================
 // PORTA
@@ -1172,6 +1174,6 @@ app.listen(PORT, () => {
 
   console.log(
     `Servidor rodando na porta ${PORT}`
-    );
+  );
 
 });
