@@ -160,7 +160,10 @@ message = audioText;
 }
     
     console.log("Mensagem:", message);
-console.log(req.body);
+console.log(
+  "WEBHOOK:",
+  JSON.stringify(req.body, null, 2)
+);
     if (!message) {
       return res.sendStatus(200);
     }
