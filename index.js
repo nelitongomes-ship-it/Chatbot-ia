@@ -169,7 +169,10 @@ if (
 
     audioText =
       whisper.data.text;
-
+console.log(
+  "TEXTO WHISPER:",
+  audioText
+);
     message =
       audioText;
 
