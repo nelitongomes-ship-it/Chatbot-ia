@@ -544,7 +544,7 @@ const telefoneLimpo =
   const existingClient =
     await prisma.client.findUnique({
       where: {
-        phone: telefone
+        phone: telefoneLimpo
       }
     });
 
