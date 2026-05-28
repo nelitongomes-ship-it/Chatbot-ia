@@ -137,7 +137,7 @@ if (
 
     audioText =
       whisper.data.text;
-
+message = audioText;
     console.log(
       "Áudio convertido:",
       audioText
