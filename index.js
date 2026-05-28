@@ -538,7 +538,9 @@ if (
 
     return res.sendStatus(200);
   }
-
+const telefoneLimpo =
+  telefone.replace("@c.us", "");
+  
   const existingClient =
     await prisma.client.findUnique({
       where: {
@@ -559,7 +561,7 @@ if (
   await prisma.client.create({
     data: {
       name: nome,
-      phone: telefone,
+      phone: telefoneLimpo
       password: senha,
       planType: plano,
       serviceType: plano,
