@@ -168,18 +168,25 @@ if (
       );
 
     audioText =
-      whisper.data.text;
+  whisper.data.text;
+
 console.log(
   "TEXTO WHISPER:",
   audioText
 );
-    message =
-      audioText;
 
-    console.log(
-      "Áudio convertido:",
-      audioText
-    );
+message =
+  audioText;
+
+message =
+  message
+    .replace(/\n/g, " ")
+    .trim();
+
+console.log(
+  "Áudio convertido:",
+  audioText
+);
 
     // =====================================================
     // APAGAR
