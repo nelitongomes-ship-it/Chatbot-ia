@@ -730,34 +730,7 @@ if (
 
   return res.sendStatus(200);
 }
-    // =====================================================
-// EXCLUIR CLIENTE
-// =====================================================
-
-if (
-  message.startsWith("/excluircliente") &&
-  adminSessions[phone]
-) {
-
-  const telefone =
-    message.replace("/excluircliente", "")
-    .trim();
-
-  await prisma.client.deleteMany({
-    where: {
-      phone: telefone
-    }
-  });
-
-  await sendMessage(
-    phone,
-`🗑️ Cliente excluído
-
-📱 ${telefone}`
-  );
-
-  return res.sendStatus(200);
-}
+    
     // =====================================================
 // CONSULTAR CLIENTE
 // =====================================================
@@ -930,7 +903,44 @@ Descrição: ${descricao}
 
       return res.sendStatus(200);
     }
+// =====================================================
+// EXCLUIR CLIENTE
+// =====================================================
 
+if (
+  message.startsWith("/excluircliente") &&
+  adminSessions[phone]
+) {
+
+  const telefone =
+    message.replace("/excluircliente", "")
+    .trim();
+
+  if (!telefone) {
+
+    await sendMessage(
+      phone,
+      "⚠️ Use:\n/excluircliente 5511999999999"
+    );
+
+    return res.sendStatus(200);
+  }
+
+  await prisma.client.deleteMany({
+    where: {
+      phone: telefone
+    }
+  });
+
+  await sendMessage(
+    phone,
+`🗑️ Cliente excluído com sucesso
+
+📱 ${telefone}`
+  );
+
+  return res.sendStatus(200);
+}
     // =====================================================
     // PROMPT SISTEMA
     // =====================================================
