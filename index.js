@@ -70,7 +70,9 @@ app.post("/webhook", async (req, res) => {
     const phone =
       req.body.data?.from ||
       "";
-
+if (req.body.data?.fromMe) {
+  return res.sendStatus(200);
+}
 // =====================================================
 // =====================================================
 // ÁUDIO WHATSAPP
