@@ -7,10 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// =====================================================
-// USER
-// =====================================================
-
 model User {
 
   id              Int      @id @default(autoincrement())
@@ -18,13 +14,14 @@ model User {
   phone           String   @unique
 
   name            String?
+
   cpf             String?
+
   email           String?
+
   password        String?
 
   isAdmin         Boolean  @default(false)
-
-  // PLANOS
 
   planType        String   @default("free")
 
@@ -38,16 +35,10 @@ model User {
 
   createdAt       DateTime @default(now())
 
-  // RELAÇÕES
-
   contracts       Contract[]
 
   appointments    Appointment[]
 }
-
-// =====================================================
-// CONFIG IA
-// =====================================================
 
 model AdminSettings {
 
@@ -55,10 +46,6 @@ model AdminSettings {
 
   systemPrompt String
 }
-
-// =====================================================
-// HISTÓRICO CHAT
-// =====================================================
 
 model Message {
 
@@ -73,10 +60,6 @@ model Message {
   createdAt DateTime @default(now())
 }
 
-// =====================================================
-// NÚMEROS BLOQUEADOS
-// =====================================================
-
 model BlockedNumber {
 
   id        Int      @id @default(autoincrement())
@@ -85,10 +68,6 @@ model BlockedNumber {
 
   createdAt DateTime @default(now())
 }
-
-// =====================================================
-// CLIENTES
-// =====================================================
 
 model Client {
 
@@ -102,10 +81,6 @@ model Client {
 
   createdAt   DateTime @default(now())
 }
-
-// =====================================================
-// GASTOS
-// =====================================================
 
 model Expense {
 
@@ -122,4 +97,71 @@ model Expense {
   createdAt   DateTime @default(now())
 }
 
-// =================================================
+model Appointment {
+
+  id          Int      @id @default(autoincrement())
+
+  clientName  String
+
+  date        String
+
+  time        String
+
+  description String
+
+  userId      Int?
+
+  user        User? @relation(fields: [userId], references: [id])
+
+  createdAt   DateTime @default(now())
+}
+
+model Contract {
+
+  id               Int      @id @default(autoincrement())
+
+  contractNumber   String   @unique
+
+  product          String
+
+  totalValue       Float
+
+  installmentValue Float
+
+  installments     Int
+
+  paidInstallments Int      @default(0)
+
+  pendingBalance   Float
+
+  status           String   @default("ativo")
+
+  userId           Int
+
+  user             User @relation(fields: [userId], references: [id])
+
+  payments         Payment[]
+
+  createdAt        DateTime @default(now())
+}
+
+model Payment {
+
+  id          Int      @id @default(autoincrement())
+
+  installment Int
+
+  value       Float
+
+  dueDate     String
+
+  paid        Boolean  @default(false)
+
+  paidAt      String?
+
+  contractId  Int
+
+  contract    Contract @relation(fields: [contractId], references: [id])
+
+  createdAt   DateTime @default(now())
+}
