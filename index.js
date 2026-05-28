@@ -160,7 +160,7 @@ message = audioText;
 }
     
     console.log("Mensagem:", message);
-
+console.log(req.body);
     if (!message) {
       return res.sendStatus(200);
     }
