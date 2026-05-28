@@ -561,7 +561,7 @@ const telefoneLimpo =
   await prisma.client.create({
     data: {
       name: nome,
-      phone: telefoneLimpo
+      phone: telefoneLimpo,
       password: senha,
       planType: plano,
       serviceType: plano,
