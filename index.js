@@ -655,7 +655,7 @@ REGRAS:
         orderBy: {
           createdAt: "asc"
         },
-        take: 15
+        take: 100
       });
 // =====================================================
 // COTAÇÃO DÓLAR
