@@ -92,8 +92,8 @@ if (
     );
 
     const audioUrl =
-      req.body.data?.media ||
-      req.body.data?.url;
+  req.body.data?.url ||
+  req.body.data?.media;
 
     console.log("URL AUDIO:", audioUrl);
 
