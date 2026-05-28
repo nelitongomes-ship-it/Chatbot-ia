@@ -68,6 +68,7 @@ app.post("/webhook", async (req, res) => {
       "";
 
 // =====================================================
+// =====================================================
 // ÁUDIO WHATSAPP
 // =====================================================
 
@@ -95,7 +96,7 @@ if (
       });
 
     const audioPath =
-      "./audio.ogg";
+      `./audio_${Date.now()}_${phone}.ogg`;
 
     const writer =
       fs.createWriteStream(audioPath);
@@ -114,7 +115,11 @@ if (
 
     form.append(
       "file",
-      fs.createReadStream(audioPath)
+      fs.createReadStream(audioPath),
+      {
+        filename: "audio.ogg",
+        contentType: "audio/ogg"
+      }
     );
 
     form.append(
@@ -127,6 +132,7 @@ if (
         "https://api.openai.com/v1/audio/transcriptions",
         form,
         {
+          timeout: 60000,
           headers: {
             Authorization:
               `Bearer ${process.env.OPENAI_API_KEY}`,
@@ -137,7 +143,11 @@ if (
 
     audioText =
       whisper.data.text;
-message = audioText;
+
+    message = audioText;
+
+    fs.unlinkSync(audioPath);
+
     console.log(
       "Áudio convertido:",
       audioText
@@ -147,6 +157,7 @@ message = audioText;
 
     console.log(
       "ERRO ÁUDIO:",
+      error.response?.data ||
       error.message
     );
 
@@ -158,16 +169,7 @@ message = audioText;
     return res.sendStatus(200);
   }
 }
-    
-    console.log("Mensagem:", message);
-console.log(
-  "WEBHOOK:",
-  JSON.stringify(req.body, null, 2)
-);
-    if (!message) {
-      return res.sendStatus(200);
-    }
-
+      
     // =====================================================
     // IGNORAR GRUPOS
     // =====================================================
