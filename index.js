@@ -464,15 +464,22 @@ console.log(
       const numero =
         message.replace("/bloquear", "").trim();
 
-      await prisma.blockedNumber.upsert({
-        where: {
-          phone: numero
-        },
-        update: {},
-        create: {
-          phone: numero
-        }
-      });
+      const bloqueado =
+  await prisma.blockedNumber.findFirst({
+    where: {
+      phone: numero
+    }
+  });
+
+if (!bloqueado) {
+
+  await prisma.blockedNumber.create({
+    data: {
+      phone: numero
+    }
+  });
+
+}
 
       await sendMessage(
         phone,
@@ -548,7 +555,7 @@ const telefoneLimpo =
   
   const existingClient =
    
-    await prisma.client.findUnique({
+    await prisma.client.findFirst({
       where: {
         phone: telefoneLimpo
       }
