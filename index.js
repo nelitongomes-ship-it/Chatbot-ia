@@ -465,13 +465,15 @@ console.log(
         message.replace("/bloquear", "").trim();
 
       const bloqueado =
+  const bloqueado =
   await prisma.blockedNumber.findFirst({
     where: {
       phone: numero
     }
   });
 
-if (!bloqueado) {
+
+  if (!bloqueado) {
 
   await prisma.blockedNumber.create({
     data: {
