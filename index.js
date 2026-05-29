@@ -796,16 +796,14 @@ if (
 
   await sendMessage(
     phone,
-`
 👤 CLIENTE
 
 Nome: ${clienteConsulta.name}
 Telefone: ${clienteConsulta.phone}
 Plano: ${clienteConsulta.planType}
+Modo IA: ${clienteConsulta.aiMode}
 Status: ${clienteConsulta.isActive ? "Ativo" : "Inativo"}
 Senha: ${clienteConsulta.password}
-`
-  );
 
   return res.sendStatus(200);
 }
