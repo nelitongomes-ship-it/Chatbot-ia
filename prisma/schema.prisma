@@ -24,7 +24,9 @@ model User {
   isAdmin         Boolean  @default(false)
 
   planType        String   @default("free")
-
+aiMode           String   @default("SEM_CADASTRO")
+financialProfile String?
+interestStage    String?  @default("NENHUM")
   messagesToday   Int      @default(0)
 
   lastMessageDay  String?
