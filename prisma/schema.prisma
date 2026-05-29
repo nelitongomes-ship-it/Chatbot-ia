@@ -85,6 +85,10 @@ model Client {
 
   planType    String   @default("basic")
 
+aiMode           String   @default("SEM_CADASTRO")
+financialProfile String?
+interestStage    String?  @default("NENHUM")
+
   planExpiresAt String?
 
   isActive    Boolean  @default(true)
