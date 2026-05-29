@@ -1341,17 +1341,6 @@ const cliente =
     }
   });
 
-if (cliente && !cliente.isActive) {
-
-  await sendMessage(
-    phone,
-`🚫 Seu acesso está desativado.
-
-Entre em contato com a Agils IA.`
-  );
-
-  return res.sendStatus(200);
-}
 let contextoSistema = modo1;
 
 if (cliente?.aiMode === "BASICO") {
@@ -1365,6 +1354,19 @@ if (cliente?.aiMode === "COMPLETO") {
 if (cliente?.aiMode === "AGILS_CRED") {
   contextoSistema = modo4;
 }
+    
+if (cliente && !cliente.isActive) {
+
+  await sendMessage(
+    phone,
+`🚫 Seu acesso está desativado.
+
+Entre em contato com a Agils IA.`
+  );
+
+  return res.sendStatus(200);
+}
+
     
     // =====================================================
     // OPENAI
