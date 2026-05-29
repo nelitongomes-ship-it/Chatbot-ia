@@ -1007,7 +1007,8 @@ const systemPrompt =
   settings?.systemPrompt
     ? settings.systemPrompt + "\n\n" + contextoSistema
     : contextoSistema;
-    
+
+    console.log("TESTE NOVO CODIGO 123");
     // =====================================================
     // SALVAR USUÁRIO
     // =====================================================
