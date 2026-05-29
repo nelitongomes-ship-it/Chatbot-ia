@@ -594,7 +594,7 @@ if (
   if (plano.toUpperCase() === "AGILS_CRED") {
     modo = "AGILS_CRED";
   }
-
+});
   
 // =====================================================
 // CADASTRAR CLIENTE
