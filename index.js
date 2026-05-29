@@ -267,7 +267,7 @@ console.log(
     // =====================================================
 
     const blocked =
-      await prisma.blockedNumber.findUnique({
+      await prisma.blockedNumber.findFirst({
         where: {
           phone
         }
