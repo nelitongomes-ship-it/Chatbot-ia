@@ -465,7 +465,7 @@ console.log(
       const numero =
         message.replace("/bloquear", "").trim();
 
-      const bloqueado =
+  
   const bloqueado =
   await prisma.blockedNumber.findFirst({
     where: {
