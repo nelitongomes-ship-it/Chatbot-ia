@@ -965,18 +965,40 @@ if (
   return res.sendStatus(200);
 }
     // =====================================================
-    // PROMPT SISTEMA
+    // VALIDAR CLIENTE
     // =====================================================
+const cliente =
+  await prisma.client.findFirst({
+    where: {
+      phone: phone.replace("@c.us", "")
+    }
+  });
 
+let contextoSistema = modo1;
+
+if (cliente?.aiMode === "BASICO") {
+  contextoSistema = modo2;
+}
+
+if (cliente?.aiMode === "COMPLETO") {
+  contextoSistema = modo3;
+}
+
+if (cliente?.aiMode === "AGILS_CRED") {
+  contextoSistema = modo4;
+}
     
+// =====================================================
+// PROMPT
+// =====================================================
 const settings =
   await prisma.adminSettings.findFirst();
 
-
 const systemPrompt =
   settings?.systemPrompt
-  ? settings.systemPrompt + "\n\n" + contextoSistema
-  : contextoSistema;
+    ? settings.systemPrompt + "\n\n" + contextoSistema
+    : contextoSistema;
+    
     // =====================================================
     // SALVAR USUÁRIO
     // =====================================================
