@@ -9,6 +9,11 @@ const FormData = require("form-data");
 
 const { PrismaClient } = require("@prisma/client");
 
+const modo1 = require("./modo1");
+const modo2 = require("./modo2");
+const modo3 = require("./modo3");
+const modo4 = require("./modo4");
+
 require("dotenv").config();
 
 const prisma = new PrismaClient();
@@ -1376,6 +1381,20 @@ Entre em contato com a Agils IA.`
   );
 
   return res.sendStatus(200);
+}
+
+    let contextoSistema = modo1;
+
+if (cliente?.aiMode === "BASICO") {
+  contextoSistema = modo2;
+}
+
+if (cliente?.aiMode === "COMPLETO") {
+  contextoSistema = modo3;
+}
+
+if (cliente?.aiMode === "AGILS_CRED") {
+  contextoSistema = modo4;
 }
     // =====================================================
     // OPENAI
