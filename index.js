@@ -1003,15 +1003,21 @@ const systemPrompt =
     // SALVAR USUÁRIO
     // =====================================================
 
-    await prisma.user.upsert({
-      where: {
-        phone
-      },
-      update: {},
-      create: {
-        phone
-      }
-    });
+    const usuario = await prisma.user.findFirst({
+  where: {
+    phone
+  }
+});
+
+if (!usuario) {
+
+  await prisma.user.create({
+    data: {
+      phone
+    }
+  });
+
+}
 
     // =====================================================
     // SALVAR MSG USER
