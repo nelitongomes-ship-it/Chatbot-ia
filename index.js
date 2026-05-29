@@ -767,14 +767,14 @@ if (
     message.replace("/cliente", "")
     .trim();
 
-  const cliente =
+  const clienteConsulta =
     await prisma.client.findFirst({
       where: {
         phone: telefone
       }
     });
 
-  if (!cliente) {
+  if (!clienteConsulta) {
 
     await sendMessage(
       phone,
@@ -789,11 +789,11 @@ if (
 `
 👤 CLIENTE
 
-Nome: ${cliente.name}
-Telefone: ${cliente.phone}
-Plano: ${cliente.planType}
-Status: ${cliente.isActive ? "Ativo" : "Inativo"}
-Senha: ${cliente.password}
+Nome: ${clienteConsulta.name}
+Telefone: ${clienteConsulta.phone}
+Plano: ${clienteConsulta.planType}
+Status: ${clienteConsulta.isActive ? "Ativo" : "Inativo"}
+Senha: ${clienteConsulta.password}
 `
   );
 
