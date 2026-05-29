@@ -78,7 +78,9 @@ model Client {
   name        String
 
   phone       String  @unique 
-
+ 
+  cpf         String?
+ 
   password    String?
 
   serviceType String
