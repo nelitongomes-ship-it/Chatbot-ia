@@ -519,6 +519,7 @@ console.log(
     }
 
 // =====================================================
+// =====================================================
 // CADASTRAR CLIENTE
 // =====================================================
 
@@ -553,14 +554,20 @@ if (
 
     return res.sendStatus(200);
   }
-const telefoneLimpo =
-  telefone.replace("@c.us", "");
-  
+
+  const telefoneLimpo = telefone
+    .replace("@c.us", "")
+    .replace(/\D/g, "");
+
+  const telefoneFinal =
+    telefoneLimpo.startsWith("55")
+      ? telefoneLimpo
+      : "55" + telefoneLimpo;
+
   const existingClient =
-   
     await prisma.client.findFirst({
       where: {
-        phone: telefoneLimpo
+        phone: telefoneFinal
       }
     });
 
@@ -576,25 +583,25 @@ const telefoneLimpo =
 
   let modo = "SEM_CADASTRO";
 
-if (plano.toUpperCase() === "BASICO") {
-  modo = "BASICO";
-}
+  if (plano.toUpperCase() === "BASICO") {
+    modo = "BASICO";
+  }
 
-if (plano.toUpperCase() === "COMPLETO") {
-  modo = "COMPLETO";
-}
+  if (plano.toUpperCase() === "COMPLETO") {
+    modo = "COMPLETO";
+  }
 
-if (plano.toUpperCase() === "AGILS_CRED") {
-  modo = "AGILS_CRED";
-}
-  
+  if (plano.toUpperCase() === "AGILS_CRED") {
+    modo = "AGILS_CRED";
+  }
+
   await prisma.client.create({
     data: {
       name: nome,
-      phone: telefoneLimpo,
+      phone: telefoneFinal,
       password: senha,
-      planType: plano,
-      serviceType: plano,
+      planType: plano.toUpperCase(),
+      serviceType: plano.toUpperCase(),
       aiMode: modo,
       isActive: true
     }
@@ -606,8 +613,9 @@ if (plano.toUpperCase() === "AGILS_CRED") {
 ✅ CLIENTE CADASTRADO
 
 👤 Nome: ${nome}
-📱 Telefone: ${telefone}
-📦 Plano: ${plano}
+📱 Telefone: ${telefoneFinal}
+📦 Plano: ${plano.toUpperCase()}
+🤖 Modo IA: ${modo}
 🔐 Senha: ${senha}
 `
   );
