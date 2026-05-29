@@ -822,14 +822,15 @@ if (
   });
 
   await sendMessage(
-    phone,
+  phone,
 `
 📦 Plano alterado
 
-📱 ${telefone}
-📌 Novo Plano: ${novoPlano}
+📱 Telefone: ${telefone}
+📦 Novo plano: ${novoPlano}
 `
-  );
+);
+
 
   return res.sendStatus(200);
 }
