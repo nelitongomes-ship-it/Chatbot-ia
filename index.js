@@ -1352,31 +1352,7 @@ Fonte: ${n.source.name}
 
   return res.sendStatus(200);
 }
-    // =====================================================
-// VALIDAR CLIENTE
-// =====================================================
-
-const cliente =
-  await prisma.client.findFirst({
-    where: {
-      phone: phone.replace("@c.us", "")
-    }
-  });
-
-let contextoSistema = modo1;
-
-if (cliente?.aiMode === "BASICO") {
-  contextoSistema = modo2;
-}
-
-if (cliente?.aiMode === "COMPLETO") {
-  contextoSistema = modo3;
-}
-
-if (cliente?.aiMode === "AGILS_CRED") {
-  contextoSistema = modo4;
-}
-    
+    //CADASTRO DESATIVADO//
 if (cliente && !cliente.isActive) {
 
   await sendMessage(
