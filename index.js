@@ -600,8 +600,131 @@ if (
       name: nome,
       phone: telefoneFinal,
       password: senha,
-      planType: plano.toUpperCase(),
-      serviceType: plano.toUpperCase(),
+// =====================================================
+// CADASTRAR CLIENTE
+// =====================================================
+
+if (
+  message.startsWith("/cadastrarcliente") &&
+  adminSessions[phone]
+) {
+
+  const dados =
+    message.replace("/cadastrarcliente", "")
+    .trim()
+    .split("|");
+
+  const nome = dados[0]?.trim();
+  const telefone = dados[1]?.trim();
+  const cpf = dados[2]?.trim();
+  const senha = dados[3]?.trim();
+  const plano = dados[4]?.trim();
+
+  if (
+    !nome ||
+    !telefone ||
+    !cpf ||
+    !senha ||
+    !plano
+  ) {
+
+    await sendMessage(
+      phone,
+`⚠️ FORMATO CORRETO
+
+/cadastrarcliente Nome | Telefone | CPF | Senha | Plano
+
+Exemplo:
+
+/cadastrarcliente João Silva | 16999999999 | 12345678900 | 1234 | BASICO
+
+PLANOS DISPONÍVEIS:
+
+• BASICO
+• COMPLETO
+• AGILS_CRED
+
+🔒 Apenas administradores autorizados podem realizar cadastros.`
+    );
+
+    return res.sendStatus(200);
+  }
+
+  const telefoneLimpo = telefone
+    .replace("@c.us", "")
+    .replace(/\D/g, "");
+
+  const telefoneFinal =
+    telefoneLimpo.startsWith("55")
+      ? telefoneLimpo
+      : "55" + telefoneLimpo;
+
+  const cpfLimpo = cpf.replace(/\D/g, "");
+
+  if (cpfLimpo.length !== 11) {
+    await sendMessage(
+      phone,
+      "❌ CPF inválido. Informe os 11 números do CPF."
+    );
+
+    return res.sendStatus(200);
+  }
+
+  const planoFinal = plano.toUpperCase();
+
+  if (
+    planoFinal !== "BASICO" &&
+    planoFinal !== "COMPLETO" &&
+    planoFinal !== "AGILS_CRED"
+  ) {
+
+    await sendMessage(
+      phone,
+      "❌ Plano inválido. Utilize BASICO, COMPLETO ou AGILS_CRED."
+    );
+
+    return res.sendStatus(200);
+  }
+
+  const existingClient =
+    await prisma.client.findFirst({
+      where: {
+        phone: telefoneFinal
+      }
+    });
+
+  if (existingClient) {
+
+    await sendMessage(
+      phone,
+      "⚠️ Cliente já cadastrado."
+    );
+
+    return res.sendStatus(200);
+  }
+
+  let modo = "SEM_CADASTRO";
+
+  if (planoFinal === "BASICO") {
+    modo = "BASICO";
+  }
+
+  if (planoFinal === "COMPLETO") {
+    modo = "COMPLETO";
+  }
+
+  if (planoFinal === "AGILS_CRED") {
+    modo = "AGILS_CRED";
+  }
+
+  await prisma.client.create({
+    data: {
+      name: nome,
+      phone: telefoneFinal,
+      cpf: cpfLimpo,
+      password: senha,
+      planType: planoFinal,
+      serviceType: planoFinal,
       aiMode: modo,
       isActive: true
     }
@@ -610,19 +733,20 @@ if (
   await sendMessage(
     phone,
 `
-✅ CLIENTE CADASTRADO
+✅ CLIENTE CADASTRADO COM SUCESSO
 
 👤 Nome: ${nome}
 📱 Telefone: ${telefoneFinal}
-📦 Plano: ${plano.toUpperCase()}
+🆔 CPF: ${cpfLimpo}
+📦 Plano: ${planoFinal}
 🤖 Modo IA: ${modo}
 🔐 Senha: ${senha}
+🟢 Status: ATIVO
 `
   );
 
   return res.sendStatus(200);
 }
-
     // =====================================================
 // ALTERAR SENHA
 // =====================================================
