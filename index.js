@@ -967,19 +967,7 @@ if (
     // =====================================================
     // PROMPT SISTEMA
     // =====================================================
-let contextoSistema = modo1;
 
-if (cliente?.aiMode === "BASICO") {
-  contextoSistema = modo2;
-}
-
-if (cliente?.aiMode === "COMPLETO") {
-  contextoSistema = modo3;
-}
-
-if (cliente?.aiMode === "AGILS_CRED") {
-  contextoSistema = modo4;
-}
     
 const settings =
   await prisma.adminSettings.findFirst();
@@ -1364,7 +1352,19 @@ Entre em contato com a Agils IA.`
 
   return res.sendStatus(200);
 }
+let contextoSistema = modo1;
 
+if (cliente?.aiMode === "BASICO") {
+  contextoSistema = modo2;
+}
+
+if (cliente?.aiMode === "COMPLETO") {
+  contextoSistema = modo3;
+}
+
+if (cliente?.aiMode === "AGILS_CRED") {
+  contextoSistema = modo4;
+}
     
     // =====================================================
     // OPENAI
