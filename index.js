@@ -542,6 +542,7 @@ const telefoneLimpo =
   telefone.replace("@c.us", "");
   
   const existingClient =
+   
     await prisma.client.findUnique({
       where: {
         phone: telefoneLimpo
@@ -558,6 +559,20 @@ const telefoneLimpo =
     return res.sendStatus(200);
   }
 
+  let modo = "SEM_CADASTRO";
+
+if (plano.toUpperCase() === "BASICO") {
+  modo = "BASICO";
+}
+
+if (plano.toUpperCase() === "COMPLETO") {
+  modo = "COMPLETO";
+}
+
+if (plano.toUpperCase() === "AGILS_CRED") {
+  modo = "AGILS_CRED";
+}
+  
   await prisma.client.create({
     data: {
       name: nome,
@@ -565,6 +580,7 @@ const telefoneLimpo =
       password: senha,
       planType: plano,
       serviceType: plano,
+      aiMode: modo,
       isActive: true
     }
   });
