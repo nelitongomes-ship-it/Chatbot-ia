@@ -595,11 +595,7 @@ if (
     modo = "AGILS_CRED";
   }
 
-  await prisma.client.create({
-    data: {
-      name: nome,
-      phone: telefoneFinal,
-      password: senha,
+  
 // =====================================================
 // CADASTRAR CLIENTE
 // =====================================================
