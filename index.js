@@ -589,18 +589,19 @@ PLANOS DISPONÍVEIS:
     return res.sendStatus(200);
   }
 
-  const telefoneLimpo = telefone
+  const telefoneClienteLimpo = 
+  telefoneCliente
     .replace("@c.us", "")
     .replace(/\D/g, "");
 
-  const telefoneFinal =
-    telefoneLimpo.startsWith("55")
-      ? telefoneLimpo
-      : "55" + telefoneLimpo;
+  const telefoneClienteFinal =
+  telefoneClienteLimpo.startsWith("55")
+      ? telefoneClienteLimpo
+      : "55" + telefoneClienteLimpo;
 
-  const cpfLimpo = cpf.replace(/\D/g, "");
+  const cpfClienteLimpo = cpfCliente.replace(/\D/g, "");
 
-  if (cpfLimpo.length !== 11) {
+  if (cpfClienteLimpo.length !== 11) {
     await sendMessage(
       phone,
       "❌ CPF inválido. Informe os 11 números do CPF."
