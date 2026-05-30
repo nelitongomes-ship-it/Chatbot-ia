@@ -525,12 +525,7 @@ console.log(
 // CADASTRAR CLIENTE
 // =====================================================
 
-if (
-  message.startsWith("/cadastrarcliente") &&
-  adminSessions[phone]
-) {
-
-  const dados =
+ const dados =
     message.replace("/cadastrarcliente", "")
     .trim()
     .split("|");
@@ -625,49 +620,121 @@ PLANOS DISPONÍVEIS:
   }
 
   let modo = "SEM_CADASTRO";
+const dados = message
+  .replace("/cadastrarcliente", "")
+  .trim()
+  .split("|");
 
-  if (planoFinal === "BASICO") {
-    modo = "BASICO";
-  }
+const nome = dados[0]?.trim();
+const telefone = dados[1]?.trim();
+const senha = dados[2]?.trim();
+const plano = dados[3]?.trim();
 
-  if (planoFinal === "COMPLETO") {
-    modo = "COMPLETO";
-  }
-
-  if (planoFinal === "AGILS_CRED") {
-    modo = "AGILS_CRED";
-  }
-
-  await prisma.client.create({
-    data: {
-      name: nome,
-      phone: telefoneFinal,
-      
-      password: senha,
-      planType: planoFinal,
-      serviceType: planoFinal,
-      aiMode: modo,
-      isActive: true
-    }
-  });
-
+if (
+  !nome ||
+  !telefone ||
+  !senha ||
+  !plano
+) {
   await sendMessage(
     phone,
-`
-✅ CLIENTE CADASTRADO COM SUCESSO
+`⚠️ FORMATO CORRETO
 
-👤 Nome: ${nome}
-📱 Telefone: ${telefoneFinal}
-🆔 CPF: ${cpfLimpo}
-📦 Plano: ${planoFinal}
-🤖 Modo IA: ${modo}
-🔐 Senha: ${senha}
-🟢 Status: ATIVO
-`
+/cadastrarcliente Nome | Telefone | Senha | Plano
+
+Exemplo:
+
+/cadastrarcliente João Silva | 16999999999 | 123456 | BASICO
+
+PLANOS DISPONÍVEIS:
+
+• BASICO
+• COMPLETO
+• AGILS_CRED`
   );
 
   return res.sendStatus(200);
 }
+
+const telefoneLimpo = telefone
+  .replace("@c.us", "")
+  .replace(/\D/g, "");
+
+const telefoneFinal =
+  telefoneLimpo.startsWith("55")
+    ? telefoneLimpo
+    : "55" + telefoneLimpo;
+
+const planoFinal = plano.toUpperCase();
+
+if (
+  planoFinal !== "BASICO" &&
+  planoFinal !== "COMPLETO" &&
+  planoFinal !== "AGILS_CRED"
+) {
+  await sendMessage(
+    phone,
+    "❌ Plano inválido. Utilize BASICO, COMPLETO ou AGILS_CRED."
+  );
+
+  return res.sendStatus(200);
+}
+
+const existingClient =
+  await prisma.client.findFirst({
+    where: {
+      phone: telefoneFinal
+    }
+  });
+
+if (existingClient) {
+  await sendMessage(
+    phone,
+    "⚠️ Cliente já cadastrado."
+  );
+
+  return res.sendStatus(200);
+}
+
+let modo = "SEM_CADASTRO";
+
+if (planoFinal === "BASICO") {
+  modo = "BASICO";
+}
+
+if (planoFinal === "COMPLETO") {
+  modo = "COMPLETO";
+}
+
+if (planoFinal === "AGILS_CRED") {
+  modo = "AGILS_CRED";
+}
+
+await prisma.client.create({
+  data: {
+    name: nome,
+    phone: telefoneFinal,
+    password: senha,
+    planType: planoFinal,
+    serviceType: planoFinal,
+    aiMode: modo,
+    isActive: true
+  }
+});
+
+await sendMessage(
+  phone,
+`✅ CLIENTE CADASTRADO COM SUCESSO
+
+👤 Nome: ${nome}
+📱 Telefone: ${telefoneFinal}
+📦 Plano: ${planoFinal}
+🤖 Modo IA: ${modo}
+🔐 Senha: ${senha}
+🟢 Status: ATIVO`
+);
+
+return res.sendStatus(200);
     // =====================================================
 // ALTERAR SENHA
 // =====================================================
