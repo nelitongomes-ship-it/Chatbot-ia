@@ -73,6 +73,7 @@ model BlockedNumber {
 }
 
 model Client {
+products Product[]
 
   id          Int      @id @default(autoincrement())
 
