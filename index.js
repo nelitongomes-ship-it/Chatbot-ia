@@ -89,7 +89,9 @@ let audioText = "";
 if (
   req.body.data?.type === "audio"
 ) {
-
+  
+console.log("AUDIO RECEBIDO");
+  
   try {
 
     await sendMessage(
@@ -101,7 +103,19 @@ if (
   req.body.data?.url ||
   req.body.data?.media;
 
-    console.log("URL AUDIO:", audioUrl);
+console.log("URL AUDIO:", audioUrl);
+
+if (!audioUrl) {
+
+  console.log("URL DE AUDIO NÃO ENCONTRADA");
+
+  await sendMessage(
+    phone,
+    "⚠️ Não encontrei o arquivo de áudio."
+  );
+
+  return res.sendStatus(200);
+}
 
     // =====================================================
     // BAIXAR ÁUDIO
