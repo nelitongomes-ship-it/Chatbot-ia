@@ -15,7 +15,7 @@ model User {
 
   name            String?
 
-  cpf             String?
+
 
   email           String?
 
@@ -79,7 +79,6 @@ model Client {
 
   phone       String  @unique 
  
-  cpf         String?
  
   password    String?
 
