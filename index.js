@@ -543,16 +543,16 @@ console.log(
 // CADASTRAR CLIENTE
 // =====================================================
 
- const dados =
+ const dadosCliente =
     message.replace("/cadastrarcliente", "")
     .trim()
     .split("|");
 
-  const nome = dados[0]?.trim();
-  const telefone = dados[1]?.trim();
-  const cpf = dados[2]?.trim();
-  const senha = dados[3]?.trim();
-  const plano = dados[4]?.trim();
+  const nome = dadosCliente[0]?.trim();
+  const telefone = dadosCliente[1]?.trim();
+  const cpf = dadosCliente[2]?.trim();
+  const senha = dadosCliente[3]?.trim();
+  const plano = dadosCliente[4]?.trim();
 
   if (
     !nome ||
