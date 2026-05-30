@@ -98,6 +98,35 @@ interestStage    String?  @default("NENHUM")
   createdAt   DateTime @default(now())
 }
 
+model Product {
+  id                Int      @id @default(autoincrement())
+
+  clientId          Int
+  client            Client   @relation(fields: [clientId], references: [id])
+
+  transactionCode   String   @unique
+
+  type              String
+  name              String
+
+  quantity          Float?
+  unitPrice         Float?
+  totalValue        Float?
+
+  contractDate      DateTime?
+  nextDueDate       DateTime?
+  endDate           DateTime?
+
+  installments      Int?
+  paidInstallments  Int      @default(0)
+  installmentValue  Float?
+
+  profitability     String?
+
+  status            String   @default("ATIVO")
+
+  createdAt         DateTime @default(now())
+}
 model Expense {
 
   id          Int      @id @default(autoincrement())
