@@ -642,7 +642,7 @@ PLANOS DISPONÍVEIS:
     data: {
       name: nome,
       phone: telefoneFinal,
-      cpf: cpfLimpo,
+      
       password: senha,
       planType: planoFinal,
       serviceType: planoFinal,
