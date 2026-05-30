@@ -548,18 +548,23 @@ console.log(
     .trim()
     .split("|");
 
-  const nome = dadosCliente[0]?.trim();
-  const telefone = dadosCliente[1]?.trim();
-  const cpf = dadosCliente[2]?.trim();
-  const senha = dadosCliente[3]?.trim();
-  const plano = dadosCliente[4]?.trim();
+  const nomeCliente = 
+  dadosCliente[0]?.trim();
+  const telefoneCliente = 
+  dadosCliente[1]?.trim();
+  const cpfCliente = 
+  dadosCliente[2]?.trim();
+  const senhaCliente = 
+  dadosCliente[3]?.trim();
+  const planoCliente =
+  dadosCliente[4]?.trim();
 
   if (
-    !nome ||
-    !telefone ||
-    !cpf ||
-    !senha ||
-    !plano
+    !nomeCliente ||
+    !telefoneCliente ||
+    !cpfCliente ||
+    !senhaCliente ||
+    !planoCliente
   ) {
 
     await sendMessage(
