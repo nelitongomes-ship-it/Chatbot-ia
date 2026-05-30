@@ -711,12 +711,6 @@ if (
   return res.sendStatus(200);
 }
 
-const existingClient =
-  await prisma.client.findFirst({
-    where: {
-      phone: telefoneFinal
-    }
-  });
 
 if (existingClient) {
   await sendMessage(
