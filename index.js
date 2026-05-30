@@ -698,8 +698,6 @@ const telefoneFinal =
     ? telefoneLimpo
     : "55" + telefoneLimpo;
 
-const planoFinal = plano.toUpperCase();
-
 if (
   planoFinal !== "BASICO" &&
   planoFinal !== "COMPLETO" &&
