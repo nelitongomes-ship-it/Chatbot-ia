@@ -717,7 +717,6 @@ if (existingClient) {
   return res.sendStatus(200);
 }
 
-let modo = "SEM_CADASTRO";
 
 if (planoFinal === "BASICO") {
   modo = "BASICO";
