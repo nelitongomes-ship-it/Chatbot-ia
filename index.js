@@ -66,6 +66,10 @@ async function sendMessage(to, body) {
 
 app.post("/webhook", async (req, res) => {
 
+  console.log(
+  "TIPO RECEBIDO:",
+  req.body.data?.type
+);
   try {
 
     let message =
