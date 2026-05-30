@@ -698,11 +698,7 @@ const telefoneFinal =
     ? telefoneLimpo
     : "55" + telefoneLimpo;
 
-if (
-  planoFinal !== "BASICO" &&
-  planoFinal !== "COMPLETO" &&
-  planoFinal !== "AGILS_CRED"
-) {
+
   await sendMessage(
     phone,
     "❌ Plano inválido. Utilize BASICO, COMPLETO ou AGILS_CRED."
