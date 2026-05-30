@@ -860,7 +860,8 @@ Modo IA: ${clienteConsulta.aiMode}
 Status: ${clienteConsulta.isActive ? "Ativo" : "Inativo"}
 Senha: ${clienteConsulta.password}
 `
-  return res.sendStatus(200);
+ );
+    return res.sendStatus(200);
 }
     
     // =====================================================
