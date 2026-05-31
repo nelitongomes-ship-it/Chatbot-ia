@@ -24,7 +24,7 @@ const app = express();
 app.use(express.json());
 
 // =====================================================
-// CONFIGURAÇÕES
+// CONFIGURAÇÕES ADM
 // =====================================================
 
 const ADMIN_USER = "AgilsIA";
