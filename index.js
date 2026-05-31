@@ -807,7 +807,104 @@ if (
 
   return res.sendStatus(200);
 }
-    
+
+    // =====================================================
+// VER CLIENTE POR CPF
+// =====================================================
+
+if (
+  message.startsWith("/vercliente") &&
+  adminSessions[phone]
+) {
+
+  const cpfBusca =
+    message
+      .replace("/vercliente", "")
+      .trim()
+      .replace(/\D/g, "");
+
+  const cliente =
+    await prisma.client.findFirst({
+      where: {
+        cpf: cpfBusca
+      }
+    });
+
+  if (!cliente) {
+
+    await sendMessage(
+      phone,
+      "❌ Cliente não encontrado."
+    );
+
+    return res.sendStatus(200);
+  }
+
+  await sendMessage(
+    phone,
+`👤 CLIENTE
+
+Nome: ${cliente.name}
+Telefone: ${cliente.phone}
+CPF: ${cliente.cpf}
+Contrato: ${cliente.contractNumber || "Não informado"}
+Plano: ${cliente.planType}
+Modo IA: ${cliente.aiMode}
+Valor: R$ ${cliente.totalValue || 0}
+Status: ${cliente.isActive ? "ATIVO" : "INATIVO"}`
+  );
+
+  return res.sendStatus(200);
+}
+
+    // =====================================================
+// EXCLUIR CLIENTE POR CPF
+// =====================================================
+
+if (
+  message.startsWith("/excluircpf") &&
+  adminSessions[phone]
+) {
+
+  const cpf =
+    message
+      .replace("/excluircpf", "")
+      .trim()
+      .replace(/\D/g, "");
+
+  const cliente =
+    await prisma.client.findFirst({
+      where: {
+        cpf
+      }
+    });
+
+  if (!cliente) {
+
+    await sendMessage(
+      phone,
+      "❌ Cliente não encontrado."
+    );
+
+    return res.sendStatus(200);
+  }
+
+  await prisma.client.delete({
+    where: {
+      id: cliente.id
+    }
+  });
+
+  await sendMessage(
+    phone,
+`🗑️ Cliente removido
+
+👤 ${cliente.name}
+🪪 ${cliente.cpf}`
+  );
+
+  return res.sendStatus(200);
+}
     // =====================================================
 // ALTERAR SENHA
 // =====================================================
