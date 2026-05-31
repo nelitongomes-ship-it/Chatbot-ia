@@ -92,6 +92,65 @@ console.log(
 if (req.body.data?.fromMe) {
   return res.sendStatus(200);
 }
+    // ======================================
+// CADASTRO AUTOMÁTICO DE CLIENTE
+// ======================================
+
+if (
+  message.includes("📄") &&
+  message.includes("Contrato:") &&
+  message.includes("Cliente:")
+) {
+
+  const contrato =
+    message.match(/Contrato:\s*(.+)/i)?.[1]?.trim() || "";
+
+  const nome =
+    message.match(/Cliente:\s*(.+)/i)?.[1]?.trim() || "";
+
+  const cpf =
+    message.match(/CPF:\s*(.+)/i)?.[1]?.trim() || "";
+
+  const valor =
+    message.match(/Valor Total:\s*R\$\s*([\d.,]+)/i)?.[1]?.trim() || "";
+
+  const parcelas =
+    message.match(/Parcelas:\s*(.+)/i)?.[1]?.trim() || "";
+
+  const dataContrato =
+    message.match(/Data do Contrato:\s*(.+)/i)?.[1]?.trim() || "";
+
+  const primeiraParcela =
+    message.match(/1ª Parcela:\s*(.+)/i)?.[1]?.trim() || "";
+
+  await prisma.cliente.create({
+    data: {
+      nome,
+      cpf,
+      contrato,
+      plano: "BÁSICO",
+      valorPlano: parseFloat(
+        valor.replace(".", "").replace(",", ".")
+      ),
+      parcelas,
+      dataContrato,
+      primeiraParcela,
+      telefone: phone
+    }
+  });
+
+  await sendMessage(
+    phone,
+    `✅ CLIENTE CADASTRADO
+
+👤 ${nome}
+📋 ${contrato}
+📦 Plano BÁSICO
+💰 R$ ${valor}`
+  );
+
+  return res.sendStatus(200);
+}
 // =====================================================
 // =====================================================
 // ÁUDIO WHATSAPP
