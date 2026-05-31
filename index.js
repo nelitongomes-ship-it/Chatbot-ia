@@ -201,17 +201,7 @@ ${telefoneCliente}`
   return res.sendStatus(200);
 }
 
-  if (clienteExistente) {
-
-    await sendMessage(
-      phone,
-      "⚠️ Cliente já cadastrado."
-    );
-
-    return res.sendStatus(200);
-  }
-
-  
+   
 // =====================================================
 // =====================================================
 // ÁUDIO WHATSAPP
