@@ -200,40 +200,7 @@ ${telefoneCliente}`
     return res.sendStatus(200);
   }
 
-  await prisma.client.create({
-    data: {
-      name: nome,
-      fullName: nome,
-      cpf: cpf,
-      phone: cpf.replace(/\D/g, ""),
-      serviceType: "ASSESSORIA_FINANCEIRA",
-      planType: "BASICO",
-      contractNumber: contrato,
-      totalValue: parseFloat(
-        valor.replace(".", "").replace(",", ".")
-      ),
-      installments: parcelas,
-      contractDate: dataContrato,
-      firstDueDate: primeiraParcela,
-      aiMode: "BASICO",
-      isActive: true
-    }
-  });
-
-  await sendMessage(
-    phone,
-`✅ CLIENTE CADASTRADO COM SUCESSO
-
-👤 ${nome}
-📋 ${contrato}
-🪪 ${cpf}
-
-📦 Plano: BÁSICO
-💰 Valor: R$ ${valor}`
-  );
-
-  return res.sendStatus(200);
-}
+  
 // =====================================================
 // =====================================================
 // ÁUDIO WHATSAPP
