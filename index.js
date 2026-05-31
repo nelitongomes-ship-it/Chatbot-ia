@@ -19,6 +19,24 @@ require("dotenv").config();
 
 const prisma = new PrismaClient();
 
+async function limparBanco() {
+
+  await prisma.payment.deleteMany({});
+  await prisma.contract.deleteMany({});
+  await prisma.appointment.deleteMany({});
+  await prisma.expense.deleteMany({});
+  await prisma.product.deleteMany({});
+  await prisma.client.deleteMany({});
+  await prisma.user.deleteMany({});
+  await prisma.message.deleteMany({});
+  await prisma.blockedNumber.deleteMany({});
+
+  console.log("BANCO LIMPO COM SUCESSO");
+
+}
+
+limparBanco();
+
 const app = express();
 
 app.use(express.json());
