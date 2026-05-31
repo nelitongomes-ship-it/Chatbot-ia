@@ -92,15 +92,12 @@ console.log(
 if (req.body.data?.fromMe) {
   return res.sendStatus(200);
 }
-    // ======================================
-// CADASTRO AUTOMÁTICO DE CLIENTE
-// ======================================
-
-if (
-  message.includes("📄") &&
-  message.includes("Contrato:") &&
+    if (
+  message.toUpperCase().includes("CONTRATO") &&
   message.includes("Cliente:")
 ) {
+
+  console.log("ENTROU NO CADASTRO AUTOMATICO");
 
   const contrato =
     message.match(/Contrato:\s*(.+)/i)?.[1]?.trim() || "";
@@ -123,30 +120,53 @@ if (
   const primeiraParcela =
     message.match(/1ª Parcela:\s*(.+)/i)?.[1]?.trim() || "";
 
-  await prisma.cliente.create({
+  const clienteExistente =
+    await prisma.client.findFirst({
+      where: {
+        cpf
+      }
+    });
+
+  if (clienteExistente) {
+
+    await sendMessage(
+      phone,
+      "⚠️ Cliente já cadastrado."
+    );
+
+    return res.sendStatus(200);
+  }
+
+  await prisma.client.create({
     data: {
-      nome,
-      cpf,
-      contrato,
-      plano: "BÁSICO",
-      valorPlano: parseFloat(
+      name: nome,
+      fullName: nome,
+      cpf: cpf,
+      phone: cpf.replace(/\D/g, ""),
+      serviceType: "ASSESSORIA_FINANCEIRA",
+      planType: "BASICO",
+      contractNumber: contrato,
+      totalValue: parseFloat(
         valor.replace(".", "").replace(",", ".")
       ),
-      parcelas,
-      dataContrato,
-      primeiraParcela,
-      telefone: phone
+      installments: parcelas,
+      contractDate: dataContrato,
+      firstDueDate: primeiraParcela,
+      aiMode: "BASICO",
+      isActive: true
     }
   });
 
   await sendMessage(
     phone,
-    `✅ CLIENTE CADASTRADO
+`✅ CLIENTE CADASTRADO COM SUCESSO
 
 👤 ${nome}
 📋 ${contrato}
-📦 Plano BÁSICO
-💰 R$ ${valor}`
+🪪 ${cpf}
+
+📦 Plano: BÁSICO
+💰 Valor: R$ ${valor}`
   );
 
   return res.sendStatus(200);
