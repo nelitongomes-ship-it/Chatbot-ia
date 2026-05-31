@@ -434,6 +434,16 @@ console.log(
 
     if (message.startsWith("/login")) {
 
+  if (!isAdminPhone(phone)) {
+
+    await sendMessage(
+      phone,
+      "⛔ Este número não possui acesso administrativo."
+    );
+
+    return res.sendStatus(200);
+  }
+
       const args =
         message.trim().split(" ");
 
