@@ -136,9 +136,7 @@ if (
     message.match(/1ª Parcela:\s*(.+)/i)?.[1]?.trim() || "";
 
   const telefoneCliente =
-    phone
-      .replace("@c.us", "")
-      .replace(/\D/g, "");
+  message.match(/(\d{10,13})/)?.[1] || "";
 
   const cpfLimpo =
     cpf.replace(/\D/g, "");
