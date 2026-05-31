@@ -73,24 +73,38 @@ model BlockedNumber {
 }
 
 model Client {
-products Product[]
+
+  products Product[]
 
   id          Int      @id @default(autoincrement())
 
   name        String
 
-  phone       String  @unique 
- 
- 
+  fullName    String?
+
+  cpf         String?
+
+  phone       String @unique
+
   password    String?
 
   serviceType String
 
-  planType    String   @default("basic")
+  planType    String @default("basic")
 
-aiMode           String   @default("SEM_CADASTRO")
-financialProfile String?
-interestStage    String?  @default("NENHUM")
+  contractNumber String?
+
+  totalValue     Float?
+
+  installments   String?
+
+  contractDate   String?
+
+  firstDueDate   String?
+
+  aiMode           String   @default("SEM_CADASTRO")
+  financialProfile String?
+  interestStage    String?  @default("NENHUM")
 
   planExpiresAt String?
 
