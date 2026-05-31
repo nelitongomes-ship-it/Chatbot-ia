@@ -624,11 +624,14 @@ console.log(
       return res.sendStatus(200);
     }
 
-
+console.log("MENSAGEM RECEBIDA:");
+console.log(message);
 // =====================================================
 // CADASTRAR CLIENTE
 // =====================================================
+console.log("ENTROU NO CADASTRO AUTOMATICO");
 
+    
 if (
   message.startsWith("/cadastrarcliente") &&
   adminSessions[phone]
