@@ -138,6 +138,11 @@ if (
   const telefoneCliente =
   message.match(/(\d{10,13})/)?.[1] || "";
 
+const telefoneFinal =
+  telefoneCliente.startsWith("55")
+    ? telefoneCliente
+    : "55" + telefoneCliente;
+  
   const cpfLimpo =
     cpf.replace(/\D/g, "");
 
