@@ -81,123 +81,157 @@ model Client {
   phone       String @unique
 
   password    String?
+generator client {
+provider = "prisma-client-js"
+}
 
-  serviceType String
+datasource db {
+provider = "postgresql"
+url      = env("DATABASE_URL")
+}
 
-  planType    String @default("basic")
+model User {
+id               Int      @id @default(autoincrement())
+phone            String   @unique
+name             String?
+email            String?
+password         String?
+isAdmin          Boolean  @default(false)
 
-  contractNumber String?
+planType         String   @default("free")
+aiMode           String   @default("SEM_CADASTRO")
+financialProfile String?
+interestStage    String?  @default("NENHUM")
 
-  totalValue     Float?
+messagesToday    Int      @default(0)
+lastMessageDay   String?
+planExpiresAt    String?
+isActive         Boolean  @default(false)
 
-  installments   String?
+createdAt        DateTime @default(now())
 
-  contractDate   String?
+contracts        Contract[]
+}
 
-  firstDueDate   String?
+model Appointment {
+id          Int      @id @default(autoincrement())
+clientName  String
+phone       String?
+date        String
+time        String
+description String
+createdAt   DateTime @default(now())
+}
 
-  aiMode           String   @default("SEM_CADASTRO")
-  financialProfile String?
-  interestStage    String?  @default("NENHUM")
+model BlockedNumber {
+id        Int      @id @default(autoincrement())
+phone     String   @unique
+createdAt DateTime @default(now())
+}
 
-  planExpiresAt String?
+model Client {
+products Product[]
 
-  isActive    Boolean  @default(true)
+id               Int      @id @default(autoincrement())
+name             String
+fullName         String?
+cpf              String?
+phone            String   @unique
+password         String?
 
-  createdAt   DateTime @default(now())
+serviceType      String
+planType         String   @default("basic")
+
+contractNumber   String?
+totalValue       Float?
+installments     String?
+contractDate     String?
+firstDueDate     String?
+
+aiMode           String   @default("SEM_CADASTRO")
+financialProfile String?
+interestStage    String?  @default("NENHUM")
+
+planExpiresAt    String?
+isActive         Boolean  @default(true)
+
+createdAt        DateTime @default(now())
 }
 
 model Product {
-  id                Int      @id @default(autoincrement())
+id                Int      @id @default(autoincrement())
 
-  clientId          Int
-  client            Client   @relation(fields: [clientId], references: [id])
+clientId          Int
+client            Client   @relation(fields: [clientId], references: [id])
 
-  transactionCode   String   @unique
+transactionCode   String   @unique
 
-  type              String
-  name              String
+type              String
+name              String
 
-  quantity          Float?
-  unitPrice         Float?
-  totalValue        Float?
+quantity          Float?
+unitPrice         Float?
+totalValue        Float?
 
-  contractDate      DateTime?
-  nextDueDate       DateTime?
-  endDate           DateTime?
+contractDate      DateTime?
+nextDueDate       DateTime?
+endDate           DateTime?
 
-  installments      Int?
-  paidInstallments  Int      @default(0)
-  installmentValue  Float?
+installments      Int?
+paidInstallments  Int      @default(0)
+installmentValue  Float?
 
-  profitability     String?
+profitability     String?
+status            String   @default("ATIVO")
 
-  status            String   @default("ATIVO")
-
-  createdAt         DateTime @default(now())
+createdAt         DateTime @default(now())
 }
+
 model Expense {
-
-  id          Int      @id @default(autoincrement())
-
-  phone       String
-
-  value       Float
-
-  category    String
-
-  description String?
-
-  createdAt   DateTime @default(now())
+id          Int      @id @default(autoincrement())
+phone       String
+value       Float
+category    String
+description String?
+createdAt   DateTime @default(now())
 }
-
 
 model Contract {
+id               Int      @id @default(autoincrement())
 
-  id               Int      @id @default(autoincrement())
+contractNumber   String   @unique
+product          String
 
-  contractNumber   String   @unique
+totalValue       Float
+installmentValue Float
+installments     Int
 
-  product          String
+paidInstallments Int      @default(0)
+pendingBalance   Float
 
-  totalValue       Float
+status           String   @default("ativo")
 
-  installmentValue Float
+userId           Int
+user             User @relation(fields: [userId], references: [id])
 
-  installments     Int
+payments         Payment[]
 
-  paidInstallments Int      @default(0)
-
-  pendingBalance   Float
-
-  status           String   @default("ativo")
-
-  userId           Int
-
-  user             User @relation(fields: [userId], references: [id])
-
-  payments         Payment[]
-
-  createdAt        DateTime @default(now())
+createdAt        DateTime @default(now())
 }
 
 model Payment {
+id          Int      @id @default(autoincrement())
 
-  id          Int      @id @default(autoincrement())
+installment Int
+value       Float
 
-  installment Int
+dueDate     String
 
-  value       Float
+paid        Boolean  @default(false)
+paidAt      String?
 
-  dueDate     String
+contractId  Int
+contract    Contract @relation(fields: [contractId], references: [id])
 
-  paid        Boolean  @default(false)
-
-  paidAt      String?
-
-  contractId  Int
-
-  contract    Contract @relation(fields: [contractId], references: [id])
-
-  createdAt   DateTime @default(now())
+createdAt   DateTime @default(now())
 }
