@@ -123,8 +123,10 @@ if (req.body.data?.fromMe) {
     // =====================================================
 // CADASTRO AUTOMÁTICO DE CLIENTE
 // =====================================================
-
+console.log("MENSAGEM ANTES DO CADASTRO:");
+console.log(message);
 if (
+  
   message.toUpperCase().includes("CONTRATO") &&
   message.includes("Cliente:")
 ) {
