@@ -57,6 +57,9 @@ model Appointment {
 
   description String
 
+  reminderDaySent  Boolean @default(false)
+  reminderHourSent Boolean @default(false)
+
   userId      Int?
 
   user        User? @relation(fields: [userId], references: [id])
@@ -158,22 +161,6 @@ model Expense {
   createdAt   DateTime @default(now())
 }
 
-model Appointment {
-
-  id          Int      @id @default(autoincrement())
-
-  clientName  String
-
-  phone       String
-
-  date        String
-
-  time        String
-
-  description String
-
-  createdAt   DateTime @default(now())
-}
 
 model Contract {
 
