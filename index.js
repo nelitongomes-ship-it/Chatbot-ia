@@ -1332,65 +1332,9 @@ Senha: ${clienteConsulta.password}
  );
     return res.sendStatus(200);
 }
-    
-    // =====================================================
-    // AGENDAR
-    // =====================================================
-
-    if (
-      message.startsWith("/agendar")
-    ) {
-
-      const dados =
-        message.replace("/agendar", "")
-        .trim()
-        .split("|");
-
-      const nome = dados[0]?.trim();
-      const data = dados[1]?.trim();
-      const hora = dados[2]?.trim();
-      const descricao = dados[3]?.trim();
-
-      if (
-        !nome ||
-        !data ||
-        !hora ||
-        !descricao
-      ) {
-
-        await sendMessage(
-          phone,
-          "⚠️ Formato:\n/agendar Nome | Data | Hora | Descrição"
-        );
-
-        return res.sendStatus(200);
-      }
-
-      await prisma.appointment.create({
-        data: {
-          clientName: nome,
-          date: data,
-          time: hora,
-          description: descricao
-        }
-      });
-
-      await sendMessage(
-        phone,
-`
-📅 Agendamento realizado
-
-Cliente: ${nome}
-Data: ${data}
-Hora: ${hora}
-Descrição: ${descricao}
-`
-      );
-
-      return res.sendStatus(200);
-    }
-
-    // =====================================================
+  
+  
+// ===================================================== 
     // LIMPAR HISTÓRICO
     // =====================================================
 
