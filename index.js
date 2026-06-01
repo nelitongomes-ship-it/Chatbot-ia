@@ -1315,7 +1315,9 @@ if (
 const cliente =
   await prisma.client.findFirst({
     where: {
-      phone: phone.replace("@c.us", "")
+      phone: phone
+        .replace("@c.us", "")
+        .replace(/^55/, "")
     }
   });
 
