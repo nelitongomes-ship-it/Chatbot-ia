@@ -1897,6 +1897,22 @@ if (
 
   return res.sendStatus(200);
   }
+
+  if (
+  message === "/testeagenda" &&
+  adminSessions[phone]
+) {
+
+  const total =
+    await prisma.appointment.count();
+
+  await sendMessage(
+    phone,
+    `TOTAL DE AGENDAMENTOS: ${total}`
+  );
+
+  return res.sendStatus(200);
+  }
       
     // =====================================================
     // OPENAI
