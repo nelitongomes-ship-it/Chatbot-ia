@@ -901,6 +901,9 @@ if (
       .replace("@c.us", "")
       .replace(/^55/, "");
 
+  console.log("WHATSAPP RECEBIDO:", phone);
+  console.log("NUMERO TRATADO:", numeroCliente);
+
   const compromissos =
     await prisma.appointment.findMany({
       where: {
@@ -910,6 +913,8 @@ if (
         createdAt: "desc"
       }
     });
+
+  console.log("COMPROMISSOS:", compromissos);
 
   if (!compromissos.length) {
 
