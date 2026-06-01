@@ -103,6 +103,8 @@ console.log(
       req.body.message ||
       "";
 
+throw new Error("TESTE DEPLOY 999");
+    
     console.log(">>> MESSAGE RAW <<<");
 console.log(JSON.stringify(message));
 console.log(">>> LENGTH <<<");
