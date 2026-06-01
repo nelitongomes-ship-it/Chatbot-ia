@@ -803,67 +803,7 @@ Exemplo:
   return res.sendStatus(200);
 }
 
-   // =====================================================
-// AGENDAR COMPROMISSO
-// =====================================================
-
-if (
-  message.startsWith("/agendar") &&
-  adminSessions[phone]
-) {
-
-  const dados =
-    message
-      .replace("/agendar", "")
-      .trim()
-      .split("|");
-
-  const telefone = dados[0]?.trim();
-  const data = dados[1]?.trim();
-  const hora = dados[2]?.trim();
-  const descricao = dados[3]?.trim();
-
-  if (
-    !telefone ||
-    !data ||
-    !hora ||
-    !descricao
-  ) {
-
-    await sendMessage(
-      phone,
-`⚠️ Use:
-
-/agendar Telefone|Data|Hora|Descrição
-
-Exemplo:
-
-/agendar 16992040119|05/06/2026|14:00|Reunião financeira`
-    );
-
-    return res.sendStatus(200);
-  }
-
-  const cliente =
-    await prisma.client.findFirst({
-      where: {
-        phone: telefone
-      }
-    });
-
-  if (!cliente) {
-
-    await sendMessage(
-      phone,
-      "❌ Cliente não encontrado."
-    );
-
-    return res.sendStatus(200);
-
-
-        
-
-
+   
     // =====================================================
 // VER CLIENTE POR CPF
 // =====================================================
@@ -913,6 +853,57 @@ Status: ${cliente.isActive ? "ATIVO" : "INATIVO"}`
   return res.sendStatus(200);
 }
 
+// =====================================================
+// LIMPAR AGENDA COMPLETA
+// =====================================================
+
+if (
+  message === "/limparagenda" &&
+  adminSessions[phone]
+) {
+
+  await prisma.appointment.deleteMany({});
+
+  await sendMessage(
+    phone,
+    "🗑️ Todos os compromissos foram removidos."
+  );
+
+  return res.sendStatus(200);
+}
+    
+// =====================================================
+// LIMPAR AGENDA CLIENTE
+// =====================================================
+
+if (
+  message.startsWith("/limparagendacliente") &&
+  adminSessions[phone]
+) {
+
+  const telefone =
+    message
+      .replace("/limparagendacliente", "")
+      .trim();
+
+  await prisma.appointment.deleteMany({
+    where: {
+      phone: telefone
+    }
+  });
+
+  await sendMessage(
+    phone,
+`🗑️ Compromissos removidos
+
+📱 ${telefone}`
+  );
+
+  return res.sendStatus(200);
+}
+
+
+    
     // =====================================================
 // EXCLUIR CLIENTE POR CPF
 // =====================================================
