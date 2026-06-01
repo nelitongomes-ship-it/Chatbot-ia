@@ -72,6 +72,10 @@ async function sendMessage(to, body) {
   );
 
 }
+iniciarLembretes(
+  prisma,
+  sendMessage
+);
 
 // =====================================================
 // WEBHOOK
