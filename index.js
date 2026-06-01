@@ -1608,13 +1608,10 @@ if (
     console.log("Consultando notícias...");
 
     const response = await axios.get(
-
       `https://newsapi.org/v2/everything?q=mercado financeiro OR economia OR investimentos&language=pt&sortBy=publishedAt&pageSize=5&apiKey=${process.env.NEWS_API_KEY}`,
-
       {
         timeout: 10000
       }
-
     );
 
     const noticias =
@@ -1666,6 +1663,7 @@ Fonte: ${n.source.name}
 }
 
     //CADASTRO DESATIVADO//
+    
 if (cliente && !cliente.isActive) {
 
   await sendMessage(
@@ -1676,36 +1674,7 @@ Entre em contato com a Agils IA.`
   );
 
   return res.sendStatus(200);
-}
-
-  }
-
-  await prisma.appointment.create({
-    data: {
-      clientName: cliente.name,
-      phone: telefone,
-      date: data,
-      time: hora,
-      description: descricao
-    }
-  });
-
-  await sendMessage(
-    phone,
-`📅 COMPROMISSO AGENDADO
-
-👤 ${cliente.name}
-📱 ${telefone}
-
-📆 ${data}
-🕒 ${hora}
-
-📝 ${descricao}`
-  );
-
-  return res.sendStatus(200);
-} 
-    
+    }  
 
 // =====================================================
 // MEUS COMPROMISSOS
