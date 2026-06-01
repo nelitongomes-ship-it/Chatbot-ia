@@ -1266,14 +1266,16 @@ if (
   return res.sendStatus(200);
 }
     // =====================================================
-    // VALIDAR CLIENTE
-    // =====================================================
+// VALIDAR CLIENTE
+// =====================================================
+
+const telefoneCliente =
+  phone.replace("@c.us", "");
+
 const cliente =
   await prisma.client.findFirst({
     where: {
-      phone: phone
-        .replace("@c.us", "")
-        .replace(/^55/, "")
+      phone: telefoneCliente
     }
   });
 
