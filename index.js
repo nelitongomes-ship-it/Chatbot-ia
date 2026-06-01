@@ -1990,7 +1990,73 @@ if (
 
   return res.sendStatus(200);
 }
-      
+     // =====================================================
+// AGENDAMENTO AUTOMÁTICO IA
+// =====================================================
+
+if (
+
+  message.toLowerCase().includes("agendar") ||
+
+  message.toLowerCase().includes("compromisso") ||
+
+  message.toLowerCase().includes("reunião") ||
+
+  message.toLowerCase().includes("reuniao")
+
+) {
+
+  const numeroCliente =
+    phone.replace("@c.us", "");
+
+  const clienteAgenda =
+    await prisma.client.findFirst({
+      where: {
+        phone: numeroCliente
+      }
+    });
+
+  if (clienteAgenda) {
+
+    await prisma.appointment.create({
+      data: {
+
+        clientName:
+          clienteAgenda.name,
+
+        phone:
+          numeroCliente,
+
+        date:
+          new Date()
+            .toLocaleDateString("pt-BR"),
+
+        time:
+          new Date()
+            .toLocaleTimeString("pt-BR"),
+
+        description:
+          message
+
+      }
+    });
+
+    await sendMessage(
+      phone,
+`📅 Compromisso registrado com sucesso.
+
+📝 ${message}
+
+Consulte depois digitando:
+
+minha agenda`
+    );
+
+    return res.sendStatus(200);
+
+  }
+
+} 
     // =====================================================
     // OPENAI
     // =====================================================
