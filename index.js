@@ -1218,9 +1218,10 @@ if (
 // =====================================================
 
 if (
-  message === "/limparagenda" &&
-  adminSessions[phone]
+  message.trim() === "/limparagenda"
 ) {
+
+  console.log("LIMPANDO AGENDA COMPLETA");
 
   await prisma.appointment.deleteMany({});
 
@@ -1237,8 +1238,7 @@ if (
 // =====================================================
 
 if (
-  message.startsWith("/limparagendacliente") &&
-  adminSessions[phone]
+  message.startsWith("/limparagendacliente")
 ) {
 
   const telefone =
@@ -1246,17 +1246,30 @@ if (
       .replace("/limparagendacliente", "")
       .trim();
 
-  await prisma.appointment.deleteMany({
-    where: {
-      phone: telefone
-    }
-  });
+  if (!telefone) {
+
+    await sendMessage(
+      phone,
+      "⚠️ Informe o telefone.\n\nExemplo:\n/limparagendacliente 5516992040119"
+    );
+
+    return res.sendStatus(200);
+  }
+
+  const resultado =
+    await prisma.appointment.deleteMany({
+      where: {
+        phone: telefone
+      }
+    });
 
   await sendMessage(
     phone,
 `🗑️ Compromissos removidos
 
-📱 ${telefone}`
+📱 ${telefone}
+
+📋 Total removido: ${resultado.count}`
   );
 
   return res.sendStatus(200);
