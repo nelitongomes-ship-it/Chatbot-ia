@@ -103,13 +103,16 @@ console.log(
       req.body.message ||
       "";
 
+    console.log(">>> MESSAGE RAW <<<");
+console.log(JSON.stringify(message));
+
     const phone =
       req.body.data?.from ||
       "";
 if (req.body.data?.fromMe) {
   return res.sendStatus(200);
 }
-    if (message.trim() === "/limparagenda") {
+    if (message.includes("/limparagenda")) {
 
   console.log("🔥🔥🔥 LIMPARAGENDA EXECUTOU 🔥🔥🔥");
 
