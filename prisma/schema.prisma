@@ -43,24 +43,25 @@ interestStage    String?  @default("NENHUM")
   appointments    Appointment[]
 }
 
-model AdminSettings {
+model Appointment {
 
-  id           Int    @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
 
-  systemPrompt String
-}
+  clientName  String
 
-model Message {
+  phone       String
 
-  id        Int      @id @default(autoincrement())
+  date        String
 
-  phone     String
+  time        String
 
-  role      String
+  description String
 
-  content   String
+  userId      Int?
 
-  createdAt DateTime @default(now())
+  user        User? @relation(fields: [userId], references: [id])
+
+  createdAt   DateTime @default(now())
 }
 
 model BlockedNumber {
