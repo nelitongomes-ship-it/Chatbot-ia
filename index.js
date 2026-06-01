@@ -136,13 +136,13 @@ if (
     message.match(/1ª Parcela:\s*(.+)/i)?.[1]?.trim() || "";
 
   const telefoneCliente =
-  message.match(/(\d{10,13})/)?.[1] || "";
+    message.match(/(\d{10,13})/)?.[1] || "";
 
-const telefoneFinal =
-  telefoneCliente.startsWith("55")
-    ? telefoneCliente
-    : "55" + telefoneCliente;
-  
+  const telefoneFinal =
+    telefoneCliente.startsWith("55")
+      ? telefoneCliente
+      : "55" + telefoneCliente;
+
   const cpfLimpo =
     cpf.replace(/\D/g, "");
 
@@ -168,7 +168,7 @@ const telefoneFinal =
       name: nome,
       fullName: nome,
       cpf: cpfLimpo,
-      phone: telefoneCliente,
+      phone: telefoneFinal,
       password: cpfLimpo.slice(-4),
       serviceType: "ASSESSORIA_FINANCEIRA",
       planType: "BASICO",
@@ -198,12 +198,11 @@ const telefoneFinal =
 🔐 Senha inicial: ${cpfLimpo.slice(-4)}
 
 📱 Login:
-${telefoneCliente}`
+${telefoneFinal}`
   );
 
   return res.sendStatus(200);
 }
-
    
 // =====================================================
 // =====================================================
