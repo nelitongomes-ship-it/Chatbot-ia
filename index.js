@@ -1813,51 +1813,89 @@ if (
 }
     
 // =====================================================
-// LISTAR AGENDA
+// AGENDAR COMPROMISSO
 // =====================================================
 
 if (
-  message === "/agenda" &&
+  message.startsWith("/agendar") &&
   adminSessions[phone]
 ) {
 
-  const compromissos =
-    await prisma.appointment.findMany({
-      orderBy: {
-        createdAt: "desc"
-      },
-      take: 20
-    });
+  const dados =
+    message
+      .replace("/agendar", "")
+      .trim()
+      .split("|");
 
-  if (!compromissos.length) {
+  const telefone = dados[0]?.trim();
+  const data = dados[1]?.trim();
+  const hora = dados[2]?.trim();
+  const descricao = dados[3]?.trim();
+
+  if (
+    !telefone ||
+    !data ||
+    !hora ||
+    !descricao
+  ) {
 
     await sendMessage(
       phone,
-      "📭 Nenhum compromisso agendado."
+`⚠️ Use:
+
+/agendar Telefone|Data|Hora|Descrição
+
+Exemplo:
+
+/agendar 5516992040119|05/06/2026|14:00|Reunião financeira`
     );
 
     return res.sendStatus(200);
   }
 
-  let resposta =
-    "📅 AGENDA DE COMPROMISSOS\n\n";
+  const telefoneFinal =
+    telefone.replace(/\D/g, "").startsWith("55")
+      ? telefone.replace(/\D/g, "")
+      : "55" + telefone.replace(/\D/g, "");
 
-  compromissos.forEach((item, index) => {
+  const cliente =
+    await prisma.client.findFirst({
+      where: {
+        phone: telefoneFinal
+      }
+    });
 
-    resposta +=
-`${index + 1}️⃣ ${item.clientName}
+  if (!cliente) {
 
-📱 ${item.phone}
-📆 ${item.date}
-🕒 ${item.time}
-📝 ${item.description}
+    await sendMessage(
+      phone,
+      "❌ Cliente não encontrado."
+    );
 
-`;
+    return res.sendStatus(200);
+  }
+
+  await prisma.appointment.create({
+    data: {
+      clientName: cliente.name,
+      phone: telefoneFinal,
+      date: data,
+      time: hora,
+      description: descricao
+    }
   });
 
   await sendMessage(
     phone,
-    resposta
+`📅 COMPROMISSO AGENDADO
+
+👤 ${cliente.name}
+📱 ${telefoneFinal}
+
+📆 ${data}
+🕒 ${hora}
+
+📝 ${descricao}`
   );
 
   return res.sendStatus(200);
