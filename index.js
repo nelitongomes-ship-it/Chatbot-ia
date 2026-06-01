@@ -951,104 +951,8 @@ if (
 
   return res.sendStatus(200);
 }
-    // =====================================================
-// LISTAR AGENDA
-// =====================================================
+    
 
-if (
-  message === "/agenda" &&
-  adminSessions[phone]
-) {
-
-  const compromissos =
-    await prisma.appointment.findMany({
-      orderBy: {
-        createdAt: "desc"
-      },
-      take: 20
-    });
-
-  if (!compromissos.length) {
-
-    await sendMessage(
-      phone,
-      "📭 Nenhum compromisso agendado."
-    );
-
-    return res.sendStatus(200);
-  }
-
-  let resposta =
-    "📅 AGENDA DE COMPROMISSOS\n\n";
-
-  compromissos.forEach((item, index) => {
-
-    resposta +=
-`${index + 1}️⃣ ${item.clientName}
-
-📱 ${item.phone}
-📆 ${item.date}
-🕒 ${item.time}
-📝 ${item.description}
-
-`;
-  });
-
-  await sendMessage(
-    phone,
-    resposta
-  );
-
-  return res.sendStatus(200);
-}
-// =====================================================
-// LISTAR CLIENTES
-// =====================================================
-
-if (
-  message === "/listarclientes" &&
-  adminSessions[phone]
-) {
-
-  const clientes =
-    await prisma.client.findMany({
-      orderBy: {
-        createdAt: "desc"
-      }
-    });
-
-  if (!clientes.length) {
-
-    await sendMessage(
-      phone,
-      "📭 Nenhum cliente cadastrado."
-    );
-
-    return res.sendStatus(200);
-  }
-
-  let resposta =
-    "📋 CLIENTES CADASTRADOS\n\n";
-
-  clientes.forEach((cliente, index) => {
-
-    resposta +=
-`${index + 1}️⃣ ${cliente.name}
-
-📱 ${cliente.phone}
-📦 ${cliente.planType}
-🟢 ${cliente.isActive ? "ATIVO" : "INATIVO"}
-
-`;
-  });
-
-  await sendMessage(
-    phone,
-    resposta
-  );
-
-  return res.sendStatus(200);
-}
 
     // =====================================================
 // VER CLIENTE POR CPF
@@ -1861,6 +1765,105 @@ Entre em contato com a Agils IA.`
   return res.sendStatus(200);
 }
 
+// =====================================================
+// LISTAR AGENDA
+// =====================================================
+
+if (
+  message === "/agenda" &&
+  adminSessions[phone]
+) {
+
+  const compromissos =
+    await prisma.appointment.findMany({
+      orderBy: {
+        createdAt: "desc"
+      },
+      take: 20
+    });
+
+  if (!compromissos.length) {
+
+    await sendMessage(
+      phone,
+      "📭 Nenhum compromisso agendado."
+    );
+
+    return res.sendStatus(200);
+  }
+
+  let resposta =
+    "📅 AGENDA DE COMPROMISSOS\n\n";
+
+  compromissos.forEach((item, index) => {
+
+    resposta +=
+`${index + 1}️⃣ ${item.clientName}
+
+📱 ${item.phone}
+📆 ${item.date}
+🕒 ${item.time}
+📝 ${item.description}
+
+`;
+  });
+
+  await sendMessage(
+    phone,
+    resposta
+  );
+
+  return res.sendStatus(200);
+}
+    
+// =====================================================
+// LISTAR CLIENTES
+// =====================================================
+
+if (
+  message === "/listarclientes" &&
+  adminSessions[phone]
+) {
+
+  const clientes =
+    await prisma.client.findMany({
+      orderBy: {
+        createdAt: "desc"
+      }
+    });
+
+  if (!clientes.length) {
+
+    await sendMessage(
+      phone,
+      "📭 Nenhum cliente cadastrado."
+    );
+
+    return res.sendStatus(200);
+  }
+
+  let resposta =
+    "📋 CLIENTES CADASTRADOS\n\n";
+
+  clientes.forEach((cliente, index) => {
+
+    resposta +=
+`${index + 1}️⃣ ${cliente.name}
+
+📱 ${cliente.phone}
+📦 ${cliente.planType}
+🟢 ${cliente.isActive ? "ATIVO" : "INATIVO"}
+
+`;
+  });
+
+  await sendMessage(
+    phone,
+    resposta
+  );
+
+  return res.sendStatus(200);
+}
     
     // =====================================================
     // OPENAI
