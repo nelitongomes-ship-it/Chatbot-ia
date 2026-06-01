@@ -134,7 +134,7 @@ if (
   message.includes("Cliente:")
 ) {
 
-  console.log("ENTROU NO CADASTRO AUTOMATICO");
+  console.log("🔥🔥🔥 CADASTRO VERSAO NOVA 🔥🔥🔥");
 
   const contrato =
     message.match(/Contrato:\s*(.+)/i)?.[1]?.trim() || "";
