@@ -887,6 +887,57 @@ Exemplo:
 
   return res.sendStatus(200);
 } 
+
+    // =====================================================
+// LISTAR AGENDA
+// =====================================================
+
+if (
+  message === "/agenda" &&
+  adminSessions[phone]
+) {
+
+  const compromissos =
+    await prisma.appointment.findMany({
+      orderBy: {
+        createdAt: "desc"
+      },
+      take: 20
+    });
+
+  if (!compromissos.length) {
+
+    await sendMessage(
+      phone,
+      "📭 Nenhum compromisso agendado."
+    );
+
+    return res.sendStatus(200);
+  }
+
+  let resposta =
+    "📅 AGENDA DE COMPROMISSOS\n\n";
+
+  compromissos.forEach((item, index) => {
+
+    resposta +=
+`${index + 1}️⃣ ${item.clientName}
+
+📱 ${item.phone}
+📆 ${item.date}
+🕒 ${item.time}
+📝 ${item.description}
+
+`;
+  });
+
+  await sendMessage(
+    phone,
+    resposta
+  );
+
+  return res.sendStatus(200);
+}
 // =====================================================
 // LISTAR CLIENTES
 // =====================================================
