@@ -853,57 +853,7 @@ Status: ${cliente.isActive ? "ATIVO" : "INATIVO"}`
   return res.sendStatus(200);
 }
 
-// =====================================================
-// LIMPAR AGENDA COMPLETA
-// =====================================================
-
-if (
-  message === "/limparagenda" &&
-  adminSessions[phone]
-) {
-
-  await prisma.appointment.deleteMany({});
-
-  await sendMessage(
-    phone,
-    "🗑️ Todos os compromissos foram removidos."
-  );
-
-  return res.sendStatus(200);
-}
-    
-// =====================================================
-// LIMPAR AGENDA CLIENTE
-// =====================================================
-
-if (
-  message.startsWith("/limparagendacliente") &&
-  adminSessions[phone]
-) {
-
-  const telefone =
-    message
-      .replace("/limparagendacliente", "")
-      .trim();
-
-  await prisma.appointment.deleteMany({
-    where: {
-      phone: telefone
-    }
-  });
-
-  await sendMessage(
-    phone,
-`🗑️ Compromissos removidos
-
-📱 ${telefone}`
-  );
-
-  return res.sendStatus(200);
-}
-
-
-    
+  
     // =====================================================
 // EXCLUIR CLIENTE POR CPF
 // =====================================================
@@ -1256,6 +1206,56 @@ if (
 
   return res.sendStatus(200);
 }
+
+// =====================================================
+// LIMPAR AGENDA COMPLETA
+// =====================================================
+
+if (
+  message === "/limparagenda" &&
+  adminSessions[phone]
+) {
+
+  await prisma.appointment.deleteMany({});
+
+  await sendMessage(
+    phone,
+    "🗑️ Todos os compromissos foram removidos."
+  );
+
+  return res.sendStatus(200);
+}
+    
+// =====================================================
+// LIMPAR AGENDA CLIENTE
+// =====================================================
+
+if (
+  message.startsWith("/limparagendacliente") &&
+  adminSessions[phone]
+) {
+
+  const telefone =
+    message
+      .replace("/limparagendacliente", "")
+      .trim();
+
+  await prisma.appointment.deleteMany({
+    where: {
+      phone: telefone
+    }
+  });
+
+  await sendMessage(
+    phone,
+`🗑️ Compromissos removidos
+
+📱 ${telefone}`
+  );
+
+  return res.sendStatus(200);
+}
+    
     // =====================================================
 // VALIDAR CLIENTE
 // =====================================================
