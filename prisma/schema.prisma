@@ -44,26 +44,12 @@ interestStage    String?  @default("NENHUM")
 }
 
 model Appointment {
-
   id          Int      @id @default(autoincrement())
-
   clientName  String
-
-  phone       String
-
+  phone       String?
   date        String
-
   time        String
-
   description String
-
-  reminderDaySent  Boolean @default(false)
-  reminderHourSent Boolean @default(false)
-
-  userId      Int?
-
-  user        User? @relation(fields: [userId], references: [id])
-
   createdAt   DateTime @default(now())
 }
 
