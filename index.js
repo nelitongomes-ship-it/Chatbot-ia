@@ -860,98 +860,9 @@ Exemplo:
     );
 
     return res.sendStatus(200);
-  }
 
-  await prisma.appointment.create({
-    data: {
-      clientName: cliente.name,
-      phone: telefone,
-      date: data,
-      time: hora,
-      description: descricao
-    }
-  });
 
-  await sendMessage(
-    phone,
-`📅 COMPROMISSO AGENDADO
-
-👤 ${cliente.name}
-📱 ${telefone}
-
-📆 ${data}
-🕒 ${hora}
-
-📝 ${descricao}`
-  );
-
-  return res.sendStatus(200);
-} 
-
-    // =====================================================
-// MEUS COMPROMISSOS
-// =====================================================
-
-if (
-  [
-    "meus compromisso",
-    "meus compromissos",
-    "agenda",
-    "minha agenda"
-  ].includes(message.toLowerCase().trim())
-) {
-
-  const numeroCliente =
-    phone
-      .replace("@c.us", "")
-      .replace(/^55/, "");
-
-  console.log("WHATSAPP RECEBIDO:", phone);
-  console.log("NUMERO TRATADO:", numeroCliente);
-
-  const compromissos =
-    await prisma.appointment.findMany({
-      where: {
-        phone: numeroCliente
-      },
-      orderBy: {
-        createdAt: "desc"
-      }
-    });
-
-  console.log("COMPROMISSOS:", compromissos);
-
-  if (!compromissos.length) {
-
-    await sendMessage(
-      phone,
-      "📭 Você não possui compromissos agendados."
-    );
-
-    return res.sendStatus(200);
-  }
-
-  let resposta =
-    "📅 SEUS COMPROMISSOS\n\n";
-
-  compromissos.forEach(item => {
-
-    resposta +=
-`📆 ${item.date}
-🕒 ${item.time}
-📝 ${item.description}
-
-`;
-  });
-
-  await sendMessage(
-    phone,
-    resposta
-  );
-
-  return res.sendStatus(200);
-}
-    
+        
 
 
     // =====================================================
@@ -1765,6 +1676,99 @@ Entre em contato com a Agils IA.`
   return res.sendStatus(200);
 }
 
+  }
+
+  await prisma.appointment.create({
+    data: {
+      clientName: cliente.name,
+      phone: telefone,
+      date: data,
+      time: hora,
+      description: descricao
+    }
+  });
+
+  await sendMessage(
+    phone,
+`📅 COMPROMISSO AGENDADO
+
+👤 ${cliente.name}
+📱 ${telefone}
+
+📆 ${data}
+🕒 ${hora}
+
+📝 ${descricao}`
+  );
+
+  return res.sendStatus(200);
+} 
+    
+// =====================================================
+// MEUS COMPROMISSOS
+// =====================================================
+
+if (
+  [
+    "meus compromisso",
+    "meus compromissos",
+    "agenda",
+    "minha agenda"
+  ].includes(message.toLowerCase().trim())
+) {
+
+  const numeroCliente =
+    phone
+      .replace("@c.us", "")
+      .replace(/^55/, "");
+
+  console.log("WHATSAPP RECEBIDO:", phone);
+  console.log("NUMERO TRATADO:", numeroCliente);
+
+  const compromissos =
+    await prisma.appointment.findMany({
+      where: {
+        phone: numeroCliente
+      },
+      orderBy: {
+        createdAt: "desc"
+      }
+    });
+
+  console.log("COMPROMISSOS:", compromissos);
+
+  if (!compromissos.length) {
+
+    await sendMessage(
+      phone,
+      "📭 Você não possui compromissos agendados."
+    );
+
+    return res.sendStatus(200);
+  }
+
+  let resposta =
+    "📅 SEUS COMPROMISSOS\n\n";
+
+  compromissos.forEach(item => {
+
+    resposta +=
+`📆 ${item.date}
+🕒 ${item.time}
+📝 ${item.description}
+
+`;
+  });
+
+  await sendMessage(
+    phone,
+    resposta
+  );
+
+  return res.sendStatus(200);
+}
+
+    
 // =====================================================
 // LISTAR AGENDA
 // =====================================================
