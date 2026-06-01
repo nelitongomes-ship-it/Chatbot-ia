@@ -109,6 +109,19 @@ console.log(
 if (req.body.data?.fromMe) {
   return res.sendStatus(200);
 }
+    if (message.trim() === "/limparagenda") {
+
+  console.log("COMANDO LIMPARAGENDA DETECTADO");
+
+  await prisma.appointment.deleteMany({});
+
+  await sendMessage(
+    phone,
+    "🗑️ Agenda apagada com sucesso."
+  );
+
+  return res.sendStatus(200);
+    }
     // =====================================================
 // CADASTRO AUTOMÁTICO DE CLIENTE
 // =====================================================
