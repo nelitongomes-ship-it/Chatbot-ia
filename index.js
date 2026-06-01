@@ -1850,8 +1850,7 @@ if (
 // =====================================================
 
 if (
-  message.trim() === "/agenda" &&
-  adminSessions[phone]
+  message.trim() === "/agenda"
 ) {
 
   console.log("ENTROU NO COMANDO AGENDA");
@@ -1863,6 +1862,11 @@ if (
       },
       take: 20
     });
+
+  console.log(
+    "TOTAL DE COMPROMISSOS:",
+    compromissos.length
+  );
 
   if (!compromissos.length) {
 
@@ -1896,23 +1900,31 @@ if (
   );
 
   return res.sendStatus(200);
-  }
+}
 
-  if (
-  message === "/testeagenda" &&
-  adminSessions[phone]
+// =====================================================
+// TESTAR TOTAL DE AGENDAMENTOS
+// =====================================================
+
+if (
+  message.trim() === "/testeagenda"
 ) {
 
   const total =
     await prisma.appointment.count();
 
+  console.log(
+    "TOTAL NO BANCO:",
+    total
+  );
+
   await sendMessage(
     phone,
-    `TOTAL DE AGENDAMENTOS: ${total}`
+    `📅 TOTAL DE AGENDAMENTOS: ${total}`
   );
 
   return res.sendStatus(200);
-  }
+}
       
     // =====================================================
     // OPENAI
