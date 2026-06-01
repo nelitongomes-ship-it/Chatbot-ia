@@ -1716,11 +1716,17 @@ Entre em contato com a Agils IA.`
 
 if (
   [
-    "meus compromisso",
-    "meus compromissos",
-    "agenda",
-    "minha agenda"
-  ].includes(message.toLowerCase().trim())
+    [
+  "meus compromisso",
+  "meus compromissos",
+  "agenda",
+  "minha agenda",
+  "consultar agenda",
+  "consultar meus compromissos",
+  "ver agenda",
+  "ver compromissos",
+  "quais são meus compromissos"
+].includes(message.toLowerCase().trim())
 ) {
 
   const numeroCliente =
