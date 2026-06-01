@@ -1,5 +1,7 @@
+console.log("LEMBRETES CARREGADO");
 
 const cron = require("node-cron");
+console.log("VERIFICANDO AGENDA");
 
 module.exports = function (prisma, sendMessage) {
 
