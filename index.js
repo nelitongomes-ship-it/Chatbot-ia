@@ -1795,7 +1795,29 @@ Exemplo:
   await prisma.appointment.create({
     data: {
 
-    
+    clientName: cliente.name,
+    phone: telefoneFinal,
+    date: data,
+    time: hora,
+    description: descricao
+  }
+});
+
+await sendMessage(
+  phone,
+`📅 COMPROMISSO AGENDADO
+
+👤 ${cliente.name}
+📱 ${telefoneFinal}
+
+📆 ${data}
+🕒 ${hora}
+
+📝 ${descricao}`
+);
+
+return res.sendStatus(200);
+}
 // =====================================================
 // LISTAR CLIENTES
 // =====================================================
