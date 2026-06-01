@@ -893,59 +893,8 @@ Exemplo:
 // =====================================================
 
 if (
-  message.toLowerCase() === "meus compromissos"
+  message.toLowerCase().includes("meus compromisso")
 ) {
-
-  const numeroCliente =
-    phone
-      .replace("@c.us", "")
-      .replace(/^55/, "");
-
-  console.log("WHATSAPP RECEBIDO:", phone);
-  console.log("NUMERO TRATADO:", numeroCliente);
-
-  const compromissos =
-    await prisma.appointment.findMany({
-      where: {
-        phone: numeroCliente
-      },
-      orderBy: {
-        createdAt: "desc"
-      }
-    });
-
-  console.log("COMPROMISSOS:", compromissos);
-
-  if (!compromissos.length) {
-
-    await sendMessage(
-      phone,
-      "📭 Você não possui compromissos agendados."
-    );
-
-    return res.sendStatus(200);
-  }
-
-  let resposta =
-    "📅 SEUS COMPROMISSOS\n\n";
-
-  compromissos.forEach(item => {
-
-    resposta +=
-`📆 ${item.date}
-🕒 ${item.time}
-📝 ${item.description}
-
-`;
-  });
-
-  await sendMessage(
-    phone,
-    resposta
-  );
-
-  return res.sendStatus(200);
-}
     // =====================================================
 // LISTAR AGENDA
 // =====================================================
