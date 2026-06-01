@@ -50,6 +50,10 @@ model Appointment {
   date        String
   time        String
   description String
+
+  userId      Int?
+  user        User? @relation(fields: [userId], references: [id])
+
   createdAt   DateTime @default(now())
 }
 
