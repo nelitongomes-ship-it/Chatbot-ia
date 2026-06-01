@@ -1,3 +1,5 @@
+const iniciarLembretes =
+require("./lembretes");
 
 const ffmpeg = require("fluent-ffmpeg");
 const ffmpegPath = require("ffmpeg-static");
