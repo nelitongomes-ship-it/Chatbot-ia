@@ -803,6 +803,90 @@ Exemplo:
 
   return res.sendStatus(200);
 }
+
+   // =====================================================
+// AGENDAR COMPROMISSO
+// =====================================================
+
+if (
+  message.startsWith("/agendar") &&
+  adminSessions[phone]
+) {
+
+  const dados =
+    message
+      .replace("/agendar", "")
+      .trim()
+      .split("|");
+
+  const telefone = dados[0]?.trim();
+  const data = dados[1]?.trim();
+  const hora = dados[2]?.trim();
+  const descricao = dados[3]?.trim();
+
+  if (
+    !telefone ||
+    !data ||
+    !hora ||
+    !descricao
+  ) {
+
+    await sendMessage(
+      phone,
+`⚠️ Use:
+
+/agendar Telefone|Data|Hora|Descrição
+
+Exemplo:
+
+/agendar 16992040119|05/06/2026|14:00|Reunião financeira`
+    );
+
+    return res.sendStatus(200);
+  }
+
+  const cliente =
+    await prisma.client.findFirst({
+      where: {
+        phone: telefone
+      }
+    });
+
+  if (!cliente) {
+
+    await sendMessage(
+      phone,
+      "❌ Cliente não encontrado."
+    );
+
+    return res.sendStatus(200);
+  }
+
+  await prisma.appointment.create({
+    data: {
+      clientName: cliente.name,
+      phone: telefone,
+      date: data,
+      time: hora,
+      description: descricao
+    }
+  });
+
+  await sendMessage(
+    phone,
+`📅 COMPROMISSO AGENDADO
+
+👤 ${cliente.name}
+📱 ${telefone}
+
+📆 ${data}
+🕒 ${hora}
+
+📝 ${descricao}`
+  );
+
+  return res.sendStatus(200);
+} 
 // =====================================================
 // LISTAR CLIENTES
 // =====================================================
