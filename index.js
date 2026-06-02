@@ -2044,6 +2044,10 @@ if (
       return res.sendStatus(200);
     }
 
+const dataBrasil =
+  new Date()
+    .toLocaleDateString("pt-BR");
+    
     const extracao =
       await axios.post(
         "https://api.openai.com/v1/chat/completions",
@@ -2052,17 +2056,17 @@ if (
           messages: [
             {
               role: "system",
-              content: `Hoje é ${dataBrasil}.
+             content: `Hoje é ${dataBrasil}.
 
 Extraia data, hora e descrição do compromisso.
 
-REGRAS:
+IMPORTANTE:
 
-- Se o usuário disser "hoje", use ${dataBrasil}
-- Se disser "amanhã", use o próximo dia
-- Retorne SOMENTE JSON
-- Data formato DD/MM/AAAA
-- Hora formato HH:MM
+- Se o texto contiver "hoje", use ${dataBrasil}.
+- Se não houver data informada, use ${dataBrasil}.
+- Se contiver "amanhã", use o dia seguinte.
+- Retorne a hora no formato HH:MM.
+- Retorne SOMENTE JSON.
 
 Exemplo:
 
@@ -2070,7 +2074,7 @@ Exemplo:
   "data":"${dataBrasil}",
   "hora":"14:00",
   "descricao":"Reunião financeira"
-}`
+}` 
             },
             {
               role: "user",
