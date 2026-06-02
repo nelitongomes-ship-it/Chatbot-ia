@@ -1,66 +1,79 @@
-console.log("LEMBRETES CARREGADO");
+console.log("🚀 LEMBRETES INICIADO");
 
 const cron = require("node-cron");
-console.log("VERIFICANDO AGENDA");
 
 module.exports = function (prisma, sendMessage) {
 
-  cron.schedule("* * * * *", async () => {
+cron.schedule("* * * * *", async () => {
 
-    try {
+try {
 
-      console.log("Verificando agenda...");
+  const agora = new Date();
 
-      const agora = new Date();
+  const dia =
+    String(agora.getDate()).padStart(2, "0");
 
-      const dia =
-        String(agora.getDate()).padStart(2, "0");
+  const mes =
+    String(agora.getMonth() + 1).padStart(2, "0");
 
-      const mes =
-        String(agora.getMonth() + 1).padStart(2, "0");
+  const ano =
+    agora.getFullYear();
 
-      const ano =
-        agora.getFullYear();
+  const dataHoje =
+    `${dia}/${mes}/${ano}`;
 
-      const dataHoje =
-        `${dia}/${mes}/${ano}`;
+  const horaAtual =
+    `${String(agora.getHours()).padStart(2, "0")}:${String(agora.getMinutes()).padStart(2, "0")}`;
 
-      const horaAtual =
-        `${String(agora.getHours()).padStart(2, "0")}:${String(agora.getMinutes()).padStart(2, "0")}`;
+  console.log(
+    `⏰ CRON RODANDO ${dataHoje} ${horaAtual}`
+  );
 
-      const compromissos =
-        await prisma.appointment.findMany();
+  const compromissos =
+    await prisma.appointment.findMany();
 
-      for (const item of compromissos) {
+  console.log(
+    `📋 TOTAL COMPROMISSOS: ${compromissos.length}`
+  );
 
-        if (
-          item.date === dataHoje &&
-          item.time === horaAtual
-        ) {
+  for (const item of compromissos) {
 
-          await sendMessage(
-            item.phone,
-`⏰ LEMBRETE
+    console.log(
+      `VERIFICANDO -> ${item.phone} | ${item.date} | ${item.time}`
+    );
 
-Você possui um compromisso agora.
-
-🕒 ${item.time}
-📝 ${item.description}`
-          );
-
-        }
-
-      }
-
-    } catch (erro) {
+    if (
+      item.date === dataHoje &&
+      item.time === horaAtual
+    ) {
 
       console.log(
-        "ERRO LEMBRETES:",
-        erro
+        `📨 ENVIANDO LEMBRETE PARA ${item.phone}`
       );
+
+      await sendMessage(
+        item.phone,
+
+`🔔 LEMBRETE DE COMPROMISSO
+
+🕒 Horário: ${item.time}
+
+📝 ${item.description}`
+);
 
     }
 
-  });
+  }
+
+} catch (erro) {
+
+  console.log(
+    "❌ ERRO LEMBRETES:",
+    erro
+  );
+
+}
+
+});
 
 };
