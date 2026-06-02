@@ -14,7 +14,12 @@ try {
     { timeZone: "America/Sao_Paulo" }
   )
 );
-
+  
+console.log(
+  "🇧🇷 HORA BRASIL:",
+  agora.toString()
+);
+  
 const dia =
   String(agora.getDate()).padStart(2, "0");
 
