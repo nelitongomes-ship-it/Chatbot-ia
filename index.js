@@ -119,19 +119,9 @@ console.log(
 if (req.body.data?.fromMe) {
   return res.sendStatus(200);
 }
-    if (message.includes("/limparagenda")) {
-
-  console.log("🔥🔥🔥 LIMPARAGENDA EXECUTOU 🔥🔥🔥");
-
-  await sendMessage(
-    phone,
-    "TESTE LIMPARAGENDA"
-  );
-
-  return res.sendStatus(200);
-}
     
-  
+    
+ 
 // =====================================================
 // CADASTRO AUTOMÁTICO DE CLIENTE
 // =====================================================
