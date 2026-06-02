@@ -1762,7 +1762,7 @@ Entre em contato com a Agils IA.`
 
 if (
   [
-    [
+    
   "meus compromisso",
   "meus compromissos",
   "agenda",
@@ -1966,12 +1966,7 @@ if (
 // LISTAR AGENDA
 // =====================================================
 
-if (
-  message.trim().toLowerCase() === "/agenda" &&
-  adminSessions[phone]
-) {
-
-  console.log("ENTROU NO COMANDO AGENDA");
+ console.log("ENTROU NO COMANDO AGENDA");
 
   const compromissos =
     await prisma.appointment.findMany({
