@@ -1828,10 +1828,7 @@ if (
 // AGENDAR COMPROMISSO
 // =====================================================
 
-if (
-  message.startsWith("/agendar") &&
-  adminSessions[phone]
-) {
+message.trim().startsWith("/agendar")
 
   const dados =
     message
@@ -1898,6 +1895,15 @@ Exemplo:
   }
 });
 
+console.log("✅ COMPROMISSO SALVO");
+console.log({
+  cliente: cliente.name,
+  telefone: telefoneFinal,
+  data,
+  hora,
+  descricao
+});
+    
 await sendMessage(
   phone,
 `📅 COMPROMISSO AGENDADO
