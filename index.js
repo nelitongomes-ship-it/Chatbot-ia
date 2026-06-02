@@ -242,11 +242,115 @@ const novoCliente =
   });
 
 console.log("✅ CLIENTE CADASTRADO");
-console.log(novoCliente);
+// =====================================================
+// CADASTRO AUTOMÁTICO DE CLIENTE
+// =====================================================
 
-await sendMessage(
-  phone,
+console.log("MENSAGEM ANTES DO CADASTRO:");
+console.log(message);
 
+if (
+  message.toUpperCase().includes("CONTRATO") &&
+  message.includes("Cliente:")
+) {
+
+  console.log("🔥🔥🔥 CADASTRO AUTOMÁTICO EXECUTOU 🔥🔥🔥");
+
+  const contrato =
+    message.match(/Contrato:\s*(.+)/i)?.[1]?.trim() || "";
+
+  const nome =
+    message.match(/Cliente:\s*(.+)/i)?.[1]?.trim() || "";
+
+  const cpf =
+    message.match(/CPF:\s*(.+)/i)?.[1]?.trim() || "";
+
+  const valor =
+    message.match(/Valor Total:\s*R\$\s*([\d.,]+)/i)?.[1]?.trim() || "";
+
+  const parcelas =
+    message.match(/Parcelas:\s*(.+)/i)?.[1]?.trim() || "";
+
+  const dataContrato =
+    message.match(/Data do Contrato:\s*(.+)/i)?.[1]?.trim() || "";
+
+  const primeiraParcela =
+    message.match(/1ª Parcela:\s*(.+)/i)?.[1]?.trim() || "";
+
+  const telefoneCliente =
+    message.match(/📲\s*(\d{10,13})/)?.[1] || "";
+
+  if (!telefoneCliente) {
+
+    await sendMessage(
+      phone,
+      "❌ Não foi possível localizar o telefone do cliente no contrato."
+    );
+
+    return res.sendStatus(200);
+  }
+
+  const telefoneFinal =
+    telefoneCliente.startsWith("55")
+      ? telefoneCliente
+      : "55" + telefoneCliente;
+
+  const cpfLimpo =
+    cpf.replace(/\D/g, "");
+
+  const clienteExistente =
+    await prisma.client.findFirst({
+      where: {
+        OR: [
+          { cpf: cpfLimpo },
+          { phone: telefoneFinal }
+        ]
+      }
+    });
+
+  if (clienteExistente) {
+
+    await sendMessage(
+      phone,
+      "⚠️ Cliente já cadastrado."
+    );
+
+    return res.sendStatus(200);
+  }
+
+  await prisma.client.create({
+    data: {
+      name: nome,
+      fullName: nome,
+      cpf: cpfLimpo,
+      phone: telefoneFinal,
+      password: cpfLimpo.slice(-4),
+      serviceType: "ASSESSORIA_FINANCEIRA",
+      planType: "BASICO",
+      contractNumber: contrato,
+      totalValue: parseFloat(
+        valor
+          .replace(/\./g, "")
+          .replace(",", ".")
+      ) || 0,
+      installments: parcelas,
+      contractDate: dataContrato,
+      firstDueDate: primeiraParcela,
+      aiMode: "BASICO",
+      isActive: true
+    }
+  });
+
+  console.log("✅ CLIENTE CADASTRADO");
+  console.log({
+    nome,
+    cpf: cpfLimpo,
+    telefone: telefoneFinal,
+    contrato
+  });
+
+  await sendMessage(
+    phone,
 `✅ CLIENTE CADASTRADO COM SUCESSO
 
 👤 ${nome}
@@ -260,27 +364,10 @@ await sendMessage(
 
 📱 Login:
 ${telefoneFinal}`
-);
+  );
 
-return res.sendStatus(200);
-
-} catch (erro) {
-
-console.log("❌ ERRO NO CADASTRO AUTOMÁTICO");
-console.log(erro);
-
-await sendMessage(
-  phone,
-  `❌ Erro ao cadastrar cliente
-
-${erro.message}`
-);
-
-return res.sendStatus(200);
-
-}
-}
-// =====================================================
+  return res.sendStatus(200);
+}// =====================================================
 // =====================================================
 // ÁUDIO WHATSAPP
 // =====================================================
