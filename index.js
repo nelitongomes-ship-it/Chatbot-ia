@@ -2014,6 +2014,8 @@ if (
      
 // =====================================================
 // =====================================================
+
+// =====================================================
 // AGENDAMENTO NATURAL IA
 // =====================================================
 
@@ -2021,7 +2023,8 @@ if (
   message.toLowerCase().includes("agendar") ||
   message.toLowerCase().includes("compromisso") ||
   message.toLowerCase().includes("reunião") ||
-  message.toLowerCase().includes("reuniao")
+  message.toLowerCase().includes("reuniao") ||
+  message.toLowerCase().includes("lembrar")
 ) {
 
   const numeroCliente =
@@ -2046,6 +2049,12 @@ if (
               role: "system",
               content: `Extraia data, hora e descrição do compromisso.
 
+Se o usuário não informar uma data,
+considere a data de hoje.
+
+Se o usuário disser "amanhã",
+utilize a data de amanhã.
+
 Retorne SOMENTE JSON válido.
 
 Exemplo:
@@ -2066,7 +2075,7 @@ Exemplo:
         {
           headers: {
             Authorization:
-              `Bearer ${process.env.OPENAI_API_KEY}`,
+              \`Bearer ${process.env.OPENAI_API_KEY}\`,
             "Content-Type":
               "application/json"
           }
@@ -2082,6 +2091,14 @@ Exemplo:
       JSON.parse(
         extracao.data.choices[0].message.content
       );
+
+    if (!dadosAgenda.data) {
+
+      dadosAgenda.data =
+        new Date()
+          .toLocaleDateString("pt-BR");
+
+    }
 
     await prisma.appointment.create({
       data: {
@@ -2119,7 +2136,6 @@ Digite "minha agenda" para consultar.`
   }
 
 }
-
       
    // =============================================
     // OPENAI
