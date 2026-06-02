@@ -2011,20 +2011,16 @@ if (
 
   return res.sendStatus(200);
 }
-     // =====================================================
-// AGENDAMENTO AUTOMÁTICO IA
+     
+// =====================================================
+// AGENDAMENTO NATURAL IA
 // =====================================================
 
 if (
-
   message.toLowerCase().includes("agendar") ||
-
   message.toLowerCase().includes("compromisso") ||
-
   message.toLowerCase().includes("reunião") ||
-
   message.toLowerCase().includes("reuniao")
-
 ) {
 
   const numeroCliente =
@@ -2039,45 +2035,52 @@ if (
 
   if (clienteAgenda) {
 
-    await prisma.appointment.create({
-      data: {
+    const extracao =
+      await axios.post(
+        "https://api.openai.com/v1/chat/completions",
+        {
+          model: "gpt-4o-mini",
+          messages: [
+            {
+              role: "system",
+              content:
+`Extraia data, hora e descrição.
 
-        clientName:
-          clienteAgenda.name,
+Retorne SOMENTE JSON.
 
-        phone:
-          numeroCliente,
+Exemplo:
 
-        date:
-          new Date()
-            .toLocaleDateString("pt-BR"),
+{
+ "data":"02/06/2026",
+ "hora":"14:00",
+ "descricao":"Reunião financeira"
+}`
+            },
+            {
+              role: "user",
+              content: message
+            }
+          ],
+          temperature: 0
+        },
+        {
+          headers: {
+            Authorization:
+              \`Bearer ${process.env.OPENAI_API_KEY}\`,
+            "Content-Type":
+              "application/json"
+          }
+        }
+      );
 
-        time:
-          new Date()
-            .toLocaleTimeString("pt-BR"),
-
-        description:
-          message
-
-      }
-    });
-
-    await sendMessage(
-      phone,
-`📅 Compromisso registrado com sucesso.
-
-📝 ${message}
-
-Consulte depois digitando:
-
-minha agenda`
+    console.log(
+      "EXTRACAO AGENDA:",
+      extracao.data.choices[0].message.content
     );
-
-    return res.sendStatus(200);
-
   }
 
-} 
+}
+
     // =====================================================
     // OPENAI
     // =====================================================
