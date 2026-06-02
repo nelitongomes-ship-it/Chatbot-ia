@@ -72,6 +72,15 @@ const ano =
 📝 ${item.description}`
 );
 
+await prisma.appointment.delete({
+  where: {
+    id: item.id
+  }
+});
+      console.log(  
+  `🗑️ COMPROMISSO REMOVIDO: ${item.id}`  
+);
+      
     }
 
   }
