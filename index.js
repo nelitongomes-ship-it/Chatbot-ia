@@ -134,65 +134,92 @@ if (req.body.data?.fromMe) {
     // =====================================================
 // CADASTRO AUTOMÁTICO DE CLIENTE
 // =====================================================
+
 console.log("MENSAGEM ANTES DO CADASTRO:");
 console.log(message);
+
 if (
-  
-  message.toUpperCase().includes("CONTRATO") &&
-  message.includes("Cliente:")
+message.toUpperCase().includes("CONTRATO") &&
+message.includes("Cliente:")
 ) {
 
-  console.log("🔥🔥🔥 CADASTRO VERSAO NOVA 🔥🔥🔥");
+console.log("🔥🔥🔥 CADASTRO VERSAO NOVA 🔥🔥🔥");
 
-  const contrato =
-    message.match(/Contrato:\s*(.+)/i)?.[1]?.trim() || "";
+try {
 
-  const nome =
-    message.match(/Cliente:\s*(.+)/i)?.[1]?.trim() || "";
+const contrato =
+  message.match(/Contrato:\s*(.+)/i)?.[1]?.trim() || "";
 
-  const cpf =
-    message.match(/CPF:\s*(.+)/i)?.[1]?.trim() || "";
+const nome =
+  message.match(/Cliente:\s*(.+)/i)?.[1]?.trim() || "";
 
-  const valor =
-    message.match(/Valor Total:\s*R\$\s*([\d.,]+)/i)?.[1]?.trim() || "";
+const cpf =
+  message.match(/CPF:\s*(.+)/i)?.[1]?.trim() || "";
 
-  const parcelas =
-    message.match(/Parcelas:\s*(.+)/i)?.[1]?.trim() || "";
+const valor =
+  message.match(/Valor Total:\s*R\$\s*([\d.,]+)/i)?.[1]?.trim() || "";
 
-  const dataContrato =
-    message.match(/Data do Contrato:\s*(.+)/i)?.[1]?.trim() || "";
+const parcelas =
+  message.match(/Parcelas:\s*(.+)/i)?.[1]?.trim() || "";
 
-  const primeiraParcela =
-    message.match(/1ª Parcela:\s*(.+)/i)?.[1]?.trim() || "";
+const dataContrato =
+  message.match(/Data do Contrato:\s*(.+)/i)?.[1]?.trim() || "";
 
-  const telefoneCliente =
+const primeiraParcela =
+  message.match(/1ª Parcela:\s*(.+)/i)?.[1]?.trim() || "";
+
+const telefoneCliente =
   message.match(/📲\s*(\d{10,13})/)?.[1] || "";
 
-  const telefoneFinal =
-    telefoneCliente.startsWith("55")
-      ? telefoneCliente
-      : "55" + telefoneCliente;
+const telefoneFinal =
+  telefoneCliente.startsWith("55")
+    ? telefoneCliente
+    : "55" + telefoneCliente;
 
-  const cpfLimpo =
-    cpf.replace(/\D/g, "");
+const cpfLimpo =
+  cpf.replace(/\D/g, "");
 
-  const clienteExistente =
-    await prisma.client.findFirst({
-      where: {
-        cpf: cpfLimpo
-      }
-    });
+console.log("CONTRATO:", contrato);
+console.log("NOME:", nome);
+console.log("CPF:", cpfLimpo);
+console.log("VALOR:", valor);
+console.log("TELEFONE EXTRAIDO:", telefoneCliente);
+console.log("TELEFONE FINAL:", telefoneFinal);
 
-  if (clienteExistente) {
+if (!telefoneCliente) {
 
-    await sendMessage(
-      phone,
-      "⚠️ Cliente já cadastrado."
-    );
+  console.log("❌ TELEFONE NÃO ENCONTRADO");
 
-    return res.sendStatus(200);
-  }
+  await sendMessage(
+    phone,
+    "❌ Não consegui localizar o telefone no comprovante."
+  );
 
+  return res.sendStatus(200);
+}
+
+const clienteExistente =
+  await prisma.client.findFirst({
+    where: {
+      cpf: cpfLimpo
+    }
+  });
+
+if (clienteExistente) {
+
+  console.log("⚠️ CLIENTE JÁ EXISTE");
+
+  await sendMessage(
+    phone,
+    "⚠️ Cliente já cadastrado."
+  );
+
+  return res.sendStatus(200);
+}
+
+console.log("🚀 VAI CADASTRAR CLIENTE");
+
+const novoCliente =
   await prisma.client.create({
     data: {
       name: nome,
@@ -214,8 +241,12 @@ if (
     }
   });
 
-  await sendMessage(
-    phone,
+console.log("✅ CLIENTE CADASTRADO");
+console.log(novoCliente);
+
+await sendMessage(
+  phone,
+
 `✅ CLIENTE CADASTRADO COM SUCESSO
 
 👤 ${nome}
@@ -229,11 +260,26 @@ if (
 
 📱 Login:
 ${telefoneFinal}`
-  );
+);
 
-  return res.sendStatus(200);
+return res.sendStatus(200);
+
+} catch (erro) {
+
+console.log("❌ ERRO NO CADASTRO AUTOMÁTICO");
+console.log(erro);
+
+await sendMessage(
+  phone,
+  `❌ Erro ao cadastrar cliente
+
+${erro.message}`
+);
+
+return res.sendStatus(200);
+
 }
-   
+}
 // =====================================================
 // =====================================================
 // ÁUDIO WHATSAPP
