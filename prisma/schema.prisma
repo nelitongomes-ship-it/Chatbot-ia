@@ -187,11 +187,6 @@ model AdminSettings {
 
   createdAt    DateTime @default(now())
 }
-  id        Int      @id @default(autoincrement())
-
-  phone     String   @unique
-
-  createdAt DateTime @default(now())
-}
+  
 
 
