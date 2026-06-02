@@ -166,7 +166,7 @@ if (
     message.match(/1ª Parcela:\s*(.+)/i)?.[1]?.trim() || "";
 
   const telefoneCliente =
-    message.match(/(\d{10,13})/)?.[1] || "";
+  message.match(/📲\s*(\d{10,13})/)?.[1] || "";
 
   const telefoneFinal =
     telefoneCliente.startsWith("55")
