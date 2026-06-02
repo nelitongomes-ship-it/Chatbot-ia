@@ -209,9 +209,6 @@ model Client {
   phone       String @unique
 
   password    String?
-generator client {
-provider = "prisma-client-js"
-}
 
 datasource db {
 provider = "postgresql"
