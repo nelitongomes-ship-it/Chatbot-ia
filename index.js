@@ -1803,11 +1803,15 @@ if (
   return res.sendStatus(200);
 }
     
+
 // =====================================================
 // AGENDAR COMPROMISSO
 // =====================================================
 
-message.trim().startsWith("/agendar")
+if (
+  message.trim().startsWith("/agendar") &&
+  adminSessions[phone]
+) {
 
   const dados =
     message
@@ -1846,14 +1850,14 @@ Exemplo:
       ? telefone.replace(/\D/g, "")
       : "55" + telefone.replace(/\D/g, "");
 
-  const cliente =
+  const clienteAgenda =
     await prisma.client.findFirst({
       where: {
         phone: telefoneFinal
       }
     });
 
-  if (!cliente) {
+  if (!clienteAgenda) {
 
     await sendMessage(
       phone,
@@ -1865,38 +1869,37 @@ Exemplo:
 
   await prisma.appointment.create({
     data: {
+      clientName: clienteAgenda.name,
+      phone: telefoneFinal,
+      date: data,
+      time: hora,
+      description: descricao
+    }
+  });
 
-    clientName: cliente.name,
-    phone: telefoneFinal,
-    date: data,
-    time: hora,
-    description: descricao
-  }
-});
+  console.log("✅ COMPROMISSO SALVO");
+  console.log({
+    cliente: clienteAgenda.name,
+    telefone: telefoneFinal,
+    data,
+    hora,
+    descricao
+  });
 
-console.log("✅ COMPROMISSO SALVO");
-console.log({
-  cliente: cliente.name,
-  telefone: telefoneFinal,
-  data,
-  hora,
-  descricao
-});
-    
-await sendMessage(
-  phone,
+  await sendMessage(
+    phone,
 `📅 COMPROMISSO AGENDADO
 
-👤 ${cliente.name}
+👤 ${clienteAgenda.name}
 📱 ${telefoneFinal}
 
 📆 ${data}
 🕒 ${hora}
 
 📝 ${descricao}`
-);
+  );
 
-return res.sendStatus(200);
+  return res.sendStatus(200);
 }
 
   // =====================================================
