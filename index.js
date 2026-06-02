@@ -2014,30 +2014,35 @@ if (
      
 // =====================================================
 // =====================================================
-
 // =====================================================
 // AGENDAMENTO NATURAL IA
 // =====================================================
 
+const texto = message.toLowerCase();
+
 if (
-  message.toLowerCase().includes("agendar") ||
-  message.toLowerCase().includes("compromisso") ||
-  message.toLowerCase().includes("reunião") ||
-  message.toLowerCase().includes("reuniao") ||
-  message.toLowerCase().includes("lembrar")
+  texto.includes("agendar") ||
+  texto.includes("compromisso") ||
+  texto.includes("reunião") ||
+  texto.includes("reuniao") ||
+  texto.includes("lembrar")
 ) {
 
-  const numeroCliente =
-    phone.replace("@c.us", "");
+  try {
 
-  const clienteAgenda =
-    await prisma.client.findFirst({
-      where: {
-        phone: numeroCliente
-      }
-    });
+    const numeroCliente =
+      phone.replace("@c.us", "");
 
-  if (clienteAgenda) {
+    const clienteAgenda =
+      await prisma.client.findFirst({
+        where: {
+          phone: numeroCliente
+        }
+      });
+
+    if (!clienteAgenda) {
+      return res.sendStatus(200);
+    }
 
     const extracao =
       await axios.post(
@@ -2051,13 +2056,13 @@ if (
 
 Extraia data, hora e descrição do compromisso.
 
-Regras:
+REGRAS:
 
 - Se o usuário disser "hoje", use ${dataBrasil}
-- Se disser "amanhã", use o dia seguinte
-- Sempre retorne a data no formato DD/MM/AAAA
-- Sempre retorne a hora no formato HH:MM
-- Retorne SOMENTE JSON válido
+- Se disser "amanhã", use o próximo dia
+- Retorne SOMENTE JSON
+- Data formato DD/MM/AAAA
+- Hora formato HH:MM
 
 Exemplo:
 
@@ -2084,22 +2089,77 @@ Exemplo:
         }
       );
 
+    let respostaIA =
+      extracao.data.choices[0].message.content
+        .trim();
+
+    // Remove blocos ```json
+    respostaIA = respostaIA
+      .replace(/```json/g, "")
+      .replace(/```/g, "")
+      .trim();
+
     console.log(
       "EXTRACAO AGENDA:",
-      extracao.data.choices[0].message.content
+      respostaIA
     );
 
-    const dadosAgenda =
-      JSON.parse(
-        extracao.data.choices[0].message.content
+    let dadosAgenda;
+
+    try {
+
+      dadosAgenda =
+        JSON.parse(respostaIA);
+
+    } catch (erroJson) {
+
+      console.log(
+        "Erro ao interpretar agenda:",
+        erroJson
       );
 
-    if (!dadosAgenda.data) {
+      await sendMessage(
+        phone,
+        "❌ Não consegui entender a data e horário do compromisso."
+      );
 
+      return res.sendStatus(200);
+    }
+
+    // Valores padrão
+    if (!dadosAgenda.data) {
       dadosAgenda.data =
         new Date()
           .toLocaleDateString("pt-BR");
+    }
 
+    if (!dadosAgenda.hora) {
+      dadosAgenda.hora = "09:00";
+    }
+
+    if (!dadosAgenda.descricao) {
+      dadosAgenda.descricao =
+        "Compromisso agendado";
+    }
+
+    // Evita duplicidade
+    const compromissoExistente =
+      await prisma.appointment.findFirst({
+        where: {
+          phone: numeroCliente,
+          date: dadosAgenda.data,
+          time: dadosAgenda.hora
+        }
+      });
+
+    if (compromissoExistente) {
+
+      await sendMessage(
+        phone,
+        `⚠️ Já existe um compromisso agendado para ${dadosAgenda.data} às ${dadosAgenda.hora}.`
+      );
+
+      return res.sendStatus(200);
     }
 
     await prisma.appointment.create({
@@ -2123,21 +2183,35 @@ Exemplo:
 
     await sendMessage(
       phone,
-      `📅 Compromisso agendado com sucesso.
+      `✅ Compromisso agendado com sucesso!
 
 📅 Data: ${dadosAgenda.data}
 🕒 Hora: ${dadosAgenda.hora}
 
 📝 ${dadosAgenda.descricao}
 
-Digite "minha agenda" para consultar.`
+Digite *minha agenda* para consultar seus compromissos.`
     );
 
     return res.sendStatus(200);
 
+  } catch (erro) {
+
+    console.log(
+      "ERRO AGENDAMENTO:",
+      erro
+    );
+
+    await sendMessage(
+      phone,
+      "❌ Ocorreu um erro ao realizar o agendamento."
+    );
+
+    return res.sendStatus(200);
   }
 
 }
+              
       
    // =============================================
     // OPENAI
