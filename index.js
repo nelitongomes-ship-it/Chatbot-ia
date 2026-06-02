@@ -1963,58 +1963,6 @@ if (
 }
 
 // =====================================================
-// LISTAR AGENDA
-// =====================================================
-
- console.log("ENTROU NO COMANDO AGENDA");
-
-  const compromissos =
-    await prisma.appointment.findMany({
-      orderBy: {
-        createdAt: "desc"
-      }
-    });
-
-  console.log(
-    "TOTAL:",
-    compromissos.length
-  );
-
-  if (!compromissos.length) {
-
-    await sendMessage(
-      phone,
-      "📭 Nenhum compromisso encontrado."
-    );
-
-    return res.sendStatus(200);
-  }
-
-  let resposta =
-    "📅 AGENDA\n\n";
-
-  compromissos.forEach(item => {
-
-    resposta +=
-`👤 ${item.clientName}
-
-📱 ${item.phone}
-📆 ${item.date}
-🕒 ${item.time}
-📝 ${item.description}
-
-`;
-  });
-
-  await sendMessage(
-    phone,
-    resposta
-  );
-
-  return res.sendStatus(200);
-}
-
-// =====================================================
 // TESTAR TOTAL DE AGENDAMENTOS
 // =====================================================
 
