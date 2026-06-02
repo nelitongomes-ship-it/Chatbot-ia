@@ -5,19 +5,25 @@ const cron = require("node-cron");
 module.exports = function (prisma, sendMessage) {
 
 cron.schedule("* * * * *", async () => {
-
+//
 try {
 
-  const agora = new Date();
+  const agora = new Date(
+  new Date().toLocaleString(
+    "en-US",
+    { timeZone: "America/Sao_Paulo" }
+  )
+);
 
-  const dia =
-    String(agora.getDate()).padStart(2, "0");
+const dia =
+  String(agora.getDate()).padStart(2, "0");
 
-  const mes =
-    String(agora.getMonth() + 1).padStart(2, "0");
+const mes =
+  String(agora.getMonth() + 1).padStart(2, "0");
 
-  const ano =
-    agora.getFullYear();
+const ano =
+  agora.getFullYear();
+  //
 
   const dataHoje =
     `${dia}/${mes}/${ano}`;
