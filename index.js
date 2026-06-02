@@ -1898,6 +1898,54 @@ await sendMessage(
 
 return res.sendStatus(200);
 }
+
+  // =====================================================
+// TESTAR TOTAL DE AGENDAMENTOS
+// =====================================================
+
+if (
+  message.trim() === "/testeagenda" &&
+  adminSessions[phone]
+) {
+
+  const total =
+    await prisma.appointment.count();
+
+  console.log(
+    "TOTAL NO BANCO:",
+    total
+  );
+
+  await sendMessage(
+    phone,
+    `📅 TOTAL DE AGENDAMENTOS: ${total}`
+  );
+
+  return res.sendStatus(200);
+}
+
+  =====================================================
+// DEBUG AGENDA
+// =====================================================
+if (
+  message.trim() === "/debugagenda" &&
+  adminSessions[phone]
+) {
+
+  const agenda =
+    await prisma.appointment.findMany();
+
+  console.log("AGENDA:");
+  console.log(JSON.stringify(agenda, null, 2));
+
+  await sendMessage(
+    phone,
+    `📋 Total encontrados: ${agenda.length}`
+  );
+
+  return res.sendStatus(200);
+}
+  
 // =====================================================
 // LISTAR CLIENTES
 // =====================================================
