@@ -2047,20 +2047,22 @@ if (
           messages: [
             {
               role: "system",
-              content: `Extraia data, hora e descrição do compromisso.
+              content: `Hoje é ${dataBrasil}.
 
-Se o usuário não informar uma data,
-considere a data de hoje.
+Extraia data, hora e descrição do compromisso.
 
-Se o usuário disser "amanhã",
-utilize a data de amanhã.
+Regras:
 
-Retorne SOMENTE JSON válido.
+- Se o usuário disser "hoje", use ${dataBrasil}
+- Se disser "amanhã", use o dia seguinte
+- Sempre retorne a data no formato DD/MM/AAAA
+- Sempre retorne a hora no formato HH:MM
+- Retorne SOMENTE JSON válido
 
 Exemplo:
 
 {
-  "data":"02/06/2026",
+  "data":"${dataBrasil}",
   "hora":"14:00",
   "descricao":"Reunião financeira"
 }`
