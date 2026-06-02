@@ -2075,7 +2075,7 @@ Exemplo:
         {
           headers: {
             Authorization:
-              \`Bearer ${process.env.OPENAI_API_KEY}\`,
+              `Bearer ${process.env.OPENAI_API_KEY}`,
             "Content-Type":
               "application/json"
           }
