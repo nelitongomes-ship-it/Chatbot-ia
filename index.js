@@ -2013,6 +2013,7 @@ if (
 }
      
 // =====================================================
+// =====================================================
 // AGENDAMENTO NATURAL IA
 // =====================================================
 
@@ -2043,17 +2044,16 @@ if (
           messages: [
             {
               role: "system",
-              content:
-`Extraia data, hora e descrição.
+              content: `Extraia data, hora e descrição do compromisso.
 
-Retorne SOMENTE JSON.
+Retorne SOMENTE JSON válido.
 
 Exemplo:
 
 {
- "data":"02/06/2026",
- "hora":"14:00",
- "descricao":"Reunião financeira"
+  "data":"02/06/2026",
+  "hora":"14:00",
+  "descricao":"Reunião financeira"
 }`
             },
             {
@@ -2077,11 +2077,51 @@ Exemplo:
       "EXTRACAO AGENDA:",
       extracao.data.choices[0].message.content
     );
+
+    const dadosAgenda =
+      JSON.parse(
+        extracao.data.choices[0].message.content
+      );
+
+    await prisma.appointment.create({
+      data: {
+        clientName:
+          clienteAgenda.name,
+
+        phone:
+          numeroCliente,
+
+        date:
+          dadosAgenda.data,
+
+        time:
+          dadosAgenda.hora,
+
+        description:
+          dadosAgenda.descricao
+      }
+    });
+
+    await sendMessage(
+      phone,
+      `📅 Compromisso agendado com sucesso.
+
+📅 Data: ${dadosAgenda.data}
+🕒 Hora: ${dadosAgenda.hora}
+
+📝 ${dadosAgenda.descricao}
+
+Digite "minha agenda" para consultar.`
+    );
+
+    return res.sendStatus(200);
+
   }
 
 }
 
-    // =====================================================
+      
+   // =============================================
     // OPENAI
     // =====================================================
 
