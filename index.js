@@ -131,117 +131,8 @@ if (req.body.data?.fromMe) {
 
   return res.sendStatus(200);
 }
-    // =====================================================
-// CADASTRO AUTOMÁTICO DE CLIENTE
-// =====================================================
-
-console.log("MENSAGEM ANTES DO CADASTRO:");
-console.log(message);
-
-if (
-message.toUpperCase().includes("CONTRATO") &&
-message.includes("Cliente:")
-) {
-
-console.log("🔥🔥🔥 CADASTRO VERSAO NOVA 🔥🔥🔥");
-
-try {
-
-const contrato =
-  message.match(/Contrato:\s*(.+)/i)?.[1]?.trim() || "";
-
-const nome =
-  message.match(/Cliente:\s*(.+)/i)?.[1]?.trim() || "";
-
-const cpf =
-  message.match(/CPF:\s*(.+)/i)?.[1]?.trim() || "";
-
-const valor =
-  message.match(/Valor Total:\s*R\$\s*([\d.,]+)/i)?.[1]?.trim() || "";
-
-const parcelas =
-  message.match(/Parcelas:\s*(.+)/i)?.[1]?.trim() || "";
-
-const dataContrato =
-  message.match(/Data do Contrato:\s*(.+)/i)?.[1]?.trim() || "";
-
-const primeiraParcela =
-  message.match(/1ª Parcela:\s*(.+)/i)?.[1]?.trim() || "";
-
-const telefoneCliente =
-  message.match(/📲\s*(\d{10,13})/)?.[1] || "";
-
-const telefoneFinal =
-  telefoneCliente.startsWith("55")
-    ? telefoneCliente
-    : "55" + telefoneCliente;
-
-const cpfLimpo =
-  cpf.replace(/\D/g, "");
-
-console.log("CONTRATO:", contrato);
-console.log("NOME:", nome);
-console.log("CPF:", cpfLimpo);
-console.log("VALOR:", valor);
-console.log("TELEFONE EXTRAIDO:", telefoneCliente);
-console.log("TELEFONE FINAL:", telefoneFinal);
-
-if (!telefoneCliente) {
-
-  console.log("❌ TELEFONE NÃO ENCONTRADO");
-
-  await sendMessage(
-    phone,
-    "❌ Não consegui localizar o telefone no comprovante."
-  );
-
-  return res.sendStatus(200);
-}
-
-const clienteExistente =
-  await prisma.client.findFirst({
-    where: {
-      cpf: cpfLimpo
-    }
-  });
-
-if (clienteExistente) {
-
-  console.log("⚠️ CLIENTE JÁ EXISTE");
-
-  await sendMessage(
-    phone,
-    "⚠️ Cliente já cadastrado."
-  );
-
-  return res.sendStatus(200);
-}
-
-console.log("🚀 VAI CADASTRAR CLIENTE");
-
-const novoCliente =
-  await prisma.client.create({
-    data: {
-      name: nome,
-      fullName: nome,
-      cpf: cpfLimpo,
-      phone: telefoneFinal,
-      password: cpfLimpo.slice(-4),
-      serviceType: "ASSESSORIA_FINANCEIRA",
-      planType: "BASICO",
-      contractNumber: contrato,
-      totalValue: parseFloat(
-        valor.replace(".", "").replace(",", ".")
-      ),
-      installments: parcelas,
-      contractDate: dataContrato,
-      firstDueDate: primeiraParcela,
-      aiMode: "BASICO",
-      isActive: true
-    }
-  });
-
-console.log("✅ CLIENTE CADASTRADO");
+    
+  
 // =====================================================
 // CADASTRO AUTOMÁTICO DE CLIENTE
 // =====================================================
@@ -367,7 +258,8 @@ ${telefoneFinal}`
   );
 
   return res.sendStatus(200);
-}// =====================================================
+}
+  // =====================================================
 // =====================================================
 // ÁUDIO WHATSAPP
 // =====================================================
