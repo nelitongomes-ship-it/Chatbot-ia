@@ -1967,7 +1967,8 @@ if (
 // =====================================================
 
 if (
-  message.trim() === "/agenda"
+  message.trim().toLowerCase() === "/agenda" &&
+  adminSessions[phone]
 ) {
 
   console.log("ENTROU NO COMANDO AGENDA");
@@ -1976,12 +1977,11 @@ if (
     await prisma.appointment.findMany({
       orderBy: {
         createdAt: "desc"
-      },
-      take: 20
+      }
     });
 
   console.log(
-    "TOTAL DE COMPROMISSOS:",
+    "TOTAL:",
     compromissos.length
   );
 
@@ -1989,19 +1989,19 @@ if (
 
     await sendMessage(
       phone,
-      "📭 Nenhum compromisso agendado."
+      "📭 Nenhum compromisso encontrado."
     );
 
     return res.sendStatus(200);
   }
 
   let resposta =
-    "📅 AGENDA DE COMPROMISSOS\n\n";
+    "📅 AGENDA\n\n";
 
-  compromissos.forEach((item, index) => {
+  compromissos.forEach(item => {
 
     resposta +=
-`${index + 1}️⃣ ${item.clientName}
+`👤 ${item.clientName}
 
 📱 ${item.phone}
 📆 ${item.date}
