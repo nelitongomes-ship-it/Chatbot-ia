@@ -2015,8 +2015,7 @@ if (
 }
      
 // =====================================================
-// =====================================================
-// =====================================================
+//// =====================================================
 // AGENDAMENTO NATURAL IA
 // =====================================================
 
@@ -2024,11 +2023,17 @@ const texto = message.toLowerCase();
 
 if (
   texto.includes("agendar") ||
+  texto.includes("agende") ||
+  texto.includes("marcar") ||
+  texto.includes("marque") ||
   texto.includes("compromisso") ||
   texto.includes("reunião") ||
   texto.includes("reuniao") ||
-  texto.includes("lembrar")
+  texto.includes("lembrar") ||
+  texto.includes("lembrete")
 ) {
+
+  console.log("📅 ENTROU NO AGENDAMENTO");
 
   try {
 
@@ -2043,13 +2048,24 @@ if (
       });
 
     if (!clienteAgenda) {
+
+      console.log(
+        "❌ CLIENTE NÃO ENCONTRADO:",
+        numeroCliente
+      );
+
       return res.sendStatus(200);
     }
 
-const dataBrasil =
-  new Date()
-    .toLocaleDateString("pt-BR");
-    
+    const dataBrasil =
+      new Date()
+        .toLocaleDateString("pt-BR");
+
+    console.log(
+      "📅 DATA BRASIL:",
+      dataBrasil
+    );
+
     const extracao =
       await axios.post(
         "https://api.openai.com/v1/chat/completions",
@@ -2058,25 +2074,25 @@ const dataBrasil =
           messages: [
             {
               role: "system",
-             content: `Hoje é ${dataBrasil}.
+              content: `Hoje é ${dataBrasil}.
 
-Extraia data, hora e descrição do compromisso.
+Extraia data, hora e descrição.
 
-IMPORTANTE:
+REGRAS:
 
-- Se o texto contiver "hoje", use ${dataBrasil}.
-- Se não houver data informada, use ${dataBrasil}.
-- Se contiver "amanhã", use o dia seguinte.
-- Retorne a hora no formato HH:MM.
-- Retorne SOMENTE JSON.
+- Se houver "hoje", use ${dataBrasil}
+- Se não houver data, use ${dataBrasil}
+- Se houver "amanhã", use o próximo dia
+- Hora sempre HH:MM
+- Retorne SOMENTE JSON
 
-Exemplo:
+Formato:
 
 {
-  "data":"${dataBrasil}",
-  "hora":"14:00",
-  "descricao":"Reunião financeira"
-}` 
+ "data":"${dataBrasil}",
+ "hora":"14:00",
+ "descricao":"Compromisso"
+}`
             },
             {
               role: "user",
@@ -2099,14 +2115,13 @@ Exemplo:
       extracao.data.choices[0].message.content
         .trim();
 
-    // Remove blocos ```json
     respostaIA = respostaIA
       .replace(/```json/g, "")
       .replace(/```/g, "")
       .trim();
 
     console.log(
-      "EXTRACAO AGENDA:",
+      "🤖 RESPOSTA IA:",
       respostaIA
     );
 
@@ -2114,13 +2129,22 @@ Exemplo:
 
     try {
 
+      const json =
+        respostaIA.match(/\{[\s\S]*\}/);
+
+      if (!json) {
+        throw new Error(
+          "JSON não encontrado"
+        );
+      }
+
       dadosAgenda =
-        JSON.parse(respostaIA);
+        JSON.parse(json[0]);
 
     } catch (erroJson) {
 
       console.log(
-        "Erro ao interpretar agenda:",
+        "❌ ERRO JSON:",
         erroJson
       );
 
@@ -2132,18 +2156,21 @@ Exemplo:
       return res.sendStatus(200);
     }
 
-   if (message.toLowerCase().includes("hoje")) {
-  dadosAgenda.data = dataBrasil;
-} 
-    // Valores padrão
+    if (
+      texto.includes("hoje")
+    ) {
+      dadosAgenda.data =
+        dataBrasil;
+    }
+
     if (!dadosAgenda.data) {
       dadosAgenda.data =
-        new Date()
-          .toLocaleDateString("pt-BR");
+        dataBrasil;
     }
 
     if (!dadosAgenda.hora) {
-      dadosAgenda.hora = "09:00";
+      dadosAgenda.hora =
+        "09:00";
     }
 
     if (!dadosAgenda.descricao) {
@@ -2151,7 +2178,14 @@ Exemplo:
         "Compromisso agendado";
     }
 
-    // Evita duplicidade
+    dadosAgenda.descricao =
+      dadosAgenda.descricao.trim();
+
+    console.log(
+      "📋 DADOS EXTRAIDOS:",
+      dadosAgenda
+    );
+
     const compromissoExistente =
       await prisma.appointment.findFirst({
         where: {
@@ -2163,6 +2197,10 @@ Exemplo:
 
     if (compromissoExistente) {
 
+      console.log(
+        "⚠️ COMPROMISSO DUPLICADO"
+      );
+
       await sendMessage(
         phone,
         `⚠️ Já existe um compromisso agendado para ${dadosAgenda.data} às ${dadosAgenda.hora}.`
@@ -2171,24 +2209,30 @@ Exemplo:
       return res.sendStatus(200);
     }
 
-    await prisma.appointment.create({
-      data: {
-        clientName:
-          clienteAgenda.name,
+    const novoCompromisso =
+      await prisma.appointment.create({
+        data: {
+          clientName:
+            clienteAgenda.name,
 
-        phone:
-          numeroCliente,
+          phone:
+            numeroCliente,
 
-        date:
-          dadosAgenda.data,
+          date:
+            dadosAgenda.data,
 
-        time:
-          dadosAgenda.hora,
+          time:
+            dadosAgenda.hora,
 
-        description:
-          dadosAgenda.descricao
-      }
-    });
+          description:
+            dadosAgenda.descricao
+        }
+      });
+
+    console.log(
+      "✅ COMPROMISSO SALVO:",
+      novoCompromisso
+    );
 
     await sendMessage(
       phone,
@@ -2207,7 +2251,7 @@ Digite *minha agenda* para consultar seus compromissos.`
   } catch (erro) {
 
     console.log(
-      "ERRO AGENDAMENTO:",
+      "❌ ERRO AGENDAMENTO:",
       erro
     );
 
@@ -2218,9 +2262,8 @@ Digite *minha agenda* para consultar seus compromissos.`
 
     return res.sendStatus(200);
   }
-
-}
-              
+} 
+    
       
    // =============================================
     // OPENAI
