@@ -2130,6 +2130,9 @@ Exemplo:
       return res.sendStatus(200);
     }
 
+   if (message.toLowerCase().includes("hoje")) {
+  dadosAgenda.data = dataBrasil;
+} 
     // Valores padrão
     if (!dadosAgenda.data) {
       dadosAgenda.data =
