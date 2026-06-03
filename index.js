@@ -2021,8 +2021,9 @@ if (
 // =====================================================
 
 const texto = message.toLowerCase();
-
-if (
+const ehAgendamento =
+  texto.includes("agendar")
+||
   texto.includes("agendar") ||
   texto.includes("agende") ||
   texto.includes("marcar") ||
@@ -2034,10 +2035,14 @@ if (
   texto.includes("me") ||
   texto.includes("lembre") ||
   texto.includes("lembrete")
-) {
 
-  console.log("📅 ENTROU NO AGENDAMENTO");
+    if (ehAgendamento) {
+   console.log("📅 ENTROU NO AGENDAMENTO");
 
+} 
+
+
+  
   try {
 
     const numeroCliente =
