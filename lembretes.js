@@ -76,7 +76,7 @@ console.log(
   "✅ LEMBRETE ENVIADO"
 );
 
-/*
+
       
 await prisma.appointment.delete({
   where: {
