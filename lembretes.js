@@ -83,9 +83,6 @@ await prisma.appointment.delete({
     id: item.id
   }
 });
-      console.log(  
-  `🗑️ COMPROMISSO REMOVIDO: ${item.id}`  
-);
       
     }
 
