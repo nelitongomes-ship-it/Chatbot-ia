@@ -1734,7 +1734,7 @@ Entre em contato com a Agils IA.`
 if (
   [
 
-  "me lembre"   
+  "me lembre",   
   "meus compromisso",
   "meus compromissos",
   "agenda",
@@ -2031,8 +2031,8 @@ if (
   texto.includes("reunião") ||
   texto.includes("reuniao") ||
   texto.includes("lembrar") ||
-  texto.includes("me lembrar") ||
-  texto.includes("me lembre") ||
+  texto.includes("me") ||
+  texto.includes("lembre") ||
   texto.includes("lembrete")
 ) {
 
