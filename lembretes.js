@@ -72,6 +72,12 @@ const ano =
 📝 ${item.description}`
 );
 
+console.log(
+  "✅ LEMBRETE ENVIADO"
+);
+
+/*
+      
 await prisma.appointment.delete({
   where: {
     id: item.id
