@@ -77,7 +77,10 @@ console.log(
 );
       
     }
+});
 
+};
+  
 } catch (erro) {
 
   console.log(
