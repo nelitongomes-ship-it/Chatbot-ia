@@ -1328,6 +1328,8 @@ const cliente =
     }
   });
 
+console.log("CLIENTE ENCONTRADO:", cliente);
+    
 let contextoSistema = modo1;
 
 if (cliente?.aiMode === "BASICO") {
@@ -1363,7 +1365,7 @@ const systemPrompt =
     phone
   }
 });
-
+console.log("USUARIO ENCONTRADO:", usuario);
 if (!usuario) {
 
   await prisma.user.create({
