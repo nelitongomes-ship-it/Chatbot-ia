@@ -65,7 +65,7 @@ Benefícios:
 
 Link Plano Avançado:
 
-https://pag.ae/81QtPEsX7
+https://pag.ae/81RT_n8m5
 
 UPGRADE PARA AGILS CRED:
 
