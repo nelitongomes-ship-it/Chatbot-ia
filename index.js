@@ -2328,7 +2328,7 @@ if (!clienteAgenda && !usuarioAgenda) {
 console.log(
   "✅ CLIENTE OU USUÁRIO ENCONTRADO"
 );
-    }
+    
 
     const dataBrasil =
       new Date()
