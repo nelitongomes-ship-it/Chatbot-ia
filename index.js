@@ -2272,37 +2272,56 @@ Digite *minha agenda* para consultar seus compromissos.`
   }
 } 
     
-   // =====================================================
+    // =====================================================
 // PROTEÇÃO CONTRA LOOP DE IAs E BOTS
 // =====================================================
 
 // Ignora mensagens enviadas pela própria conta
 
-if (
-  req.body?.data?.fromMe === true
-) {
+if (req.body?.data?.fromMe === true) {
   return res.sendStatus(200);
 }
 
 // Ignora grupos
 
-if (
-  phone.includes("@g.us")
-) {
+if (phone.includes("@g.us")) {
   return res.sendStatus(200);
 }
 
-// Ignora mensagens muito comuns de bots
-
 const mensagemLower =
-  (message || "").toLowerCase();
+  (message || "")
+    .toLowerCase()
+    .trim();
+
+// =====================================================
+// DETECÇÃO DE MENUS E BOTÕES
+// =====================================================
+
+if (
+  req.body?.data?.buttonText ||
+  req.body?.data?.listResponse ||
+  req.body?.data?.selectedButtonId
+) {
+
+  console.log(
+    "🤖 MENU AUTOMÁTICO DETECTADO"
+  );
+
+  return res.sendStatus(200);
+}
+
+// =====================================================
+// DETECÇÃO POR PALAVRAS-CHAVE
+// =====================================================
 
 const indicadoresIA = [
 
   "sou uma inteligência artificial",
+  "sou uma inteligencia artificial",
   "sou uma ia",
   "como assistente virtual",
   "como modelo de linguagem",
+  "como modelo de linguagem ia",
   "chatgpt",
   "openai",
   "gemini",
@@ -2316,7 +2335,9 @@ const indicadoresIA = [
   "bot de atendimento",
   "assistente digital",
   "olá, sou o assistente",
+  "ola, sou o assistente",
   "olá, eu sou um assistente",
+  "ola, eu sou um assistente",
   "sou o assistente virtual",
   "atendente virtual",
   "assistente de atendimento",
@@ -2324,7 +2345,32 @@ const indicadoresIA = [
   "resposta automática",
   "resposta automatica",
   "mensagem automática",
-  "mensagem automatica"
+  "mensagem automatica",
+
+  // menus automáticos
+
+  "não entendi",
+  "nao entendi",
+  "vamos tentar novamente",
+  "selecione uma das opções",
+  "selecione uma das opcoes",
+  "clique no botão",
+  "clique no botao",
+  "ver opções",
+  "ver opcoes",
+  "como podemos te ajudar",
+  "escolha uma opção",
+  "escolha uma opcao",
+  "digite uma opção",
+  "digite uma opcao",
+  "menu principal",
+  "atendimento digital",
+  "fluxo de atendimento",
+  "responda com o número",
+  "responda com o numero",
+  "para prosseguirmos",
+  "opções da lista",
+  "opcoes da lista"
 
 ];
 
@@ -2337,13 +2383,39 @@ const detectouIA =
 if (detectouIA) {
 
   console.log(
-    "🤖 Outra IA detectada por palavras-chave."
+    "🤖 IA/BOT DETECTADO POR PALAVRAS-CHAVE"
   );
 
   return res.sendStatus(200);
 }
 
-// Detecta IA usando GPT
+// =====================================================
+// PROTEÇÃO CONTRA LOOP DE MENSAGENS
+// =====================================================
+
+global.ultimasMensagens =
+  global.ultimasMensagens || {};
+
+const chaveLoop = phone;
+
+if (
+  global.ultimasMensagens[chaveLoop] ===
+  mensagemLower
+) {
+
+  console.log(
+    "🤖 LOOP DE IA DETECTADO"
+  );
+
+  return res.sendStatus(200);
+}
+
+global.ultimasMensagens[chaveLoop] =
+  mensagemLower;
+
+// =====================================================
+// DETECÇÃO AVANÇADA VIA GPT
+// =====================================================
 
 try {
 
@@ -2360,7 +2432,7 @@ try {
 
 Analise a mensagem recebida.
 
-Responda somente:
+Responda SOMENTE:
 
 SIM
 
@@ -2368,14 +2440,17 @@ ou
 
 NAO
 
-Responda SIM apenas se a mensagem foi claramente enviada por:
+Responda SIM se a mensagem claramente parece ter sido enviada por:
+
 - chatbot
 - assistente virtual
+- bot
+- atendimento automático
+- fluxo automatizado
+- menu automatizado
 - inteligência artificial
-- automação
-- bot de WhatsApp
 
-Responda NAO se a mensagem parecer humana.
+Responda NAO se parecer humana.
 
 Não explique.`
           },
@@ -2409,7 +2484,7 @@ Não explique.`
   ) {
 
     console.log(
-      "🤖 Outra IA detectada pelo GPT."
+      "🤖 IA DETECTADA PELO GPT"
     );
 
     return res.sendStatus(200);
@@ -2425,8 +2500,9 @@ Não explique.`
 }
 
 // =====================================================
-// FIM PROTEÇÃO IAs
-// =====================================================   
+// FIM DA PROTEÇÃO
+// =====================================================
+   
    // =============================================
     // OPENAI
     // =====================================================
