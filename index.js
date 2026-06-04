@@ -1426,22 +1426,37 @@ if (message === "/testebanco") {
   return res.sendStatus(200);
 }
     // =====================================================
-    // SALVAR USUÁRIO
-    // =====================================================
+// SALVAR USUÁRIO
+// =====================================================
 
-    const usuario = await prisma.user.findFirst({
-  where: {
-    phone
-  }
-});
-console.log("USUARIO ENCONTRADO:", usuario);
-if (!usuario) {
+console.log("ANTES DO USER");
 
-  await prisma.user.create({
-    data: {
+try {
+
+  const usuario = await prisma.user.findFirst({
+    where: {
       phone
     }
   });
+
+  console.log("USUARIO ENCONTRADO:");
+  console.log(usuario);
+
+  if (!usuario) {
+
+    await prisma.user.create({
+      data: {
+        phone
+      }
+    });
+
+    console.log("USUARIO CRIADO");
+  }
+
+} catch (erro) {
+
+  console.log("ERRO USER:");
+  console.log(erro);
 
 }
 
