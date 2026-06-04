@@ -142,7 +142,41 @@ const textoLower =
 console.log(textoLower);
     //
 
+====================================================
+// STATUS DA CONTA
+// =====================================================
 
+if (textoLower === "status") {
+
+  const usuario = await prisma.user.findFirst({
+    where: {
+      phone
+    }
+  });
+
+  if (!usuario) {
+
+    await sendMessage(
+      phone,
+      "❌ Usuário não encontrado."
+    );
+
+    return res.sendStatus(200);
+  }
+
+  await sendMessage(
+    phone,
+    `📋 Status da conta
+
+Plano: ${usuario.planType}
+
+Modo: ${usuario.aiMode}
+
+Ativo: ${usuario.isActive ? "SIM" : "NÃO"}`
+  );
+
+  return res.sendStatus(200);
+         }
 // =====================================================
 // =====================================================
 // ATIVAR TESTE GRÁTIS
