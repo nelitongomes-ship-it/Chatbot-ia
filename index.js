@@ -103,6 +103,11 @@ console.log(
       req.body.data?.body ||
       req.body.message ||
       "";
+
+const phone =
+      req.body.data?.from ||
+      "";
+
 console.log("================================");
 console.log("MESSAGE RECEBIDA:");
 console.log(message);
@@ -111,15 +116,6 @@ console.log(phone);
 console.log("ADMIN SESSION:");
 console.log(adminSessions[phone]);
 console.log("================================");
-    
-    console.log(">>> MESSAGE RAW <<<");
-console.log(JSON.stringify(message));
-console.log(">>> LENGTH <<<");
-console.log(message.length);
-console.log(">>> CHAR CODES <<<");
-console.log(
-  message.split("").map(c => c.charCodeAt(0))
-);
 
     const phone =
       req.body.data?.from ||
