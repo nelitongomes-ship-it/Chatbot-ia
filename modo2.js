@@ -56,7 +56,7 @@ Exemplo:
 
 Link Plano Intermediário:
 
-[LINK_INTERMEDIARIO]
+https://pag.ae/81Qd1FMB8
 
 Suporte:
 
