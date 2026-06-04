@@ -104,10 +104,6 @@ console.log(
       req.body.message ||
       "";
 
-const phone =
-      req.body.data?.from ||
-      "";
-
 console.log("================================");
 console.log("MESSAGE RECEBIDA:");
 console.log(message);
