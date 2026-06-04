@@ -103,7 +103,14 @@ console.log(
       req.body.data?.body ||
       req.body.message ||
       "";
-
+console.log("================================");
+console.log("MESSAGE RECEBIDA:");
+console.log(message);
+console.log("PHONE:");
+console.log(phone);
+console.log("ADMIN SESSION:");
+console.log(adminSessions[phone]);
+console.log("================================");
     
     console.log(">>> MESSAGE RAW <<<");
 console.log(JSON.stringify(message));
@@ -1327,6 +1334,8 @@ if (
   adminSessions[phone]
 ) {
 
+console.log("🔥 TESTEBANCO EXECUTOU 🔥");
+  
   const cliente =
     await prisma.client.findFirst();
 
