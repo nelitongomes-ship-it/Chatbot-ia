@@ -2272,7 +2272,161 @@ Digite *minha agenda* para consultar seus compromissos.`
   }
 } 
     
-      
+   // =====================================================
+// PROTEÇÃO CONTRA LOOP DE IAs E BOTS
+// =====================================================
+
+// Ignora mensagens enviadas pela própria conta
+
+if (
+  req.body?.data?.fromMe === true
+) {
+  return res.sendStatus(200);
+}
+
+// Ignora grupos
+
+if (
+  phone.includes("@g.us")
+) {
+  return res.sendStatus(200);
+}
+
+// Ignora mensagens muito comuns de bots
+
+const mensagemLower =
+  (message || "").toLowerCase();
+
+const indicadoresIA = [
+
+  "sou uma inteligência artificial",
+  "sou uma ia",
+  "como assistente virtual",
+  "como modelo de linguagem",
+  "chatgpt",
+  "openai",
+  "gemini",
+  "claude",
+  "copilot",
+  "assistente virtual",
+  "atendimento automático",
+  "atendimento automatizado",
+  "robô de atendimento",
+  "robo de atendimento",
+  "bot de atendimento",
+  "assistente digital",
+  "olá, sou o assistente",
+  "olá, eu sou um assistente",
+  "sou o assistente virtual",
+  "atendente virtual",
+  "assistente de atendimento",
+  "sistema automatizado",
+  "resposta automática",
+  "resposta automatica",
+  "mensagem automática",
+  "mensagem automatica"
+
+];
+
+const detectouIA =
+  indicadoresIA.some(
+    termo =>
+      mensagemLower.includes(termo)
+  );
+
+if (detectouIA) {
+
+  console.log(
+    "🤖 Outra IA detectada por palavras-chave."
+  );
+
+  return res.sendStatus(200);
+}
+
+// Detecta IA usando GPT
+
+try {
+
+  const detectorIA =
+    await axios.post(
+      "https://api.openai.com/v1/chat/completions",
+      {
+        model: "gpt-4o-mini",
+        messages: [
+          {
+            role: "system",
+            content:
+`Você é um detector de chatbots.
+
+Analise a mensagem recebida.
+
+Responda somente:
+
+SIM
+
+ou
+
+NAO
+
+Responda SIM apenas se a mensagem foi claramente enviada por:
+- chatbot
+- assistente virtual
+- inteligência artificial
+- automação
+- bot de WhatsApp
+
+Responda NAO se a mensagem parecer humana.
+
+Não explique.`
+          },
+          {
+            role: "user",
+            content: message
+          }
+        ],
+        temperature: 0,
+        max_tokens: 5
+      },
+      {
+        headers: {
+          Authorization:
+            `Bearer ${process.env.OPENAI_API_KEY}`,
+          "Content-Type":
+            "application/json"
+        }
+      }
+    );
+
+  const respostaDetector =
+    detectorIA.data
+      .choices[0]
+      .message.content
+      .trim()
+      .toUpperCase();
+
+  if (
+    respostaDetector.includes("SIM")
+  ) {
+
+    console.log(
+      "🤖 Outra IA detectada pelo GPT."
+    );
+
+    return res.sendStatus(200);
+  }
+
+} catch (error) {
+
+  console.log(
+    "ERRO DETECTOR IA:",
+    error.message
+  );
+
+}
+
+// =====================================================
+// FIM PROTEÇÃO IAs
+// =====================================================   
    // =============================================
     // OPENAI
     // =====================================================
