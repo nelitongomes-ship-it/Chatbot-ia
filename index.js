@@ -196,11 +196,7 @@ if (
     }
   });
 //
-  await prisma.client.updateMany({
-  ...
-});
-
-const clientTeste = await prisma.client.findFirst({
+  const clientTeste = await prisma.client.findFirst({
   where: {
     phone: phone
   }
