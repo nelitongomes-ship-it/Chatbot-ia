@@ -1331,8 +1331,7 @@ if (
 console.log("CHEGOU ANTES DO TESTEBANCO");
 
 if (
-  message === "/testebanco" &&
-  isAdminPhone(phone)
+  message === "/testebanco"
 ){
 
 console.log("🔥 TESTEBANCO EXECUTOU 🔥");
