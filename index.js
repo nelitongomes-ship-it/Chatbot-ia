@@ -182,7 +182,7 @@ if (
 
   delete global.testeGratisSession[phone];
 
-  await prisma.client.updateMany({
+  
   const resultado = await prisma.client.updateMany({
   where: {
     phone: phone
