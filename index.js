@@ -1328,14 +1328,19 @@ if (
     // ============================
     // TESTE BANCO
 // =====================================================
+console.log("CHEGOU ANTES DO TESTEBANCO");
 
 if (
   message === "/testebanco" &&
   isAdminPhone(phone)
-)
+){
 
 console.log("🔥 TESTEBANCO EXECUTOU 🔥");
-  
+  console.log("PHONE:");
+console.log(phone);
+
+console.log("ADMIN:");
+console.log(isAdminPhone(phone));
   const cliente =
     await prisma.client.findFirst();
 
