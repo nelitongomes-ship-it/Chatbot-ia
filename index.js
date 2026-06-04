@@ -1341,14 +1341,17 @@ if (cliente?.aiMode === "BASICO") {
   contextoSistema = modo2;
 }
 
-if (cliente?.aiMode === "COMPLETO") {
+if (cliente?.aiMode === "INTERMEDIARIO") {
   contextoSistema = modo3;
 }
 
 if (cliente?.aiMode === "AGILS_CRED") {
   contextoSistema = modo4;
 }
-    
+
+if (cliente?.aiMode === "AVANCADO") {
+  contextoSistema = modo5;
+}      
 // =====================================================
 // PROMPT
 // =====================================================
