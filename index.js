@@ -183,18 +183,22 @@ if (
   delete global.testeGratisSession[phone];
 
   await prisma.client.updateMany({
-    where: {
-      phone: phone
-    },
-    data: {
-      aiMode: "TESTE_GRATIS",
-      isActive: true,
-      trialStartAt: new Date(),
-      trialEndAt: new Date(
-        Date.now() + 7 * 24 * 60 * 60 * 1000
-      )
-    }
-  });
+  const resultado = await prisma.client.updateMany({
+  where: {
+    phone: phone
+  },
+  data: {
+    aiMode: "TESTE_GRATIS",
+    isActive: true,
+    trialStartAt: new Date(),
+    trialEndAt: new Date(
+      Date.now() + 7 * 24 * 60 * 60 * 1000
+    )
+  }
+});
+
+console.log("UPDATE RESULTADO:");
+console.log(resultado);
 //
   const clientTeste = await prisma.client.findFirst({
   where: {
