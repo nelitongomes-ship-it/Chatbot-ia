@@ -26,6 +26,9 @@ model User {
 
   isActive         Boolean  @default(false)
 
+  trialStartAt     DateTime?
+  trialEndAt       DateTime?
+
   createdAt        DateTime @default(now())
 
   contracts        Contract[]
