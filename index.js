@@ -2104,8 +2104,7 @@ if (
 
 const texto = message.toLowerCase();
 const ehAgendamento =
-  texto.includes("agendar")
-||
+  
   texto.includes("agendar") ||
   texto.includes("agende") ||
   texto.includes("marcar") ||
@@ -2348,7 +2347,7 @@ Digite *minha agenda* para consultar seus compromissos.`
 
     return res.sendStatus(200);
   }
-
+    }
     
     // =====================================================
 // PROTEÇÃO CONTRA LOOP DE IAs E BOTS
