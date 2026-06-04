@@ -2114,15 +2114,11 @@ const ehAgendamento =
   texto.includes("reunião") ||
   texto.includes("reuniao") ||
   texto.includes("lembrar") ||
-  texto.includes("me") ||
   texto.includes("lembre") ||
   texto.includes("lembrete")
 
     if (ehAgendamento) {
    console.log("📅 ENTROU NO AGENDAMENTO");
-
-} 
-
 
   
   try {
