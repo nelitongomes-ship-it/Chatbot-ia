@@ -1318,7 +1318,26 @@ if (
 
   return res.sendStatus(200);
 }
-    
+    // ============================
+    // TESTE BANCO
+// =====================================================
+
+if (
+  message === "/testebanco" &&
+  adminSessions[phone]
+) {
+
+  const cliente =
+    await prisma.client.findFirst();
+
+  await sendMessage(
+    phone,
+    JSON.stringify(cliente, null, 2)
+  );
+
+  return res.sendStatus(200);
+}
+
     // =====================================================
 // VALIDAR CLIENTE
 // =====================================================
@@ -1352,25 +1371,6 @@ if (cliente?.aiMode === "AGILS_CRED") {
 if (cliente?.aiMode === "AVANCADO") {
   contextoSistema = modo5;
 }  
-// ============================
-    // TESTE BANCO
-// =====================================================
-
-if (
-  message === "/testebanco" &&
-  adminSessions[phone]
-) {
-
-  const cliente =
-    await prisma.client.findFirst();
-
-  await sendMessage(
-    phone,
-    JSON.stringify(cliente, null, 2)
-  );
-
-  return res.sendStatus(200);
-}
 
 // =====================================================
 // PROMPT
