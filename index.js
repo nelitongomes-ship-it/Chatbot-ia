@@ -152,8 +152,6 @@ console.log("🎁 BLOCO TESTE GRATIS EXECUTOU");
   
   global.testeGratisSession[phone] = true;
 
-  return res.sendStatus(200);
-
   await sendMessage(
     phone,
     `🎁 Posso liberar um teste grátis de 7 dias da Agils IA.
