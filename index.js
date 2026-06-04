@@ -2300,22 +2300,34 @@ const ehAgendamento =
 
     const numeroCliente =
       phone.replace("@c.us", "");
-
+//
     const clienteAgenda =
-      await prisma.client.findFirst({
-        where: {
-          phone: numeroCliente
-        }
-      });
+  await prisma.client.findFirst({
+    where: {
+      phone: numeroCliente
+    }
+  });
 
-    if (!clienteAgenda) {
+const usuarioAgenda =
+  await prisma.user.findFirst({
+    where: {
+      phone: numeroCliente
+    }
+  });
 
-      console.log(
-        "❌ CLIENTE NÃO ENCONTRADO:",
-        numeroCliente
-      );
+if (!clienteAgenda && !usuarioAgenda) {
 
-      return res.sendStatus(200);
+  console.log(
+    "❌ CLIENTE/USUÁRIO NÃO ENCONTRADO:",
+    numeroCliente
+  );
+
+  return res.sendStatus(200);
+}
+
+console.log(
+  "✅ CLIENTE OU USUÁRIO ENCONTRADO"
+);
     }
 
     const dataBrasil =
