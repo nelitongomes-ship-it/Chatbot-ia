@@ -82,8 +82,14 @@ iniciarLembretes(
 // =====================================================
 // WEBHOOK
 // =====================================================
-
 app.post("/webhook", async (req, res) => {
+
+console.log("PROCESS ID:");
+console.log(process.pid);
+
+console.log("TESTE SESSION INICIO:");
+console.log(global.testeGratisSession);
+
 
 console.log(
   "TIPO:",
