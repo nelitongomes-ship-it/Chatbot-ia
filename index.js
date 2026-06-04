@@ -1358,6 +1358,12 @@ const cliente =
   });
 
 console.log("CLIENTE ENCONTRADO:", cliente);
+if (!cliente) {
+  console.log("❌ CLIENTE NÃO CADASTRADO");
+} else {
+  console.log("✅ CLIENTE CADASTRADO");
+}
+
     
 let contextoSistema = modo1;
 
