@@ -17,6 +17,7 @@ const modo2 = require("./modo2");
 const modo3 = require("./modo3");
 const modo4 = require("./modo4");
 const modo5 = require("./modo5");
+const modo6 = require("./modo6");
 
 require("dotenv").config();
 
@@ -1381,8 +1382,12 @@ if (cliente?.aiMode === "AGILS_CRED") {
 
 if (cliente?.aiMode === "AVANCADO") {
   contextoSistema = modo5;
-}  
-
+} 
+    
+if (cliente?.aiMode === "TESTE_GRATIS") {
+  contextoSistema = modo6;
+  console.log("🎁 MODO TESTE_GRATIS CARREGADO");
+}
 // =====================================================
 // PROMPT
 // =====================================================
