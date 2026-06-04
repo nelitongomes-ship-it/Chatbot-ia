@@ -100,9 +100,13 @@ console.log(
   try {
 
     let message =
-      req.body.data?.body ||
-      req.body.message ||
-      "";
+  req.body.data?.body ||
+  req.body.message ||
+  "";
+
+const phone =
+  req.body.data?.from ||
+  "";
 
 console.log("================================");
 console.log("MESSAGE RECEBIDA:");
@@ -113,13 +117,9 @@ console.log("ADMIN SESSION:");
 console.log(adminSessions[phone]);
 console.log("================================");
 
-    const phone =
-      req.body.data?.from ||
-      "";
 if (req.body.data?.fromMe) {
   return res.sendStatus(200);
 }
-    
     
  
 // =====================================================
