@@ -16,6 +16,7 @@ const modo1 = require("./modo1");
 const modo2 = require("./modo2");
 const modo3 = require("./modo3");
 const modo4 = require("./modo4");
+const modo5 = require("./modo5");
 
 require("dotenv").config();
 
@@ -806,20 +807,24 @@ Exemplo:
     return res.sendStatus(200);
   }
 
-  let modo = "SEM_CADASTRO";
+  let modo1 = "SEM_CADASTRO";
 
   if (plano === "BASICO") {
-    modo = "BASICO";
+    modo2 = "BASICO";
   }
 
-  if (plano === "COMPLETO") {
-    modo = "COMPLETO";
+  if (plano === "INTERMEDIARIO") {
+    modo3 = "INYERMEDIARIO";
   }
 
   if (plano === "AGILS_CRED") {
-    modo = "AGILS_CRED";
+    modo4 = "AGILS_CRED";
   }
 
+  if (plano === "AVANCADO") {
+    modo5 = "AVANCADO";
+  }
+  
   await prisma.client.create({
     data: {
       name: nome,
