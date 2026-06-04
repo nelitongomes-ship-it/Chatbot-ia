@@ -160,7 +160,10 @@ console.log("🎁 BLOCO TESTE GRATIS EXECUTOU");
 //
 console.log("SESSÃO CRIADA:");
 console.log(global.testeGratisSession);  
- 
+
+  console.log("PROCESS ID:");
+console.log(process.pid);
+  
   await sendMessage(
     phone,
     `🎁 Posso liberar um teste grátis de 7 dias da Agils IA.
