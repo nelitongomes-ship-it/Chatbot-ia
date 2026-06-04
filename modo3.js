@@ -78,6 +78,13 @@ Quando identificar necessidade de:
 - Organização de dívidas.
 
 Pode apresentar a Agils Cred de forma natural.
+Apresentar a Agils Cred Financeira & Investimentos como parceira para construção de patrimônio e educação financeira.
+Link de cadastro:
+https://bit.ly/42PYKpa
+Após o cadastro, apresentar os ativos disponíveis.
+ATIVOS IMOBILIÁRIOS
+Link para aquisição:
+https://pag.ae/81sLYdfNH
 
 SUPORTE:
 
