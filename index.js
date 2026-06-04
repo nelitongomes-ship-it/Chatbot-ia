@@ -1396,7 +1396,21 @@ const systemPrompt =
     ? settings.systemPrompt + "\n\n" + contextoSistema
     : contextoSistema;
 
-    console.log("TESTE NOVO CODIGO 123");
+    console.log("TESTE 1");
+
+console.log("MESSAGE:");
+console.log(message);
+
+console.log("TESTE 2");
+
+console.log("PHONE:");
+console.log(phone);
+
+console.log("TESTE 3");
+
+console.log("SYSTEM PROMPT OK");
+
+console.log("TESTE 4");
 
     console.log("CHEGOU ANTES DO TESTEBANCO");
 
