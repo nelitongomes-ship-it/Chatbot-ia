@@ -174,7 +174,16 @@ Responda apenas: SIM`
 // =====================================================
 // CONFIRMAÇÃO TESTE
 // =====================================================
+console.log("=== TESTE SESSION ===");
+console.log(global.testeGratisSession);
 
+console.log("=== PHONE ===");
+console.log(phone);
+
+console.log("=== SESSION PHONE ===");
+console.log(global.testeGratisSession?.[phone]);
+//
+    
 if (
   textoLower === "sim" &&
   global.testeGratisSession[phone]
