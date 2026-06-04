@@ -51,7 +51,7 @@ model BlockedNumber {
   phone     String   @unique
   createdAt DateTime @default(now())
 }
-
+//
 model Client {
   id               Int      @id @default(autoincrement())
 
@@ -75,6 +75,27 @@ model Client {
   interestStage    String?  @default("NENHUM")
 
   planExpiresAt    String?
+
+  // =====================================
+  // AGILS IA
+  // =====================================
+
+  selectedPlan     String?
+
+  trialStartAt     DateTime?
+  trialEndAt       DateTime?
+
+  messagesToday    Int      @default(0)
+
+  dailyLimit       Int      @default(20)
+
+  paymentStatus    String   @default("PENDENTE")
+
+  nextPaymentAt    String?
+
+  lastPaymentAt    String?
+
+  // =====================================
 
   isActive         Boolean  @default(true)
 
