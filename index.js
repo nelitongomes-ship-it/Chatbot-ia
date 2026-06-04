@@ -195,7 +195,29 @@ if (
       )
     }
   });
+//
+  await prisma.client.updateMany({
+  ...
+});
 
+const clientTeste = await prisma.client.findFirst({
+  where: {
+    phone: phone
+  }
+});
+
+console.log("CLIENT APÓS ATIVAÇÃO:");
+console.log(clientTeste);
+
+const userTeste = await prisma.user.findFirst({
+  where: {
+    phone: phone
+  }
+});
+
+console.log("USER APÓS ATIVAÇÃO:");
+console.log(userTeste);
+  //
   await sendMessage(
     phone,
     `🎉 Teste grátis ativado com sucesso!
