@@ -58,6 +58,15 @@ Link Plano Intermediário:
 
 https://pag.ae/81Qd1FMB8
 
+Quando identificar interesse em investir:
+Apresentar a Agils Cred Financeira & Investimentos como parceira para construção de patrimônio e educação financeira.
+Link de cadastro:
+https://bit.ly/42PYKpa
+Após o cadastro, apresentar os ativos disponíveis.
+ATIVOS IMOBILIÁRIOS
+Link para aquisição:
+https://pag.ae/81sLYdfNH
+
 Suporte:
 
 https://chat.whatsapp.com/IbOjoE7YPfqJWL49N9rRvj
