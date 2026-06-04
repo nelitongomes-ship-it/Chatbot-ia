@@ -90,6 +90,9 @@ console.log(process.pid);
 console.log("TESTE SESSION INICIO:");
 console.log(global.testeGratisSession);
 
+console.log("MEMORIA:");
+console.log(process.memoryUsage().heapUsed);
+
 
 console.log(
   "TIPO:",
@@ -138,32 +141,43 @@ const textoLower =
     console.log("TEXTO LOWER:");
 console.log(textoLower);
     //
-global.testeGratisSession =
-  global.testeGratisSession || {};
 
+
+// =====================================================
 // =====================================================
 // ATIVAR TESTE GRÁTIS
 // =====================================================
 
 if (
-  textoLower.includes("teste grátis")
-  ||
-  textoLower.includes("teste gratis")
-  ||
-  textoLower.includes("quero testar") 
-  ||
-  textoLower.includes("tem teste") 
+  textoLower.includes("teste grátis") ||
+  textoLower.includes("teste gratis") ||
+  textoLower.includes("quero testar") ||
+  textoLower.includes("tem teste")
 ) {
-console.log("🎁 BLOCO TESTE GRATIS EXECUTOU");
-  
-  global.testeGratisSession[phone] = true;
-//
-console.log("SESSÃO CRIADA:");
-console.log(global.testeGratisSession);  
 
-  console.log("PROCESS ID:");
-console.log(process.pid);
-  
+  console.log("🎁 BLOCO TESTE GRATIS EXECUTOU");
+
+  await prisma.user.updateMany({
+    where: {
+      phone
+    },
+    data: {
+      aiMode: "AGUARDANDO_TESTE"
+    }
+  });
+
+  const usuarioAguardando =
+    await prisma.user.findFirst({
+      where: {
+        phone
+      }
+    });
+
+  console.log(
+    "USUÁRIO AGUARDANDO TESTE:"
+  );
+  console.log(usuarioAguardando);
+
   await sendMessage(
     phone,
     `🎁 Posso liberar um teste grátis de 7 dias da Agils IA.
@@ -184,61 +198,57 @@ Responda apenas: SIM`
 }
 
 // =====================================================
+
+ // =====================================================
 // CONFIRMAÇÃO TESTE
 // =====================================================
-console.log("=== TESTE SESSION ===");
-console.log(global.testeGratisSession);
 
-console.log("=== PHONE ===");
-console.log(phone);
+const usuarioTeste =
+  await prisma.user.findFirst({
+    where: {
+      phone
+    }
+  });
 
-console.log("=== SESSION PHONE ===");
-console.log(global.testeGratisSession?.[phone]);
-//
-    
+console.log("USUARIO TESTE:");
+console.log(usuarioTeste);
+
 if (
   textoLower === "sim" &&
-  global.testeGratisSession[phone]
+  usuarioTeste?.aiMode === "AGUARDANDO_TESTE"
 ) {
 
-  delete global.testeGratisSession[phone];
+  const resultado =
+    await prisma.user.updateMany({
+      where: {
+        phone
+      },
+      data: {
+        aiMode: "TESTE_GRATIS",
+        isActive: true,
+        trialStartAt: new Date(),
+        trialEndAt: new Date(
+          Date.now() +
+          7 * 24 * 60 * 60 * 1000
+        )
+      }
+    });
 
-  
-  const resultado = await prisma.user.updateMany({
-  where: {
-    phone: phone
-  },
-  data: {
-    aiMode: "TESTE_GRATIS",
-    isActive: true,
-    trialStartAt: new Date(),
-    trialEndAt: new Date(
-      Date.now() + 7 * 24 * 60 * 60 * 1000
-    )
-  }
-});
+  console.log("UPDATE RESULTADO:");
+  console.log(resultado);
 
-console.log("UPDATE RESULTADO:");
-console.log(resultado);
-//
-  const clientTeste = await prisma.client.findFirst({
-  where: {
-    phone: phone
-  }
-});
+  const userAtivado =
+    await prisma.user.findFirst({
+      where: {
+        phone
+      }
+    });
 
-console.log("CLIENT APÓS ATIVAÇÃO:");
-console.log(clientTeste);
+  console.log(
+    "USER APÓS ATIVAÇÃO:"
+  );
+  console.log(userAtivado);
 
-const userTeste = await prisma.user.findFirst({
-  where: {
-    phone: phone
-  }
-});
-
-console.log("USER APÓS ATIVAÇÃO:");
-console.log(userTeste);
-  //
   await sendMessage(
     phone,
     `🎉 Teste grátis ativado com sucesso!
@@ -250,7 +260,6 @@ Agora você já pode utilizar todos os recursos da Agils IA.`
 
   return res.sendStatus(200);
 }
- 
 // =====================================================
 // CADASTRO AUTOMÁTICO DE CLIENTE
 // =====================================================
