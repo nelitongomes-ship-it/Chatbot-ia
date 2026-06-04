@@ -121,7 +121,85 @@ console.log("================================");
 if (req.body.data?.fromMe) {
   return res.sendStatus(200);
 }
-    
+
+    //// 
+
+const textoLower =
+  (message || "")
+    .toLowerCase()
+    .trim();
+
+global.testeGratisSession =
+  global.testeGratisSession || {};
+
+// =====================================================
+// ATIVAR TESTE GRÁTIS
+// =====================================================
+
+if (
+  textoLower.includes("teste grátis") ||
+  textoLower.includes("teste gratis") ||
+  textoLower.includes("quero testar") ||
+  textoLower.includes("tem teste")
+) {
+
+  global.testeGratisSession[phone] = true;
+
+  await sendMessage(
+    phone,
+    `🎁 Posso liberar um teste grátis de 7 dias da Agils IA.
+
+Durante o período de teste você poderá:
+
+✅ Conversar com a IA
+✅ Criar lembretes
+✅ Agendar compromissos
+✅ Organizar tarefas
+
+Deseja ativar agora?
+
+Responda apenas: SIM`
+  );
+
+  return res.sendStatus(200);
+}
+
+// =====================================================
+// CONFIRMAÇÃO TESTE
+// =====================================================
+
+if (
+  textoLower === "sim" &&
+  global.testeGratisSession[phone]
+) {
+
+  delete global.testeGratisSession[phone];
+
+  await prisma.client.updateMany({
+    where: {
+      phone: phone
+    },
+    data: {
+      aiMode: "TESTE_GRATIS",
+      isActive: true,
+      trialStartAt: new Date(),
+      trialEndAt: new Date(
+        Date.now() + 7 * 24 * 60 * 60 * 1000
+      )
+    }
+  });
+
+  await sendMessage(
+    phone,
+    `🎉 Teste grátis ativado com sucesso!
+
+Seu acesso ficará disponível por 7 dias.
+
+Agora você já pode utilizar todos os recursos da Agils IA.`
+  );
+
+  return res.sendStatus(200);
+}
  
 // =====================================================
 // CADASTRO AUTOMÁTICO DE CLIENTE
