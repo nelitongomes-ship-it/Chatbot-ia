@@ -1398,6 +1398,20 @@ const systemPrompt =
     : contextoSistema;
 
     console.log("TESTE NOVO CODIGO 123");
+
+    console.log("CHEGOU ANTES DO TESTEBANCO");
+
+if (message === "/testebanco") {
+
+  console.log("🔥 TESTEBANCO EXECUTOU 🔥");
+
+  await sendMessage(
+    phone,
+    "COMANDO TESTEBANCO FUNCIONOU"
+  );
+
+  return res.sendStatus(200);
+}
     // =====================================================
     // SALVAR USUÁRIO
     // =====================================================
