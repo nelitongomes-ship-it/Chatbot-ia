@@ -806,22 +806,22 @@ Exemplo:
     return res.sendStatus(200);
   }
 
-  let modo1 = "SEM_CADASTRO";
+  let modo = "SEM_CADASTRO";
 
   if (plano === "BASICO") {
-    modo2 = "BASICO";
+    modo = "BASICO";
   }
 
   if (plano === "INTERMEDIARIO") {
-    modo3 = "INYERMEDIARIO";
+    modo3 = "INTERMEDIARIO";
   }
 
   if (plano === "AGILS_CRED") {
-    modo4 = "AGILS_CRED";
+    modo = "AGILS_CRED";
   }
 
   if (plano === "AVANCADO") {
-    modo5 = "AVANCADO";
+    modo = "AVANCADO";
   }
   
   await prisma.client.create({
