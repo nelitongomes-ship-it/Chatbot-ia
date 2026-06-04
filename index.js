@@ -1331,8 +1331,8 @@ if (
 
 if (
   message === "/testebanco" &&
-  adminSessions[phone]
-) {
+  isAdminPhone(phone)
+)
 
 console.log("🔥 TESTEBANCO EXECUTOU 🔥");
   
