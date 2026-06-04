@@ -129,6 +129,9 @@ const textoLower =
     .toLowerCase()
     .trim();
 
+    console.log("TEXTO LOWER:");
+console.log(textoLower);
+    //
 global.testeGratisSession =
   global.testeGratisSession || {};
 
@@ -137,13 +140,19 @@ global.testeGratisSession =
 // =====================================================
 
 if (
-  textoLower.includes("teste grátis") ||
-  textoLower.includes("teste gratis") ||
-  textoLower.includes("quero testar") ||
-  textoLower.includes("tem teste")
+  textoLower.includes("teste grátis")
+  ||
+  textoLower.includes("teste gratis")
+  ||
+  textoLower.includes("quero testar") 
+  ||
+  textoLower.includes("tem teste") 
 ) {
-
+console.log("🎁 BLOCO TESTE GRATIS EXECUTOU");
+  
   global.testeGratisSession[phone] = true;
+
+  return res.sendStatus(200);
 
   await sendMessage(
     phone,
