@@ -995,6 +995,10 @@ Exemplo:
   if (plano === "AVANCADO") {
     modo = "AVANCADO";
   }
+
+  if (plano === "TESTE_GRATIS") {
+    modo = "TESTE_GRATIS";
+  }
   
   await prisma.client.create({
     data: {
