@@ -809,7 +809,7 @@ if (
         return res.sendStatus(200);
       }
 //alterado//
-      const currentSettings =
+      
       const partes = novoPrompt.split("|");
 
 const titulo = partes[0]?.trim();
