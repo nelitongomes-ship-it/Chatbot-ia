@@ -1524,7 +1524,7 @@ console.log(isAdminPhone(phone));
 // =====================================================
 
 const telefoneCliente =
-phone.replace("@c.us", "");
+phone;
 
 const cliente =
 await prisma.client.findFirst({
