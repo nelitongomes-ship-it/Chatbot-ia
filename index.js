@@ -1517,7 +1517,7 @@ const sessoesAtivas =
   await prisma.session.count({
     where: {
       lastSeenAt: {
-        gte: umMinutosAtras
+        gte: cincoMinutosAtras
       }
     }
   });
