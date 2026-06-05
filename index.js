@@ -2501,26 +2501,32 @@ if (!possuiDataNaMensagem) {
       return res.sendStatus(200);
     }
 
-    const novoCompromisso =
-      await prisma.appointment.create({
-        data: {
-          clientName:
-            clienteAgenda.name,
+     
+        //alterado//
+          const nomeCliente =
+  clienteAgenda?.name ||
+  usuarioAgenda?.name ||
+  "Usuário";
+    console.log("NOME CLIENTE:");
+console.log(nomeCliente);
 
-          phone:
-            numeroCliente,
+const novoCompromisso =
+  await prisma.appointment.create({
+    data: {
+      clientName: nomeCliente,
 
-          date:
-            dadosAgenda.data,
+      phone: numeroCliente,
 
-          time:
-            dadosAgenda.hora,
+      date: dadosAgenda.data,
 
-          description:
-            dadosAgenda.descricao
-        }
-      });
+      time: dadosAgenda.hora,
 
+      description: dadosAgenda.descricao
+    }
+  });
+    
+//fin//
+    
     console.log(
       "✅ COMPROMISSO SALVO:",
       novoCompromisso
