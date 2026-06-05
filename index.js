@@ -1256,6 +1256,54 @@ if (
   return res.sendStatus(200);
 }
 // =====================================================
+// VER NUMERO BLOQUEADO
+// =====================================================
+
+if (
+  message.startsWith("/verbloqueado") &&
+  adminSessions[phone]
+) {
+
+  const numero =
+    message.replace("/verbloqueado", "").trim();
+
+  if (!numero) {
+
+    await sendMessage(
+      phone,
+      "⚠️ Informe um número.\n\nExemplo:\n/verbloqueado 5516999999999"
+    );
+
+    return res.sendStatus(200);
+  }
+
+  const bloqueado =
+    await prisma.blockedNumber.findFirst({
+      where: {
+        phone: numero
+      }
+    });
+
+  if (bloqueado) {
+
+    await sendMessage(
+      phone,
+      `🚫 O número ${numero} está bloqueado.`
+    );
+
+  } else {
+
+    await sendMessage(
+      phone,
+      `✅ O número ${numero} não está bloqueado.`
+    );
+
+  }
+
+  return res.sendStatus(200);
+}
+    
+// =====================================================
 // CADASTRAR CLIENTE
 // =====================================================
 console.log("ENTROU NO CADASTRO AUTOMATICO");
