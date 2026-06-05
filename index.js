@@ -3232,6 +3232,7 @@ return res.sendStatus(200);
 // Ignora grupos
 
 if (phone.includes("@g.us")) {
+  console.log("🚫 GRUPO IGNORADO");
 return res.sendStatus(200);
 }
 
