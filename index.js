@@ -1680,14 +1680,43 @@ console.log("🎁 MODO TESTE_GRATIS CARREGADO");
     // =====================================================
 // PROMPT
 // =====================================================
-const settings =
+//alterado//
+    const settings =
   await prisma.adminSettings.findFirst();
 
-const systemPrompt =
-  settings?.systemPrompt
-    ? settings.systemPrompt + "\n\n" + contextoSistema
-    : contextoSistema;
+const treinamentos =
+  await prisma.training.findMany({
+    where: {
+      active: true
+    },
+    orderBy: {
+      id: "asc"
+    }
+  });
 
+let memoriaTreinamentos = "";
+
+for (const t of treinamentos) {
+
+  memoriaTreinamentos += `
+
+━━━━━━━━━━━━━━━
+TREINAMENTO
+━━━━━━━━━━━━━━━
+
+Título: ${t.title}
+
+${t.content}
+
+`;
+}
+
+const systemPrompt = `
+${settings?.systemPrompt || contextoSistema}
+
+${memoriaTreinamentos}
+`;
+//fim//
     console.log("TESTE 1");
 
 console.log("MESSAGE:");
