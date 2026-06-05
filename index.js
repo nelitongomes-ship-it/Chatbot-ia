@@ -1302,6 +1302,137 @@ if (
 
   return res.sendStatus(200);
 }
+// =====================================================
+// ESTATÍSTICAS
+// =====================================================
+
+if (
+  message === "/estatisticas" &&
+  adminSessions[phone]
+) {
+
+  const totalClientes =
+    await prisma.client.count();
+
+  const clientesAtivos =
+    await prisma.client.count({
+      where: {
+        isActive: true
+      }
+    });
+
+  const clientesInativos =
+    await prisma.client.count({
+      where: {
+        isActive: false
+      }
+    });
+
+  const bloqueados =
+    await prisma.blockedNumber.count();
+
+  const botsBloqueados =
+    await prisma.blockedBot.count();
+
+  const totalAgendamentos =
+    await prisma.appointment.count();
+
+  const treinamentosAtivos =
+    await prisma.training.count({
+      where: {
+        active: true
+      }
+    });
+
+  const pagamentosPendentes =
+    await prisma.client.count({
+      where: {
+        paymentStatus: "PENDENTE"
+      }
+    });
+
+  const pagamentosAprovados =
+    await prisma.client.count({
+      where: {
+        paymentStatus: "APROVADO"
+      }
+    });
+
+  const planoTeste =
+    await prisma.client.count({
+      where: {
+        selectedPlan: "teste"
+      }
+    });
+
+  const planoBasico =
+    await prisma.client.count({
+      where: {
+        selectedPlan: "basico"
+      }
+    });
+
+  const planoIntermediario =
+    await prisma.client.count({
+      where: {
+        selectedPlan: "intermediario"
+      }
+    });
+
+  const planoAvancado =
+    await prisma.client.count({
+      where: {
+        selectedPlan: "avancado"
+      }
+    });
+
+  const hoje = new Date().toISOString().split("T")[0];
+
+  const mensagensHoje =
+    await prisma.client.aggregate({
+      _sum: {
+        messagesToday: true
+      }
+    });
+
+  await sendMessage(
+    phone,
+`📊 PAINEL AGILS IA
+
+👥 CLIENTES
+
+Total: ${totalClientes}
+🟢 Ativos: ${clientesAtivos}
+🔴 Inativos: ${clientesInativos}
+
+📦 PLANOS
+
+🧪 Teste: ${planoTeste}
+🥉 Básico: ${planoBasico}
+🥈 Intermediário: ${planoIntermediario}
+🥇 Avançado: ${planoAvancado}
+
+💳 PAGAMENTOS
+
+✅ Aprovados: ${pagamentosAprovados}
+⚠️ Pendentes: ${pagamentosPendentes}
+
+🤖 SISTEMA
+
+🚫 Números bloqueados: ${bloqueados}
+🤖 Bots bloqueados: ${botsBloqueados}
+📝 Treinamentos ativos: ${treinamentosAtivos}
+📅 Agendamentos: ${totalAgendamentos}
+
+💬 Mensagens hoje: ${
+      mensagensHoje._sum.messagesToday || 0
+    }
+
+📅 Data: ${hoje}`
+  );
+
+  return res.sendStatus(200);
+}
     
 // =====================================================
 // CADASTRAR CLIENTE
