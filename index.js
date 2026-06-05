@@ -960,6 +960,192 @@ ${treinamento.active ? "Ativo" : "Inativo"}`
   return res.sendStatus(200);
 }
     // =====================================================
+// EDITAR TREINAMENTO
+// =====================================================
+
+if (message.startsWith("/editartreinamento")) {
+
+  if (!adminSessions[phone]) {
+
+    await sendMessage(
+      phone,
+      "⛔ Faça login administrativo."
+    );
+
+    return res.sendStatus(200);
+  }
+
+  const dados =
+    message.replace("/editartreinamento", "").trim();
+
+  const partes = dados.split("|");
+
+  const id = parseInt(partes[0]?.trim());
+
+  const novoConteudo = partes[1]?.trim();
+
+  if (!id || !novoConteudo) {
+
+    await sendMessage(
+      phone,
+      "⚠️ Use:\n/editartreinamento ID|Novo conteúdo"
+    );
+
+    return res.sendStatus(200);
+  }
+
+  await prisma.training.update({
+    where: {
+      id
+    },
+    data: {
+      content: novoConteudo
+    }
+  });
+
+  await sendMessage(
+    phone,
+    "✅ Treinamento atualizado."
+  );
+
+  return res.sendStatus(200);
+}
+    // =====================================================
+// DESATIVAR TREINAMENTO
+// =====================================================
+
+if (message.startsWith("/desativartreinamento")) {
+
+  if (!adminSessions[phone]) {
+
+    await sendMessage(
+      phone,
+      "⛔ Faça login administrativo."
+    );
+
+    return res.sendStatus(200);
+  }
+
+  const id = parseInt(
+    message.replace("/desativartreinamento", "").trim()
+  );
+
+  if (!id) {
+
+    await sendMessage(
+      phone,
+      "⚠️ Use:\n/desativartreinamento ID"
+    );
+
+    return res.sendStatus(200);
+  }
+
+  await prisma.training.update({
+    where: {
+      id
+    },
+    data: {
+      active: false
+    }
+  });
+
+  await sendMessage(
+    phone,
+    "🔴 Treinamento desativado."
+  );
+
+  return res.sendStatus(200);
+      }
+    // =====================================================
+// ATIVAR TREINAMENTO
+// =====================================================
+
+if (message.startsWith("/ativartreinamento")) {
+
+  if (!adminSessions[phone]) {
+
+    await sendMessage(
+      phone,
+      "⛔ Faça login administrativo."
+    );
+
+    return res.sendStatus(200);
+  }
+
+  const id = parseInt(
+    message.replace("/ativartreinamento", "").trim()
+  );
+
+  if (!id) {
+
+    await sendMessage(
+      phone,
+      "⚠️ Use:\n/ativartreinamento ID"
+    );
+
+    return res.sendStatus(200);
+  }
+
+  await prisma.training.update({
+    where: {
+      id
+    },
+    data: {
+      active: true
+    }
+  });
+
+  await sendMessage(
+    phone,
+    "🟢 Treinamento ativado."
+  );
+
+  return res.sendStatus(200);
+}
+    // =====================================================
+// EXCLUIR TREINAMENTO
+// =====================================================
+
+if (message.startsWith("/excluirtreinamento")) {
+
+  if (!adminSessions[phone]) {
+
+    await sendMessage(
+      phone,
+      "⛔ Faça login administrativo."
+    );
+
+    return res.sendStatus(200);
+  }
+
+  const id = parseInt(
+    message.replace("/excluirtreinamento", "").trim()
+  );
+
+  if (!id) {
+
+    await sendMessage(
+      phone,
+      "⚠️ Use:\n/excluirtreinamento ID"
+    );
+
+    return res.sendStatus(200);
+  }
+
+  await prisma.training.delete({
+    where: {
+      id
+    }
+  });
+
+  await sendMessage(
+    phone,
+    "🗑️ Treinamento excluído."
+  );
+
+  return res.sendStatus(200);
+}
+    // =====================================================
     // BLOQUEAR
     // =====================================================
 
