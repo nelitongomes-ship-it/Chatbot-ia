@@ -326,6 +326,25 @@ Agora você já pode utilizar todos os recursos da Agils IA.`
 
   return res.sendStatus(200);
 }
+//Alterado//
+ // =====================================================
+// SAUDE DO SISTEMA
+// =====================================================
+
+if (
+  message === "/saudesistema" &&
+  adminSessions[phone]
+) {
+
+  await sendMessage(
+    phone,
+    "✅ TESTE SAÚDE"
+  );
+
+  return res.sendStatus(200);
+}  
+//fim//    
+    
 // =====================================================
 // CADASTRO AUTOMÁTICO DE CLIENTE
 // =====================================================
