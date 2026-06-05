@@ -223,6 +223,17 @@ model BlockedBot {
   createdAt DateTime @default(now())
 }
 
+model Session {
+
+  id         Int      @id @default(autoincrement())
+
+  phone      String   @unique
+
+  lastSeenAt DateTime @default(now())
+
+  createdAt  DateTime @default(now())
+}
+
 model Training {
   id          Int      @id @default(autoincrement())
 
