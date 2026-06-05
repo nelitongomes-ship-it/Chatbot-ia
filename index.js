@@ -3515,7 +3515,60 @@ console.log(
 // =====================================================
 // FIM DA PROTEÇÃO
 // =====================================================
-   
+   // =====================================================
+// BOTS BLOQUEADOS
+// =====================================================
+
+if (message === "/botsbloqueados") {
+
+  if (!adminSessions[phone]) {
+
+    await sendMessage(
+      phone,
+      "⛔ Faça login administrativo."
+    );
+
+    return res.sendStatus(200);
+  }
+
+  const bots =
+    await prisma.blockedBot.findMany({
+      orderBy: {
+        createdAt: "desc"
+      }
+    });
+
+  if (bots.length === 0) {
+
+    await sendMessage(
+      phone,
+      "✅ Nenhum bot bloqueado."
+    );
+
+    return res.sendStatus(200);
+  }
+
+  let texto =
+    "🤖 BOTS BLOQUEADOS\n\n";
+
+  bots.forEach((bot, index) => {
+
+    texto +=
+      `${index + 1}. ${bot.phone}\n` +
+      `Motivo: ${bot.reason || "Não informado"}\n\n`;
+
+  });
+
+  texto +=
+    `📊 Total: ${bots.length}`;
+
+  await sendMessage(
+    phone,
+    texto
+  );
+
+  return res.sendStatus(200);
+}
    // =============================================
     // OPENAI
     // =====================================================
