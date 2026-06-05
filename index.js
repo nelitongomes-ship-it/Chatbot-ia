@@ -1577,28 +1577,97 @@ if (cliente?.aiMode === "AVANCADO") {
 
 if (cliente?.aiMode === "TESTE_GRATIS") {
   contextoSistema = modo6;
+// =====================================================
+// VALIDAR CLIENTE / USUÁRIO
+// =====================================================
+
+const telefoneCliente =
+  phone.replace("@c.us", "");
+
+const cliente =
+  await prisma.client.findFirst({
+    where: {
+      phone: telefoneCliente
+    }
+  });
+
+const usuario =
+  await prisma.user.findFirst({
+    where: {
+      phone: phone
+    }
+  });
+
+console.log("CLIENTE ENCONTRADO:");
+console.log(cliente);
+
+console.log("USUÁRIO ENCONTRADO:");
+console.log(usuario);
+
+if (!cliente && !usuario) {
+
+  console.log(
+    "❌ CLIENTE/USUÁRIO NÃO ENCONTRADO"
+  );
+
+} else {
+
+  console.log(
+    "✅ CLIENTE OU USUÁRIO ENCONTRADO"
+  );
+
+}
+
+let contextoSistema = modo1;
+
+// =====================================
+// MODOS CLIENT
+// =====================================
+
+if (cliente?.aiMode === "BASICO") {
+  contextoSistema = modo2;
+}
+
+if (cliente?.aiMode === "INTERMEDIARIO") {
+  contextoSistema = modo3;
+}
+
+if (cliente?.aiMode === "AGILS_CRED") {
+  contextoSistema = modo4;
+}
+
+if (cliente?.aiMode === "AVANCADO") {
+  contextoSistema = modo5;
+}
+
+if (cliente?.aiMode === "TESTE_GRATIS") {
+  contextoSistema = modo6;
   console.log("🎁 MODO TESTE_GRATIS CLIENT");
 }
 
 // =====================================
-// PRIORIDADE USER
+// MODOS USER
 // =====================================
 
-if (usuario?.aiMode === "TESTE_GRATIS") {
-  contextoSistema = modo6;
-  console.log("🎁 MODO TESTE_GRATIS USER");
-}
-
-if (usuario?.aiMode === "AVANCADO") {
-  contextoSistema = modo5;
+if (usuario?.aiMode === "BASICO") {
+  contextoSistema = modo2;
 }
 
 if (usuario?.aiMode === "INTERMEDIARIO") {
   contextoSistema = modo3;
 }
 
-if (usuario?.aiMode === "BASICO") {
-  contextoSistema = modo2;
+if (usuario?.aiMode === "AGILS_CRED") {
+  contextoSistema = modo4;
+}
+
+if (usuario?.aiMode === "AVANCADO") {
+  contextoSistema = modo5;
+}
+
+if (usuario?.aiMode === "TESTE_GRATIS") {
+  contextoSistema = modo6;
+  console.log("🎁 MODO TESTE_GRATIS USER");
 }
    
     // =====================================================
