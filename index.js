@@ -118,6 +118,38 @@ const phone =
   req.body.data?.from ||
   "";
 
+// =====================================
+// ATUALIZAR SESSÃO
+// =====================================
+
+try {
+
+  await prisma.session.upsert({
+
+    where: {
+      phone
+    },
+
+    update: {
+      lastSeenAt: new Date()
+    },
+
+    create: {
+      phone,
+      lastSeenAt: new Date()
+    }
+
+  });
+
+} catch (error) {
+
+  console.log(
+    "ERRO SESSION:",
+    error.message
+  );
+
+}
+ //fin//   
 console.log("================================");
 console.log("MESSAGE RECEBIDA:");
 console.log(message);
