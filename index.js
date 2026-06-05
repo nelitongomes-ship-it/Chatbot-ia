@@ -3216,43 +3216,105 @@ Digite *minha agenda* para consultar seus compromissos.`
     return res.sendStatus(200);
   }
     }
-    
-    // =====================================================
+    //alterado//
+
+// =====================================================
 // PROTEÇÃO CONTRA LOOP DE IAs E BOTS
+// SOMENTE PARA NÚMEROS SEM CADASTRO
 // =====================================================
 
 // Ignora mensagens enviadas pela própria conta
 
 if (req.body?.data?.fromMe === true) {
-  return res.sendStatus(200);
+return res.sendStatus(200);
 }
 
 // Ignora grupos
 
 if (phone.includes("@g.us")) {
-  return res.sendStatus(200);
+return res.sendStatus(200);
+}
+
+// =====================================================
+// CONSULTA USUÁRIO
+// =====================================================
+
+let usuario = null;
+
+try {
+
+usuario =
+await prisma.user.findFirst({
+where: {
+phone
+}
+});
+
+} catch (error) {
+
+console.log(
+"ERRO CONSULTA USER:",
+error.message
+);
+
+}
+
+// =====================================================
+// VERIFICA SE JÁ FOI BLOQUEADO
+// =====================================================
+
+if (!usuario) {
+
+const bloqueado =
+await prisma.blockedBot.findFirst({
+where: {
+phone
+}
+});
+
+if (bloqueado) {
+
+console.log(
+  "🚫 BOT BLOQUEADO"
+);
+
+return res.sendStatus(200);
+
+}
+
 }
 
 const mensagemLower =
-  (message || "")
-    .toLowerCase()
-    .trim();
+(message || "")
+.toLowerCase()
+.trim();
 
 // =====================================================
 // DETECÇÃO DE MENUS E BOTÕES
 // =====================================================
 
 if (
-  req.body?.data?.buttonText ||
-  req.body?.data?.listResponse ||
-  req.body?.data?.selectedButtonId
+!usuario &&
+(
+req.body?.data?.buttonText ||
+req.body?.data?.listResponse ||
+req.body?.data?.selectedButtonId
+)
 ) {
 
-  console.log(
-    "🤖 MENU AUTOMÁTICO DETECTADO"
-  );
+console.log(
+"🤖 MENU AUTOMÁTICO DETECTADO"
+);
 
-  return res.sendStatus(200);
+await prisma.blockedBot.create({
+data: {
+phone,
+reason: "MENU_AUTOMATICO"
+}
+});
+
+return res.sendStatus(200);
+
 }
 
 // =====================================================
@@ -3261,123 +3323,141 @@ if (
 
 const indicadoresIA = [
 
-  "sou uma inteligência artificial",
-  "sou uma inteligencia artificial",
-  "sou uma ia",
-  "como assistente virtual",
-  "como modelo de linguagem",
-  "como modelo de linguagem ia",
-  "chatgpt",
-  "openai",
-  "gemini",
-  "claude",
-  "copilot",
-  "assistente virtual",
-  "atendimento automático",
-  "atendimento automatizado",
-  "robô de atendimento",
-  "robo de atendimento",
-  "bot de atendimento",
-  "assistente digital",
-  "olá, sou o assistente",
-  "ola, sou o assistente",
-  "olá, eu sou um assistente",
-  "ola, eu sou um assistente",
-  "sou o assistente virtual",
-  "atendente virtual",
-  "assistente de atendimento",
-  "sistema automatizado",
-  "resposta automática",
-  "resposta automatica",
-  "mensagem automática",
-  "mensagem automatica",
-
-  // menus automáticos
-
-  "não entendi",
-  "nao entendi",
-  "vamos tentar novamente",
-  "selecione uma das opções",
-  "selecione uma das opcoes",
-  "clique no botão",
-  "clique no botao",
-  "ver opções",
-  "ver opcoes",
-  "como podemos te ajudar",
-  "escolha uma opção",
-  "escolha uma opcao",
-  "digite uma opção",
-  "digite uma opcao",
-  "menu principal",
-  "atendimento digital",
-  "fluxo de atendimento",
-  "responda com o número",
-  "responda com o numero",
-  "para prosseguirmos",
-  "opções da lista",
-  "opcoes da lista"
+"sou uma inteligência artificial",
+"sou uma inteligencia artificial",
+"sou uma ia",
+"como assistente virtual",
+"como modelo de linguagem",
+"como modelo de linguagem ia",
+"chatgpt",
+"openai",
+"gemini",
+"claude",
+"copilot",
+"assistente virtual",
+"atendimento automático",
+"atendimento automatizado",
+"robô de atendimento",
+"robo de atendimento",
+"bot de atendimento",
+"assistente digital",
+"olá, sou o assistente",
+"ola, sou o assistente",
+"olá, eu sou um assistente",
+"ola, eu sou um assistente",
+"sou o assistente virtual",
+"atendente virtual",
+"assistente de atendimento",
+"sistema automatizado",
+"resposta automática",
+"resposta automatica",
+"mensagem automática",
+"mensagem automatica",
+"não entendi",
+"nao entendi",
+"vamos tentar novamente",
+"selecione uma das opções",
+"selecione uma das opcoes",
+"clique no botão",
+"clique no botao",
+"ver opções",
+"ver opcoes",
+"como podemos te ajudar",
+"escolha uma opção",
+"escolha uma opcao",
+"digite uma opção",
+"digite uma opcao",
+"menu principal",
+"atendimento digital",
+"fluxo de atendimento",
+"responda com o número",
+"responda com o numero",
+"para prosseguirmos",
+"opções da lista",
+"opcoes da lista"
 
 ];
 
 const detectouIA =
-  indicadoresIA.some(
-    termo =>
-      mensagemLower.includes(termo)
-  );
+indicadoresIA.some(
+termo =>
+mensagemLower.includes(termo)
+);
 
-if (detectouIA) {
+if (
+!usuario &&
+detectouIA
+) {
 
-  console.log(
-    "🤖 IA/BOT DETECTADO POR PALAVRAS-CHAVE"
-  );
+console.log(
+"🤖 IA DETECTADA POR PALAVRAS"
+);
 
-  return res.sendStatus(200);
+await prisma.blockedBot.create({
+data: {
+phone,
+reason: "PALAVRAS_CHAVE"
+}
+});
+
+return res.sendStatus(200);
+
 }
 
 // =====================================================
-// PROTEÇÃO CONTRA LOOP DE MENSAGENS
+// LOOP DE MENSAGENS
 // =====================================================
 
 global.ultimasMensagens =
-  global.ultimasMensagens || {};
+global.ultimasMensagens || {};
 
 const chaveLoop = phone;
 
 if (
-  global.ultimasMensagens[chaveLoop] ===
-  mensagemLower
+!usuario &&
+global.ultimasMensagens[chaveLoop] ===
+mensagemLower
 ) {
 
-  console.log(
-    "🤖 LOOP DE IA DETECTADO"
-  );
+console.log(
+"🤖 LOOP DETECTADO"
+);
 
-  return res.sendStatus(200);
+await prisma.blockedBot.create({
+data: {
+phone,
+reason: "LOOP_MENSAGENS"
+}
+});
+
+return res.sendStatus(200);
+
 }
 
 global.ultimasMensagens[chaveLoop] =
-  mensagemLower;
+mensagemLower;
 
 // =====================================================
-// DETECÇÃO AVANÇADA VIA GPT
+// DETECÇÃO GPT
 // =====================================================
+
+if (!usuario) {
 
 try {
 
-  const detectorIA =
-    await axios.post(
-      "https://api.openai.com/v1/chat/completions",
-      {
-        model: "gpt-4o-mini",
-        messages: [
-          {
-            role: "system",
-            content:
-`Você é um detector de chatbots.
+const detectorIA =
+  await axios.post(
+    "https://api.openai.com/v1/chat/completions",
+    {
+      model: "gpt-4o-mini",
+      messages: [
+        {
+          role: "system",
+          content:
 
-Analise a mensagem recebida.
+`Você é um detector de bots.
 
-Responda SOMENTE:
+Responda apenas:
 
 SIM
 
@@ -3385,65 +3465,52 @@ ou
 
 NAO
 
-Responda SIM se a mensagem claramente parece ter sido enviada por:
+SIM = parece bot.
+NAO = parece humano."}, { role: "user", content: message } ], temperature: 0, max_tokens: 5 }, { headers: { Authorization:"Bearer ${process.env.OPENAI_API_KEY}`,
+"Content-Type":
+"application/json"
+}
+}
+);
 
-- chatbot
-- assistente virtual
-- bot
-- atendimento automático
-- fluxo automatizado
-- menu automatizado
-- inteligência artificial
+const respostaDetector =
+  detectorIA.data
+    .choices[0]
+    .message.content
+    .trim()
+    .toUpperCase();
 
-Responda NAO se parecer humana.
-
-Não explique.`
-          },
-          {
-            role: "user",
-            content: message
-          }
-        ],
-        temperature: 0,
-        max_tokens: 5
-      },
-      {
-        headers: {
-          Authorization:
-            `Bearer ${process.env.OPENAI_API_KEY}`,
-          "Content-Type":
-            "application/json"
-        }
-      }
-    );
-
-  const respostaDetector =
-    detectorIA.data
-      .choices[0]
-      .message.content
-      .trim()
-      .toUpperCase();
-
-  if (
-    respostaDetector.includes("SIM")
-  ) {
-
-    console.log(
-      "🤖 IA DETECTADA PELO GPT"
-    );
-
-    return res.sendStatus(200);
-  }
-
-} catch (error) {
+if (
+  respostaDetector.includes(
+    "SIM"
+  )
+) {
 
   console.log(
-    "ERRO DETECTOR IA:",
-    error.message
+    "🤖 IA DETECTADA PELO GPT"
   );
+
+  await prisma.blockedBot.create({
+    data: {
+      phone,
+      reason: "GPT_DETECTOR"
+    }
+  });
+
+  return res.sendStatus(200);
 
 }
 
+} catch (error) {
+
+console.log(
+  "ERRO DETECTOR IA:",
+  error.message
+);
+
+}
+
+}
 // =====================================================
 // FIM DA PROTEÇÃO
 // =====================================================
