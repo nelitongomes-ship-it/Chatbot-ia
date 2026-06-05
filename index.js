@@ -1716,6 +1716,8 @@ ${settings?.systemPrompt || contextoSistema}
 
 ${memoriaTreinamentos}
 `;
+    console.log("TREINAMENTOS CARREGADOS:");
+console.log(memoriaTreinamentos);
 //fim//
     console.log("TESTE 1");
 
