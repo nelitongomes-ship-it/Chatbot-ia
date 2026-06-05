@@ -808,34 +808,31 @@ if (
 
         return res.sendStatus(200);
       }
-
+//alterado//
       const currentSettings =
-        await prisma.adminSettings.findFirst();
+      const partes = novoPrompt.split("|");
 
-      if (currentSettings) {
+const titulo = partes[0]?.trim();
+const conteudo = partes[1]?.trim();
 
-        await prisma.adminSettings.update({
-          where: {
-            id: currentSettings.id
-          },
-          data: {
-            systemPrompt:
-              currentSettings.systemPrompt +
-              "\n\n━━━━━━━━━━━━━━━\nNOVO TREINAMENTO\n━━━━━━━━━━━━━━━\n\n" +
-              novoPrompt
-          }
-        });
+if (!titulo || !conteudo) {
 
-      } else {
+  await sendMessage(
+    phone,
+    "⚠️ Use:\n/treinar Título|Conteúdo"
+  );
 
-        await prisma.adminSettings.create({
-          data: {
-            systemPrompt: novoPrompt
-          }
-        });
+  return res.sendStatus(200);
+}
 
-      }
-
+await prisma.training.create({
+  data: {
+    title: titulo,
+    content: conteudo
+  }
+});
+//Fim//
+      
       await sendMessage(
         phone,
         "✅ IA treinada com sucesso.\n🧠 Conhecimento acumulado."
