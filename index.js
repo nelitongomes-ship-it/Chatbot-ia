@@ -1212,7 +1212,49 @@ if (message.startsWith("/excluirtreinamento")) {
 
 console.log("MENSAGEM RECEBIDA:");
 console.log(message);
-    
+
+    // =====================================================
+// LISTAR BLOQUEADOS
+// =====================================================
+
+if (
+  message === "/bloqueados" &&
+  adminSessions[phone]
+) {
+
+  const bloqueados =
+    await prisma.blockedNumber.findMany({
+      orderBy: {
+        phone: "asc"
+      }
+    });
+
+  if (bloqueados.length === 0) {
+
+    await sendMessage(
+      phone,
+      "✅ Nenhum número bloqueado."
+    );
+
+    return res.sendStatus(200);
+  }
+
+  let lista =
+    "🚫 NÚMEROS BLOQUEADOS\n\n";
+
+  bloqueados.forEach((item, index) => {
+    lista += `${index + 1}. ${item.phone}\n`;
+  });
+
+  lista += `\nTotal: ${bloqueados.length}`;
+
+  await sendMessage(
+    phone,
+    lista
+  );
+
+  return res.sendStatus(200);
+}
 // =====================================================
 // CADASTRAR CLIENTE
 // =====================================================
