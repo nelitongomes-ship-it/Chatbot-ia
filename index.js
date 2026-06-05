@@ -328,21 +328,8 @@ Agora você já pode utilizar todos os recursos da Agils IA.`
 }
 //Alterado//
  // =====================================================
-// SAUDE DO SISTEMA
+// SAUDE DO SISTEMA teste
 // =====================================================
-
-if (
-  message === "/saudesistema" &&
-  adminSessions[phone]
-) {
-
-  await sendMessage(
-    phone,
-    "✅ TESTE SAÚDE"
-  );
-
-  return res.sendStatus(200);
-}  
 //fim//    
     
 // =====================================================
