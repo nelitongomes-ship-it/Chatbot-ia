@@ -985,7 +985,7 @@ Exemplo:
   }
 
   if (plano === "INTERMEDIARIO") {
-    modo3 = "INTERMEDIARIO";
+    modo = "INTERMEDIARIO";
   }
 
   if (plano === "AGILS_CRED") {
@@ -2009,7 +2009,7 @@ if (
 ) {
 
   const numeroCliente =
-    phone.replace("@c.us", "");
+    phone;
 
   console.log("WHATSAPP RECEBIDO:", phone);
   console.log("NUMERO CLIENTE:", numeroCliente);
@@ -2302,7 +2302,7 @@ const ehAgendamento =
   try {
 
     const numeroCliente =
-      phone.replace("@c.us", "");
+      phone;
 //
     const clienteAgenda =
   await prisma.client.findFirst({
