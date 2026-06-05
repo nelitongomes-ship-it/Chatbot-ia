@@ -1488,10 +1488,21 @@ if (
     prismaStatus = "🔴 Erro";
 
   }
+//alterado//
+  const cincoMinutosAtras =
+  new Date(
+    Date.now() - 5 * 60 * 1000
+  );
 
-  const sessoesAtivas =
-    Object.keys(userSessions || {}).length;
-
+const sessoesAtivas =
+  await prisma.session.count({
+    where: {
+      lastSeenAt: {
+        gte: cincoMinutosAtras
+      }
+    }
+  });
+//Fim//
   const dataHora =
     new Date().toLocaleString("pt-BR");
 
