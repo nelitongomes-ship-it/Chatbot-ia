@@ -79,6 +79,8 @@ model Client {
   interestStage    String?  @default("NENHUM")
 
   planExpiresAt    String?
+  lastPaymentAt DateTime?
+  nextPaymentAt DateTime?
 
   // =====================================
   // AGILS IA
