@@ -2186,6 +2186,16 @@ if (cliente?.aiMode === "TESTE_GRATIS") {
 contextoSistema = modo6;
 console.log("🎁 MODO TESTE_GRATIS CARREGADO");
 }
+
+if (cliente?.aiMode === "AGUARDANDO_DADOS_TESTE") {
+  contextoSistema = modo7;
+  console.log("📝 MODO AGUARDANDO_DADOS_TESTE CARREGADO");
+}
+    
+if (cliente?.aiMode === "PAGAMENTO_PENDENTE") {
+  contextoSistema = modo8;
+  console.log("💳 MODO PAGAMENTO_PENDENTE CARREGADO");
+}    
     // =====================================================
 // PROMPT
 // =====================================================
