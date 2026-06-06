@@ -1446,8 +1446,8 @@ if (
 
 👥 CADASTROS
 
-👤 Users: ${totalUsers}
 👥 Clients: ${totalClientes}
+👤 Users: ${totalUsers}
 
 🟢 Ativos: ${clientesAtivos}
 🔴 Inativos: ${clientesInativos}
