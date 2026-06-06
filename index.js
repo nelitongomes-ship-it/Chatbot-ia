@@ -1353,7 +1353,7 @@ if (
 
   await sendMessage(
     phone,
-    "🔥 TESTE NOVA ESTATISTICA"
+    "🔥 TESTE NOVA ESTATISTICA");
   //fim//
   const totalClientes =
     await prisma.client.count();
