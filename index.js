@@ -3468,7 +3468,10 @@ const mensagemLower =
 // IGNORAR ADMIN
 // =====================================
 
-if (adminSessions[phone]) {
+if (
+  adminSessions[phone] &&
+  !message.startsWith("/")
+) {
 
   console.log(
     "👑 ADMIN IGNORADO PELO DETECTOR"
