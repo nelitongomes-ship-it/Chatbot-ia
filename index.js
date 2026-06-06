@@ -265,7 +265,7 @@ Responda apenas: SIM`
 
 // =====================================================
 
- // =====================================================
+// =====================================================
 // CONFIRMAÇÃO TESTE
 // =====================================================
 
@@ -284,49 +284,117 @@ if (
   usuarioTeste?.aiMode === "AGUARDANDO_TESTE"
 ) {
 
-  const resultado =
-    await prisma.user.updateMany({
+  const agora = new Date();
+
+  const fimTeste = new Date(
+    Date.now() +
+    7 * 24 * 60 * 60 * 1000
+  );
+
+  const clienteExistente =
+    await prisma.client.findFirst({
       where: {
         phone
-      },
-      data: {
-        aiMode: "TESTE_GRATIS",
-        isActive: true,
-        trialStartAt: new Date(),
-        trialEndAt: new Date(
-          Date.now() +
-          7 * 24 * 60 * 60 * 1000
-        )
       }
     });
 
-  console.log("UPDATE RESULTADO:");
-  console.log(resultado);
+  if (!clienteExistente) {
 
-  const userAtivado =
-    await prisma.user.findFirst({
+    await prisma.client.create({
+      data: {
+        name: "Cliente Teste",
+        fullName: "Cliente Teste",
+        email: "",
+        phone: phone,
+
+        serviceType: "AGILS_IA",
+        planType: "TESTE",
+
+        selectedPlan: "teste",
+
+        aiMode: "TESTE_GRATIS",
+
+        isActive: true,
+
+        paymentStatus: "APROVADO",
+
+        dailyLimit: 20,
+
+        trialStartAt: agora,
+        trialEndAt: fimTeste
+      }
+    });
+
+    console.log(
+      "✅ CLIENTE TESTE CRIADO"
+    );
+
+  } else {
+
+    await prisma.client.update({
+      where: {
+        id: clienteExistente.id
+      },
+      data: {
+        selectedPlan: "teste",
+
+        aiMode: "TESTE_GRATIS",
+
+        isActive: true,
+
+        paymentStatus: "APROVADO",
+
+        dailyLimit: 20,
+
+        trialStartAt: agora,
+        trialEndAt: fimTeste
+      }
+    });
+
+    console.log(
+      "✅ CLIENTE TESTE ATUALIZADO"
+    );
+
+  }
+
+  await prisma.user.updateMany({
+    where: {
+      phone
+    },
+    data: {
+      aiMode: "TESTE_GRATIS",
+      isActive: true,
+      trialStartAt: agora,
+      trialEndAt: fimTeste
+    }
+  });
+
+  const clienteFinal =
+    await prisma.client.findFirst({
       where: {
         phone
       }
     });
 
   console.log(
-    "USER APÓS ATIVAÇÃO:"
+    "CLIENTE APÓS ATIVAÇÃO:"
   );
-  console.log(userAtivado);
+  console.log(clienteFinal);
 
   await sendMessage(
     phone,
-    `🎉 Teste grátis ativado com sucesso!
+`🎉 Teste grátis ativado com sucesso!
 
-Seu acesso ficará disponível por 7 dias.
+✅ Seu cadastro foi concluído.
+
+📅 Validade do teste:
+${fimTeste.toLocaleDateString("pt-BR")}
 
 Agora você já pode utilizar todos os recursos da Agils IA.`
   );
 
   return res.sendStatus(200);
-}
-//Alterado//
+}//Alterado//
  // =====================================================
 // SAUDE DO SISTEMA teste
 // =====================================================
