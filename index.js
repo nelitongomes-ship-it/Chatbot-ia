@@ -1917,6 +1917,37 @@ if (
 
   return res.sendStatus(200);
 }
+ DEBUG MODO
+// =====================================================
+
+if (message.trim() === "/debugmodo") {
+
+  const cliente =
+    await prisma.client.findFirst({
+      where: { phone }
+    });
+
+  const usuario =
+    await prisma.user.findFirst({
+      where: { phone }
+    });
+
+  await sendMessage(
+    phone,
+`DEBUG
+
+CLIENT:
+${cliente?.aiMode || "NULL"}
+
+USER:
+${usuario?.aiMode || "NULL"}
+
+CONTEXTO:
+${contextoSistema === modo1 ? "modo1" : "outro"}`
+  );
+
+  return res.sendStatus(200);
+}
 
   // =====================================================
 // VER CADASTRO
@@ -1956,38 +1987,6 @@ ${JSON.stringify(cliente, null, 2)}`
   return res.sendStatus(200);
 }
   // =====================================================
-// DEBUG MODO
-// =====================================================
-
-if (message.trim() === "/debugmodo") {
-
-  const cliente =
-    await prisma.client.findFirst({
-      where: { phone }
-    });
-
-  const usuario =
-    await prisma.user.findFirst({
-      where: { phone }
-    });
-
-  await sendMessage(
-    phone,
-`DEBUG
-
-CLIENT:
-${cliente?.aiMode || "NULL"}
-
-USER:
-${usuario?.aiMode || "NULL"}
-
-CONTEXTO:
-${contextoSistema === modo1 ? "modo1" : "outro"}`
-  );
-
-  return res.sendStatus(200);
-}
-    // =====================================================
 // CONSULTAR CLIENTE
 // =====================================================
 
