@@ -3290,6 +3290,37 @@ const mensagemLower =
 .toLowerCase()
 .trim();
 
+// =====================================
+// IGNORAR ADMIN
+// =====================================
+
+if (adminSessions[phone]) {
+
+  console.log(
+    "👑 ADMIN IGNORADO PELO DETECTOR"
+  );
+
+  return;
+
+}
+
+// =====================================
+// IGNORAR COMANDOS
+// =====================================
+
+if (
+  message &&
+  message.startsWith("/")
+) {
+
+  console.log(
+    "⚙️ COMANDO IGNORADO PELO DETECTOR"
+  );
+
+  return;
+
+}
+    
 // =====================================================
 // DETECÇÃO DE MENUS E BOTÕES
 // =====================================================
@@ -3439,23 +3470,24 @@ global.ultimasMensagens[chaveLoop] =
 mensagemLower;
 
 // =====================================================
-// DETECÇÃO GPT
+// =====================================================
+// DETECÇÃO AVANÇADA VIA GPT
+// SOMENTE PARA NÚMEROS SEM CADASTRO
 // =====================================================
 
 if (!usuario) {
 
-try {
+  try {
 
-const detectorIA =
-  await axios.post(
-    "https://api.openai.com/v1/chat/completions",
-    {
-      model: "gpt-4o-mini",
-      messages: [
+    const detectorIA =
+      await axios.post(
+        "https://api.openai.com/v1/chat/completions",
         {
-          role: "system",
-          content:
-
+          model: "gpt-4o-mini",
+          messages: [
+            {
+              role: "system",
+              content:
 `Você é um detector de bots.
 
 Responda apenas:
@@ -3467,49 +3499,71 @@ ou
 NAO
 
 SIM = parece bot.
-NAO = parece humano."}, { role: "user", content: message } ], temperature: 0, max_tokens: 5 }, { headers: { Authorization:"Bearer ${process.env.OPENAI_API_KEY}`,
-"Content-Type":
-"application/json"
-}
-}
-);
+NAO = parece humano.`
+            },
+            {
+              role: "user",
+              content: message
+            }
+          ],
+          temperature: 0,
+          max_tokens: 5
+        },
+        {
+          headers: {
+            Authorization:
+              `Bearer ${process.env.OPENAI_API_KEY}`,
+            "Content-Type":
+              "application/json"
+          }
+        }
+      );
 
-const respostaDetector =
-  detectorIA.data
-    .choices[0]
-    .message.content
-    .trim()
-    .toUpperCase();
+    const respostaDetector =
+      detectorIA.data
+        .choices[0]
+        .message.content
+        .trim()
+        .toUpperCase();
 
-if (
-  respostaDetector.includes(
-    "SIM"
-  )
-) {
+    if (
+      respostaDetector.includes("SIM")
+    ) {
 
-  console.log(
-    "🤖 IA DETECTADA PELO GPT"
-  );
+      console.log(
+        "🤖 IA DETECTADA PELO GPT"
+      );
 
-  await prisma.blockedBot.create({
-    data: {
-      phone,
-      reason: "GPT_DETECTOR"
+      const existe =
+        await prisma.blockedBot.findFirst({
+          where: {
+            phone
+          }
+        });
+
+      if (!existe) {
+
+        await prisma.blockedBot.create({
+          data: {
+            phone,
+            reason: "GPT_DETECTOR"
+          }
+        });
+
+      }
+
+      return res.sendStatus(200);
+
     }
-  });
 
-  return res.sendStatus(200);
+  } catch (error) {
 
-}
+    console.log(
+      "ERRO DETECTOR IA:",
+      error.message
+    );
 
-} catch (error) {
-
-console.log(
-  "ERRO DETECTOR IA:",
-  error.message
-);
-
-}
+  }
 
 }
 // =====================================================
