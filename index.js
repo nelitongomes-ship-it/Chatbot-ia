@@ -2195,7 +2195,30 @@ if (cliente?.aiMode === "AGUARDANDO_DADOS_TESTE") {
 if (cliente?.aiMode === "PAGAMENTO_PENDENTE") {
   contextoSistema = modo8;
   console.log("💳 MODO PAGAMENTO_PENDENTE CARREGADO");
-}    
+}  
+//teste temporario//
+    // =====================================================
+// TESTE EMAIL
+// =====================================================
+
+if (
+  message.trim() === "/testeemail"
+) {
+
+  console.log("🔥 TESTEEMAIL EXECUTOU");
+
+  const cliente =
+    await prisma.client.findFirst();
+
+  await sendMessage(
+    phone,
+    JSON.stringify(cliente, null, 2)
+  );
+
+  return res.sendStatus(200);
+}
+
+    
     // =====================================================
 // PROMPT
 // =====================================================
@@ -3657,30 +3680,7 @@ if (message === "/botsbloqueados") {
   );
 
   return res.sendStatus(200);
-}
-
-    //teste temporario//
-    // =====================================================
-// TESTE EMAIL
-// =====================================================
-
-if (
-  message.trim() === "/testeemail"
-) {
-
-  console.log("🔥 TESTEEMAIL EXECUTOU");
-
-  const cliente =
-    await prisma.client.findFirst();
-
-  await sendMessage(
-    phone,
-    JSON.stringify(cliente, null, 2)
-  );
-
-  return res.sendStatus(200);
-}
-
+} 
     
    // =============================================
     // OPENAI
