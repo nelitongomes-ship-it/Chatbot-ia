@@ -1349,10 +1349,12 @@ if (
   adminSessions[phone]
 ) {
 //teste//
-  console.log(
-  "📊 COMANDO ESTATISTICAS EXECUTOU"
-);
-  //fun//
+  console.log("🔥 NOVA ESTATISTICA EXECUTOU");
+
+  await sendMessage(
+    phone,
+    "🔥 TESTE NOVA ESTATISTICA"
+  //fim//
   const totalClientes =
     await prisma.client.count();
 
