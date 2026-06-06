@@ -3474,8 +3474,12 @@ mensagemLower;
 // DETECÇÃO AVANÇADA VIA GPT
 // SOMENTE PARA NÚMEROS SEM CADASTRO
 // =====================================================
-
-if (!usuario) {
+const DETECTOR_BOT_ATIVO = false;
+    
+if (
+  DETECTOR_BOT_ATIVO &&
+  !usuario
+) {
 
   try {
 
@@ -3569,7 +3573,28 @@ NAO = parece humano.`
 // =====================================================
 // FIM DA PROTEÇÃO
 // =====================================================
-   // =====================================================
+// =====================================
+// IGNORAR DETECTOR
+// =====================================
+
+const ignorarDetector =
+
+  adminSessions[phone] ||
+
+  (
+    message &&
+    message.startsWith("/")
+  );
+
+if (ignorarDetector) {
+
+  console.log(
+    "⚙️ DETECTOR IGNORADO"
+  );
+
+}
+    
+    // =====================================================
 // BOTS BLOQUEADOS
 // =====================================================
 
