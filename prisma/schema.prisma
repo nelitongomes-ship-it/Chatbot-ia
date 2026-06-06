@@ -97,10 +97,7 @@ model Client {
 
   paymentStatus    String   @default("PENDENTE")
 
-  nextPaymentAt    String?
-
-  lastPaymentAt    String?
-
+  
   // =====================================
 
   isActive         Boolean  @default(true)
