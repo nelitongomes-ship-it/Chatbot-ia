@@ -3660,32 +3660,27 @@ if (message === "/botsbloqueados") {
 }
 
     //teste temporario//
-    AGUARDANDO_DADOS_TESTE
-↓
-Cliente envia:
+    // =====================================================
+// TESTE EMAIL
+// =====================================================
 
-João da Silva
-joao@email.com
+if (
+  message.trim() === "/testeemail"
+) {
 
-↓
+  console.log("🔥 TESTEEMAIL EXECUTOU");
 
-Salvar:
-name
-fullName
-email
+  const cliente =
+    await prisma.client.findFirst();
 
-↓
+  await sendMessage(
+    phone,
+    JSON.stringify(cliente, null, 2)
+  );
 
-Ativar:
-aiMode = TESTE_GRATIS
-isActive = true
-paymentStatus = TESTE
-trialStartAt
-trialEndAt
+  return res.sendStatus(200);
+}
 
-↓
-
-Enviar confirmação
     
    // =============================================
     // OPENAI
