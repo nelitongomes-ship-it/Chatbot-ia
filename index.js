@@ -2217,7 +2217,29 @@ if (
 
   return res.sendStatus(200);
 }
+if (message === "/vercadastro") {
 
+  const usuario =
+    await prisma.user.findFirst({
+      where: { phone }
+    });
+
+  const cliente =
+    await prisma.client.findFirst({
+      where: { phone }
+    });
+
+  await sendMessage(
+    phone,
+`USER:
+${JSON.stringify(usuario, null, 2)}
+
+CLIENT:
+${JSON.stringify(cliente, null, 2)}`
+  );
+
+  return res.sendStatus(200);
+}
     
     // =====================================================
 // PROMPT
