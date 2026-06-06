@@ -1430,7 +1430,15 @@ if (
         selectedPlan: "avancado"
       }
     });
+  
+const planoAgilsCred =
+await prisma.client.count({
+  where: {
+    selectedPlan: "agils_cred"
+  }
+});
 
+  
   const hoje = new Date().toISOString().split("T")[0];
 
   const mensagensHoje =
@@ -1458,6 +1466,7 @@ if (
 🥉 Básico: ${planoBasico}
 🥈 Intermediário: ${planoIntermediario}
 🥇 Avançado: ${planoAvancado}
+🏦 Agils Cred: ${planoAgilsCred}
 
 💳 PAGAMENTOS
 
