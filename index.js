@@ -3658,6 +3658,35 @@ if (message === "/botsbloqueados") {
 
   return res.sendStatus(200);
 }
+
+    //teste temporario//
+    AGUARDANDO_DADOS_TESTE
+↓
+Cliente envia:
+
+João da Silva
+joao@email.com
+
+↓
+
+Salvar:
+name
+fullName
+email
+
+↓
+
+Ativar:
+aiMode = TESTE_GRATIS
+isActive = true
+paymentStatus = TESTE
+trialStartAt
+trialEndAt
+
+↓
+
+Enviar confirmação
+    
    // =============================================
     // OPENAI
     // =====================================================
