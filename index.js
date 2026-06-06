@@ -1356,6 +1356,9 @@ if (
   const totalClientes =
     await prisma.client.count();
 
+  const totalUsers =
+  await prisma.user.count();
+
   const clientesAtivos =
     await prisma.client.count({
       where: {
@@ -1438,12 +1441,14 @@ if (
     });
 
   await sendMessage(
-    phone,
+  phone,
 `📊 PAINEL AGILS IA
 
-👥 CLIENTES
+👥 CADASTROS
 
-Total: ${totalClientes}
+👤 Users: ${totalUsers}
+👥 Clients: ${totalClientes}
+
 🟢 Ativos: ${clientesAtivos}
 🔴 Inativos: ${clientesInativos}
 
@@ -1467,14 +1472,11 @@ Total: ${totalClientes}
 📅 Agendamentos: ${totalAgendamentos}
 
 💬 Mensagens hoje: ${
-      mensagensHoje._sum.messagesToday || 0
-    }
+  mensagensHoje._sum.messagesToday || 0
+}
 
 📅 Data: ${hoje}`
-  );
-
-  return res.sendStatus(200);
-}
+);
     
  // =====================================================
 // SAUDE DO SISTEMA
