@@ -3774,7 +3774,7 @@ if (message === "/botsbloqueados") {
       `Motivo: ${bot.reason || "Não informado"}\n\n`;
 
   });
-
+//yeste//
   texto +=
     `📊 Total: ${bots.length}`;
 
@@ -3786,6 +3786,8 @@ if (message === "/botsbloqueados") {
   return res.sendStatus(200);
 
 }    
+
+  console.log("DEPOIS DO DETECTOR");
    // =============================================
     // OPENAI
     // =====================================================
