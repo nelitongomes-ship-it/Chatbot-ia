@@ -64,7 +64,8 @@ function isAdminPhone(phone) {
 
   return [
     "5516999796559",
-    "5516981323152"
+    "5516981323152",
+    "551637225563"
   ].includes(numero);
 
 }
