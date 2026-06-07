@@ -152,7 +152,7 @@ app.post("/webhook", async (req, res) => {
   console.log("DOCUMENT:");
   console.log(req.body?.data?.document);
 
-  try {
+  
 
 // =====================================
 // ATUALIZAR SESSÃO
