@@ -1014,6 +1014,12 @@ console.log("================================");
       ) {
 
         adminSessions[phone] = true;
+       //teste//
+console.log("ADMIN SESSION CRIADA");
+console.log(adminSessions);
+console.log("PHONE LOGIN:");
+console.log(phone);
+       //fim//
 
         await sendMessage(
           phone,
