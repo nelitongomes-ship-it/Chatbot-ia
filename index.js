@@ -98,7 +98,7 @@ app.post("/webhook", async (req, res) => {
   console.log("NOVO WEBHOOK 999");
   console.log("################################");
 
-  try {
+ // try {//
 
   
   console.log("================================");
@@ -158,7 +158,7 @@ app.post("/webhook", async (req, res) => {
 // ATUALIZAR SESSÃO
 // =====================================
 
-//try {//
+try {
   await prisma.session.upsert({
 
     where: {
@@ -894,6 +894,7 @@ ${telefoneFinal}`
 
   return res.sendStatus(200);
 }
+
  //yeate catch//
  } catch (error) {
   console.log(error);
@@ -1039,7 +1040,7 @@ console.log(
       fs.unlinkSync(mp3Path);
     }
 
-  } catch (error) {
+//  } catch (error) {//
 
     console.log(
       "ERRO ÁUDIO:",
@@ -3683,7 +3684,7 @@ Digite *minha agenda* para consultar seus compromissos.`
 
     return res.sendStatus(200);
 
-  //} catch (erro) {//
+  } catch (erro) {
 
     console.log(
       "❌ ERRO AGENDAMENTO:",
@@ -3825,7 +3826,7 @@ if (ehComando) {
 
     return res.sendStatus(200);
 
-  } catch (error) {
+//  } catch (error) {//
 
     console.log(
       error.response?.data ||
