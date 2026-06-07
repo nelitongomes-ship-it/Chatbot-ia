@@ -88,8 +88,12 @@ iniciarLembretes(
 // =====================================================
 
 app.post("/webhook", async (req, res) => {
-  
-console.log("NOVO WEBHOOK FUNCIONANDO");
+
+  console.log("################################");
+  console.log("NOVO WEBHOOK 999");
+  console.log("################################");
+
+  try {
 
   
   console.log("================================");
