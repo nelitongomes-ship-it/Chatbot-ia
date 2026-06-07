@@ -51,7 +51,7 @@ function isAdminPhone(phone) {
       .replace("@c.us", "")
       .replace(/\D/g, "");
 
-  return numero === ADMIN_PHONE;
+  return ADMIN_PHONES.includes(numero);
 
 }
 //Fim//
