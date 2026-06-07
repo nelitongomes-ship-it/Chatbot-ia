@@ -894,8 +894,10 @@ ${telefoneFinal}`
 
   return res.sendStatus(200);
 }
- //adicionado try//
- try {
+ //yeate catch//
+ } catch (error) {
+  console.log(error);
+              }
   // =====================================================
 // =====================================================
 // ÁUDIO WHATSAPP
