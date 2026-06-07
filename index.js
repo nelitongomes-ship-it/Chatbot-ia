@@ -391,7 +391,8 @@ const mensagensHoje =
     }
   });
 
-console.log("PASSO 18");
+return res.sendStatus(200);
+}
  //fim//
 
   const totalUsers =
