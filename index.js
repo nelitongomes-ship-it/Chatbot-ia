@@ -1443,6 +1443,7 @@ if (
   return res.sendStatus(200);
 }
 // =====================================================
+// =====================================================
 // ESTATÍSTICAS
 // =====================================================
 
@@ -1450,18 +1451,14 @@ if (
   message === "/estatisticas" &&
   adminSessions[phone]
 ) {
-//teste//
-  console.log("🔥 NOVA ESTATISTICA EXECUTOU");
 
-  await sendMessage(
-    phone,
-    "🔥 TESTE NOVA ESTATISTICA");
-  //fim//
+  console.log("📊 COMANDO ESTATISTICAS EXECUTOU");
+
   const totalClientes =
     await prisma.client.count();
 
   const totalUsers =
-  await prisma.user.count();
+    await prisma.user.count();
 
   const clientesAtivos =
     await prisma.client.count({
@@ -1477,42 +1474,29 @@ if (
       }
     });
 
-  const bloqueados =
-    await prisma.blockedNumber.count();
-
-  const botsBloqueados =
-    await prisma.blockedBot.count();
-
-  const totalAgendamentos =
-    await prisma.appointment.count();
-
-  const treinamentosAtivos =
-    await prisma.training.count({
-      where: {
-        active: true
-      }
-    });
-
-  const pagamentosPendentes =
-    await prisma.client.count({
-      where: {
-        paymentStatus: "PENDENTE"
-      }
-    });
-
-  const pagamentosAprovados =
-    await prisma.client.count({
-      where: {
-        paymentStatus: "APROVADO"
-      }
-    });
+  // =====================================
+  // TESTE GRÁTIS (USER)
+  // =====================================
 
   const planoTeste =
-    await prisma.client.count({
+    await prisma.user.count({
       where: {
-        selectedPlan: "teste"
+        aiMode: "TESTE_GRATIS",
+        isActive: true
       }
     });
+
+  const testeExpirado =
+    await prisma.user.count({
+      where: {
+        aiMode: "TESTE_GRATIS",
+        isActive: false
+      }
+    });
+
+  // =====================================
+  // PLANOS PAGOS (CLIENT)
+  // =====================================
 
   const planoBasico =
     await prisma.client.count({
@@ -1534,16 +1518,51 @@ if (
         selectedPlan: "avancado"
       }
     });
-  
-const planoAgilsCred =
-await prisma.client.count({
-  where: {
-    selectedPlan: "agils_cred"
-  }
-});
 
-  
-  const hoje = new Date().toISOString().split("T")[0];
+  const planoAgilsCred =
+    await prisma.client.count({
+      where: {
+        selectedPlan: "agils_cred"
+      }
+    });
+
+  // =====================================
+  // PAGAMENTOS
+  // =====================================
+
+  const pagamentosAprovados =
+    await prisma.client.count({
+      where: {
+        paymentStatus: "APROVADO"
+      }
+    });
+
+  const pagamentosPendentes =
+    await prisma.client.count({
+      where: {
+        paymentStatus: "PENDENTE"
+      }
+    });
+
+  // =====================================
+  // SISTEMA
+  // =====================================
+
+  const bloqueados =
+    await prisma.blockedNumber.count();
+
+  const botsBloqueados =
+    await prisma.blockedBot.count();
+
+  const treinamentosAtivos =
+    await prisma.training.count({
+      where: {
+        active: true
+      }
+    });
+
+  const totalAgendamentos =
+    await prisma.appointment.count();
 
   const mensagensHoje =
     await prisma.client.aggregate({
@@ -1552,8 +1571,12 @@ await prisma.client.count({
       }
     });
 
+  const hoje =
+    new Date()
+      .toLocaleDateString("pt-BR");
+
   await sendMessage(
-  phone,
+    phone,
 `📊 PAINEL AGILS IA
 
 👥 CADASTROS
@@ -1561,12 +1584,16 @@ await prisma.client.count({
 👥 Clients: ${totalClientes}
 👤 Users: ${totalUsers}
 
-🟢 Ativos: ${clientesAtivos}
-🔴 Inativos: ${clientesInativos}
+🟢 Clientes ativos: ${clientesAtivos}
+🔴 Clientes inativos: ${clientesInativos}
 
-📦 PLANOS
+🧪 TESTE GRÁTIS
 
-🧪 Teste: ${planoTeste}
+🟢 Em teste: ${planoTeste}
+🔴 Expirados: ${testeExpirado}
+
+📦 PLANOS PAGOS
+
 🥉 Básico: ${planoBasico}
 🥈 Intermediário: ${planoIntermediario}
 🥇 Avançado: ${planoAvancado}
@@ -1589,7 +1616,13 @@ await prisma.client.count({
 }
 
 📅 Data: ${hoje}`
-);
+  );
+
+  return res.sendStatus(200);
+     }
+
+  
+  
     
  // =====================================================
 // SAUDE DO SISTEMA
