@@ -176,7 +176,7 @@ try {
 
   });
 
-//} catch (error) {//
+} catch (error) {
 
   console.log(
     "ERRO SESSION:",
