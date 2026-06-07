@@ -2107,10 +2107,12 @@ ${contextoSistema === modo1 ? "modo1" : "outro"}`
     resposta += `📞 ${u.phone}\n\n`;
   });
 
-  await sock.sendMessage(phone, {
-    text: resposta || "Nenhum usuário encontrado."
-  });
-}
+  await sendMessage(
+  phone,
+  resposta || "Nenhum usuário encontrado."
+);
+
+return res.sendStatus(200);
 
   // =====================================================
 // VER CADASTRO
