@@ -250,7 +250,8 @@ Ativo: ${usuario.isActive ? "SIM" : "NÃO"}`
 // ESTATÍSTICAS
 // =====================================================
 //teste//
-   console.log("================================");
+   
+  /* console.log("================================");
 console.log("TESTANDO ESTATISTICAS");
 console.log("PHONE:");
 console.log(phone);
@@ -559,7 +560,21 @@ return res.sendStatus(200);
   );
 
   return res.sendStatus(200);
-}
+}*/
+   if (
+  message === "/estatisticas" &&
+  adminSessions[phone]
+) {
+
+  console.log("🔥 ESTATISTICAS TESTE 🔥");
+
+  await sendMessage(
+    phone,
+    "TESTE ESTATISTICAS"
+  );
+
+  return res.sendStatus(200);
+   }
 // =====================================================
 // =====================================================
 // ATIVAR TESTE GRÁTIS
