@@ -3590,14 +3590,16 @@ if (
   return;
 
 }
+  
+//==≈=≈==============================================
+  //IGNORAR COMANDOS
+  //==≈===============================================
 
-// =====================================
-// IGNORAR COMANDOS
-// =====================================
-
-if (
+  if (
   message &&
-  message.startsWith("/")
+  message.startsWith("/") &&
+  !adminSessions[phone] &&
+  !isAdminPhone(phone)
 ) {
 
   console.log(
