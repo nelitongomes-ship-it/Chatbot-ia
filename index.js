@@ -3567,149 +3567,18 @@ if (ehComando) {
 // DETECÇÃO DE MENUS E BOTÕES
 // =====================================================
 
-if (
-!usuario &&
-(
-req.body?.data?.buttonText ||
-req.body?.data?.listResponse ||
-req.body?.data?.selectedButtonId
-)
-) {
 
-console.log(
-"🤖 MENU AUTOMÁTICO DETECTADO"
-);
-
-await prisma.blockedBot.create({
-data: {
-phone,
-reason: "MENU_AUTOMATICO"
-}
-});
-
-return res.sendStatus(200);
-
-}
 
 // =====================================================
 // DETECÇÃO POR PALAVRAS-CHAVE
 // =====================================================
 
-const indicadoresIA = [
-
-"sou uma inteligência artificial",
-"sou uma inteligencia artificial",
-"sou uma ia",
-"como assistente virtual",
-"como modelo de linguagem",
-"como modelo de linguagem ia",
-"chatgpt",
-"openai",
-"gemini",
-"claude",
-"copilot",
-"assistente virtual",
-"atendimento automático",
-"atendimento automatizado",
-"robô de atendimento",
-"robo de atendimento",
-"bot de atendimento",
-"assistente digital",
-"olá, sou o assistente",
-"ola, sou o assistente",
-"olá, eu sou um assistente",
-"ola, eu sou um assistente",
-"sou o assistente virtual",
-"atendente virtual",
-"assistente de atendimento",
-"sistema automatizado",
-"resposta automática",
-"resposta automatica",
-"mensagem automática",
-"mensagem automatica",
-"não entendi",
-"nao entendi",
-"vamos tentar novamente",
-"selecione uma das opções",
-"selecione uma das opcoes",
-"clique no botão",
-"clique no botao",
-"ver opções",
-"ver opcoes",
-"como podemos te ajudar",
-"escolha uma opção",
-"escolha uma opcao",
-"digite uma opção",
-"digite uma opcao",
-"menu principal",
-"atendimento digital",
-"fluxo de atendimento",
-"responda com o número",
-"responda com o numero",
-"para prosseguirmos",
-"opções da lista",
-"opcoes da lista"
-
-];
-
-const detectouIA =
-indicadoresIA.some(
-termo =>
-mensagemLower.includes(termo)
-);
-
-if (
-!usuario &&
-detectouIA
-) {
-
-console.log(
-"🤖 IA DETECTADA POR PALAVRAS"
-);
-
-await prisma.blockedBot.create({
-data: {
-phone,
-reason: "PALAVRAS_CHAVE"
-}
-});
-
-return res.sendStatus(200);
-
-}
 
 // =====================================================
 // LOOP DE MENSAGENS
 // =====================================================
 
-global.ultimasMensagens =
-global.ultimasMensagens || {};
 
-const chaveLoop = phone;
-
-if (
-!usuario &&
-global.ultimasMensagens[chaveLoop] ===
-mensagemLower
-) {
-
-console.log(
-"🤖 LOOP DETECTADO"
-);
-
-await prisma.blockedBot.create({
-data: {
-phone,
-reason: "LOOP_MENSAGENS"
-}
-});
-
-return res.sendStatus(200);
-
-}
-
-global.ultimasMensagens[chaveLoop] =
-mensagemLower;
 
 // =====================================================
 // =====================================================
@@ -3732,59 +3601,7 @@ mensagemLower;
 // BOTS BLOQUEADOS
 // =====================================================
 
-if (message === "/botsbloqueados") {
 
-  if (!adminSessions[phone]) {
-
-    await sendMessage(
-      phone,
-      "⛔ Faça login administrativo."
-    );
-
-    return res.sendStatus(200);
-  }
-
-  const bots =
-    await prisma.blockedBot.findMany({
-      orderBy: {
-        createdAt: "desc"
-      }
-    });
-
-  if (bots.length === 0) {
-
-    await sendMessage(
-      phone,
-      "✅ Nenhum bot bloqueado."
-    );
-
-    return res.sendStatus(200);
-  }
-
-  let texto =
-    "🤖 BOTS BLOQUEADOS\n\n";
-
-  bots.forEach((bot, index) => {
-
-    texto +=
-      `${index + 1}. ${bot.phone}\n` +
-      `Motivo: ${bot.reason || "Não informado"}\n\n`;
-
-  });
-//yeste//
-  texto +=
-    `📊 Total: ${bots.length}`;
-
-  await sendMessage(
-    phone,
-    texto
-  );
-
-  return res.sendStatus(200);
-
-}    
-
-  console.log("DEPOIS DO DETECTOR");
    // =============================================
     // OPENAI
     // =====================================================
