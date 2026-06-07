@@ -3646,102 +3646,8 @@ mensagemLower;
 // DETECÇÃO AVANÇADA VIA GPT
 // SOMENTE PARA NÚMEROS SEM CADASTRO
 // =====================================================
-const DETECTOR_BOT_ATIVO = false;
-    
-if (
-  DETECTOR_BOT_ATIVO &&
-  !usuario
-) {
 
-  try {
 
-    const detectorIA =
-      await axios.post(
-        "https://api.openai.com/v1/chat/completions",
-        {
-          model: "gpt-4o-mini",
-          messages: [
-            {
-              role: "system",
-              content:
-`Você é um detector de bots.
-
-Responda apenas:
-
-SIM
-
-ou
-
-NAO
-
-SIM = parece bot.
-NAO = parece humano.`
-            },
-            {
-              role: "user",
-              content: message
-            }
-          ],
-          temperature: 0,
-          max_tokens: 5
-        },
-        {
-          headers: {
-            Authorization:
-              `Bearer ${process.env.OPENAI_API_KEY}`,
-            "Content-Type":
-              "application/json"
-          }
-        }
-      );
-
-    const respostaDetector =
-      detectorIA.data
-        .choices[0]
-        .message.content
-        .trim()
-        .toUpperCase();
-
-    if (
-      respostaDetector.includes("SIM")
-    ) {
-
-      console.log(
-        "🤖 IA DETECTADA PELO GPT"
-      );
-
-      const existe =
-        await prisma.blockedBot.findFirst({
-          where: {
-            phone
-          }
-        });
-
-      if (!existe) {
-
-        await prisma.blockedBot.create({
-          data: {
-            phone,
-            reason: "GPT_DETECTOR"
-          }
-        });
-
-      }
-
-      return res.sendStatus(200);
-
-    }
-
-  } catch (error) {
-
-    console.log(
-      "ERRO DETECTOR IA:",
-      error.message
-    );
-
-  }
-
-}
 // =====================================================
 // FIM DA PROTEÇÃO
 // =====================================================
@@ -3749,22 +3655,7 @@ NAO = parece humano.`
 // IGNORAR DETECTOR
 // =====================================
 
-const ignorarDetector =
 
-  adminSessions[phone] ||
-
-  (
-    message &&
-    message.startsWith("/")
-  );
-
-if (ignorarDetector) {
-
-  console.log(
-    "⚙️ DETECTOR IGNORADO"
-  );
-
-}
     
     
 // =====================================================
