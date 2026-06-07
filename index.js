@@ -18,6 +18,8 @@ const modo3 = require("./modo3");
 const modo4 = require("./modo4");
 const modo5 = require("./modo5");
 const modo6 = require("./modo6");
+const modo7 = require("./modo7");
+const modo8 = require("./modo8");
 
 require("dotenv").config();
 
