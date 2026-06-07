@@ -1,4 +1,4 @@
-console.log("🚀 VERSAO 07-06-2026 14:40");
+console.log("🔥🔥🔥 VERSAO TESTE 18:06 RODRIGO 🔥🔥🔥");
 
 const iniciarLembretes =
 require("./lembretes");
