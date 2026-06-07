@@ -3601,20 +3601,20 @@ console.log(adminSessions[phone]);
   //IGNORAR COMANDOS
   //==≈===============================================
 
-  if (
-  message &&
-  message.startsWith("/") &&
-  !adminSessions[phone] &&
-  !isAdminPhone(phone)
-) {
+//  if (
+//  message &&
+//  message.startsWith("/") &&
+//  !adminSessions[phone] &&
+//  !isAdminPhone(phone)
+//) {
 
-  console.log(
-    "⚙️ COMANDO IGNORADO PELO DETECTOR"
-  );
+//  console.log(
+//    "⚙️ COMANDO IGNORADO PELO DETECTOR"
+//  );
+//
+//  return;
 
-  return;
-
-}
+//}
     
 // =====================================================
 // DETECÇÃO DE MENUS E BOTÕES
