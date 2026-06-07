@@ -2527,7 +2527,34 @@ ${memoriaTreinamentos}
     console.log("TREINAMENTOS CARREGADOS:");
 console.log(memoriaTreinamentos);
 //fim//
-    console.log("TESTE 1");
+console.log("================================");
+console.log("DIAGNOSTICO MIDIA");
+console.log("================================");
+
+console.log("TIPO:");
+console.log(req.body?.data?.type);
+
+console.log("BODY:");
+console.log(req.body?.data?.body);
+
+console.log("MEDIA:");
+console.log(req.body?.data?.media);
+
+console.log("URL:");
+console.log(req.body?.data?.url);
+
+console.log("IMAGE:");
+console.log(req.body?.data?.image);
+
+console.log("DOCUMENT:");
+console.log(req.body?.data?.document);
+
+console.log("WEBHOOK:");
+console.log(
+  JSON.stringify(req.body, null, 2)
+); 
+  
+  console.log("TESTE 1");
 
 console.log("MESSAGE:");
 console.log(message);
