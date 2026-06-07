@@ -176,7 +176,7 @@ app.post("/webhook", async (req, res) => {
 
   });
 
-} catch (error) {
+//} catch (error) {//
 
   console.log(
     "ERRO SESSION:",
