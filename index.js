@@ -44,7 +44,7 @@ const userCooldown = {};
 const pendingDeletes = {};
 
 // interrompido para teste//
-/* function isAdminPhone(phone) {
+function isAdminPhone(phone) {
 
   const numero =
     phone
@@ -53,10 +53,10 @@ const pendingDeletes = {};
 
   return numero === ADMIN_PHONE;
 
-}*/
+}
 //Fim//
 //codigo de teste//
-function isAdminPhone(phone) {
+/*function isAdminPhone(phone) {
 
   const numero =
     phone
@@ -69,7 +69,7 @@ function isAdminPhone(phone) {
     "551637225563"
   ].includes(numero);
 
-}
+}*/
 //Fim//
 // =====================================================
 // STATUS
