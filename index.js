@@ -42,7 +42,8 @@ const adminSessions = {};
 const userCooldown = {};
 const pendingDeletes = {};
 
-function isAdminPhone(phone) {
+// interrompido para teste//
+/* function isAdminPhone(phone) {
 
   const numero =
     phone
@@ -51,7 +52,23 @@ function isAdminPhone(phone) {
 
   return numero === ADMIN_PHONE;
 
+}*/
+//Fim//
+//codigo de teste//
+function isAdminPhone(phone) {
+
+  const numero =
+    phone
+      .replace("@c.us", "")
+      .replace(/\D/g, "");
+
+  return [
+    "5516999796559",
+    "5516981323152"
+  ].includes(numero);
+
 }
+//Fim//
 // =====================================================
 // STATUS
 // =====================================================
