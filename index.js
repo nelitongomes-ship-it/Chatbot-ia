@@ -3543,7 +3543,22 @@ Digite *minha agenda* para consultar seus compromissos.`
   }
     }
     //alterado//
+  //===========≈====================≈==============
+  //LIBERAR BLOQUEIO ADMINISTRATIVO
+  //===========================≈============≈======
+const ehComando =
+  message.startsWith("/");
 
+if (ehComando) {
+
+  console.log(
+    "✅ COMANDO LIBERADO"
+  );
+
+} else {
+
+  // detector aqui
+}
 // =====================================================
 // PROTEÇÃO CONTRA LOOP DE IAs E BOTS
 // SOMENTE PARA NÚMEROS SEM CADASTRO
