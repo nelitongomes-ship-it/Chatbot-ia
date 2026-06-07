@@ -623,10 +623,13 @@ Agora você já pode utilizar todos os recursos da Agils IA.`
 console.log("MENSAGEM ANTES DO CADASTRO:");
 console.log(message);
 
+const texto =
+  String(message || "");
+
 if (
-  message.toUpperCase().includes("CONTRATO") &&
-  message.includes("Cliente:")
-) {
+  texto.toUpperCase().includes("CONTRATO") &&
+  texto.includes("Cliente:")
+)
 
   console.log("🔥🔥🔥 CADASTRO AUTOMÁTICO EXECUTOU 🔥🔥🔥");
 
