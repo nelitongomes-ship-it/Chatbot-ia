@@ -85,6 +85,12 @@ iniciarLembretes(
 // =====================================================
 // WEBHOOK
 // =====================================================
+console.log("WEBHOOK COMPLETO:");
+console.log(
+  JSON.stringify(req.body, null, 2)
+);
+
+
 app.post("/webhook", async (req, res) => {
 
 console.log("PROCESS ID:");
