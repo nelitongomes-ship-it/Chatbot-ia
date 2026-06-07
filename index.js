@@ -2469,7 +2469,7 @@ if (
 
   return res.sendStatus(200);
 }
-if (message === "/vercadastro") {
+
 
   const usuario =
     await prisma.user.findFirst({
