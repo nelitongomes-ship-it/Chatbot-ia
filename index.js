@@ -3242,30 +3242,6 @@ if (
 }
 
 // =====================================================
-// TESTAR TOTAL DE AGENDAMENTOS
-// =====================================================
-
-if (
-  message.trim() === "/testeagenda"
-) {
-
-  const total =
-    await prisma.appointment.count();
-
-  console.log(
-    "TOTAL NO BANCO:",
-    total
-  );
-
-  await sendMessage(
-    phone,
-    `📅 TOTAL DE AGENDAMENTOS: ${total}`
-  );
-
-  return res.sendStatus(200);
-}
-     
-// =====================================================
 //// =====================================================
 // AGENDAMENTO NATURAL IA
 // =====================================================
