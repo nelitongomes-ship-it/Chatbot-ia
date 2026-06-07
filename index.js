@@ -2038,6 +2038,27 @@ ${JSON.stringify(usuario, null, 2)}`
 
   return res.sendStatus(200);
 }
+  if (message.trim() === "/veruser") {
+
+  console.log("🔥 COMANDO VERUSER EXECUTOU");
+
+  const usuario =
+    await prisma.user.findFirst({
+      where: {
+        phone
+      }
+    });
+
+  console.log("USUARIO:");
+  console.log(usuario);
+
+  await sendMessage(
+    phone,
+    JSON.stringify(usuario, null, 2)
+  );
+
+  return res.sendStatus(200);
+  }
   // =====================================================
 // VER CADASTRO
 // =====================================================
