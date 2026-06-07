@@ -2019,28 +2019,11 @@ ${contextoSistema === modo1 ? "modo1" : "outro"}`
   return res.sendStatus(200);
 }
 // =====================================================
+// =====================================================
 // VER USUÁRIO
 // =====================================================
 
 if (message.trim() === "/veruser") {
-
-  const usuario =
-    await prisma.user.findFirst({
-      where: {
-        phone
-      }
-    });
-
-  await sendMessage(
-    phone,
-`👤 USER
-
-${JSON.stringify(usuario, null, 2)}`
-  );
-
-  return res.sendStatus(200);
-}
-  if (message.trim() === "/veruser") {
 
   console.log("🔥 COMANDO VERUSER EXECUTOU");
 
@@ -2056,11 +2039,14 @@ ${JSON.stringify(usuario, null, 2)}`
 
   await sendMessage(
     phone,
-    JSON.stringify(usuario, null, 2)
+`👤 USER
+
+${JSON.stringify(usuario, null, 2)}`
   );
 
   return res.sendStatus(200);
-  }
+}
+
   // =====================================================
 // VER CADASTRO
 // =====================================================
