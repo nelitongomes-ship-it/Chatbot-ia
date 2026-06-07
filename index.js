@@ -243,6 +243,184 @@ Ativo: ${usuario.isActive ? "SIM" : "NÃO"}`
 
   return res.sendStatus(200);
          }
+
+   // =====================================================
+// ESTATÍSTICAS
+// =====================================================
+
+if (
+  message === "/estatisticas" &&
+  adminSessions[phone]
+) {
+
+  console.log("📊 COMANDO ESTATISTICAS EXECUTOU");
+
+  const totalClientes =
+    await prisma.client.count();
+
+  const totalUsers =
+    await prisma.user.count();
+
+  const clientesAtivos =
+    await prisma.client.count({
+      where: {
+        isActive: true
+      }
+    });
+
+  const clientesInativos =
+    await prisma.client.count({
+      where: {
+        isActive: false
+      }
+    });
+
+  // =====================================
+  // TESTE GRÁTIS (USER)
+  // =====================================
+
+  const planoTeste =
+    await prisma.user.count({
+      where: {
+        aiMode: "TESTE_GRATIS",
+        isActive: true
+      }
+    });
+
+  const testeExpirado =
+    await prisma.user.count({
+      where: {
+        aiMode: "TESTE_GRATIS",
+        isActive: false
+      }
+    });
+
+  // =====================================
+  // PLANOS PAGOS (CLIENT)
+  // =====================================
+
+  const planoBasico =
+    await prisma.client.count({
+      where: {
+        selectedPlan: "basico"
+      }
+    });
+
+  const planoIntermediario =
+    await prisma.client.count({
+      where: {
+        selectedPlan: "intermediario"
+      }
+    });
+
+  const planoAvancado =
+    await prisma.client.count({
+      where: {
+        selectedPlan: "avancado"
+      }
+    });
+
+  const planoAgilsCred =
+    await prisma.client.count({
+      where: {
+        selectedPlan: "agils_cred"
+      }
+    });
+
+  // =====================================
+  // PAGAMENTOS
+  // =====================================
+
+  const pagamentosAprovados =
+    await prisma.client.count({
+      where: {
+        paymentStatus: "APROVADO"
+      }
+    });
+
+  const pagamentosPendentes =
+    await prisma.client.count({
+      where: {
+        paymentStatus: "PENDENTE"
+      }
+    });
+
+  // =====================================
+  // SISTEMA
+  // =====================================
+
+  const bloqueados =
+    await prisma.blockedNumber.count();
+
+  const botsBloqueados =
+    await prisma.blockedBot.count();
+
+  const treinamentosAtivos =
+    await prisma.training.count({
+      where: {
+        active: true
+      }
+    });
+
+  const totalAgendamentos =
+    await prisma.appointment.count();
+
+  const mensagensHoje =
+    await prisma.client.aggregate({
+      _sum: {
+        messagesToday: true
+      }
+    });
+
+  const hoje =
+    new Date()
+      .toLocaleDateString("pt-BR");
+
+  await sendMessage(
+    phone,
+`📊 PAINEL AGILS IA
+
+👥 CADASTROS
+
+👥 Clients: ${totalClientes}
+👤 Users: ${totalUsers}
+
+🟢 Clientes ativos: ${clientesAtivos}
+🔴 Clientes inativos: ${clientesInativos}
+
+🧪 TESTE GRÁTIS
+
+🟢 Em teste: ${planoTeste}
+🔴 Expirados: ${testeExpirado}
+
+📦 PLANOS PAGOS
+
+🥉 Básico: ${planoBasico}
+🥈 Intermediário: ${planoIntermediario}
+🥇 Avançado: ${planoAvancado}
+🏦 Agils Cred: ${planoAgilsCred}
+
+💳 PAGAMENTOS
+
+✅ Aprovados: ${pagamentosAprovados}
+⚠️ Pendentes: ${pagamentosPendentes}
+
+🤖 SISTEMA
+
+🚫 Números bloqueados: ${bloqueados}
+🤖 Bots bloqueados: ${botsBloqueados}
+📝 Treinamentos ativos: ${treinamentosAtivos}
+📅 Agendamentos: ${totalAgendamentos}
+
+💬 Mensagens hoje: ${
+  mensagensHoje._sum.messagesToday || 0
+}
+
+📅 Data: ${hoje}`
+  );
+
+  return res.sendStatus(200);
+}
 // =====================================================
 // =====================================================
 // ATIVAR TESTE GRÁTIS
@@ -1443,187 +1621,7 @@ if (
   return res.sendStatus(200);
 }
 // =====================================================
-// =====================================================
-// ESTATÍSTICAS
-// =====================================================
-
-if (
-  message === "/estatisticas" &&
-  adminSessions[phone]
-) {
-
-  console.log("📊 COMANDO ESTATISTICAS EXECUTOU");
-
-  const totalClientes =
-    await prisma.client.count();
-
-  const totalUsers =
-    await prisma.user.count();
-
-  const clientesAtivos =
-    await prisma.client.count({
-      where: {
-        isActive: true
-      }
-    });
-
-  const clientesInativos =
-    await prisma.client.count({
-      where: {
-        isActive: false
-      }
-    });
-
-  // =====================================
-  // TESTE GRÁTIS (USER)
-  // =====================================
-
-  const planoTeste =
-    await prisma.user.count({
-      where: {
-        aiMode: "TESTE_GRATIS",
-        isActive: true
-      }
-    });
-
-  const testeExpirado =
-    await prisma.user.count({
-      where: {
-        aiMode: "TESTE_GRATIS",
-        isActive: false
-      }
-    });
-
-  // =====================================
-  // PLANOS PAGOS (CLIENT)
-  // =====================================
-
-  const planoBasico =
-    await prisma.client.count({
-      where: {
-        selectedPlan: "basico"
-      }
-    });
-
-  const planoIntermediario =
-    await prisma.client.count({
-      where: {
-        selectedPlan: "intermediario"
-      }
-    });
-
-  const planoAvancado =
-    await prisma.client.count({
-      where: {
-        selectedPlan: "avancado"
-      }
-    });
-
-  const planoAgilsCred =
-    await prisma.client.count({
-      where: {
-        selectedPlan: "agils_cred"
-      }
-    });
-
-  // =====================================
-  // PAGAMENTOS
-  // =====================================
-
-  const pagamentosAprovados =
-    await prisma.client.count({
-      where: {
-        paymentStatus: "APROVADO"
-      }
-    });
-
-  const pagamentosPendentes =
-    await prisma.client.count({
-      where: {
-        paymentStatus: "PENDENTE"
-      }
-    });
-
-  // =====================================
-  // SISTEMA
-  // =====================================
-
-  const bloqueados =
-    await prisma.blockedNumber.count();
-
-  const botsBloqueados =
-    await prisma.blockedBot.count();
-
-  const treinamentosAtivos =
-    await prisma.training.count({
-      where: {
-        active: true
-      }
-    });
-
-  const totalAgendamentos =
-    await prisma.appointment.count();
-
-  const mensagensHoje =
-    await prisma.client.aggregate({
-      _sum: {
-        messagesToday: true
-      }
-    });
-
-  const hoje =
-    new Date()
-      .toLocaleDateString("pt-BR");
-
-  await sendMessage(
-    phone,
-`📊 PAINEL AGILS IA
-
-👥 CADASTROS
-
-👥 Clients: ${totalClientes}
-👤 Users: ${totalUsers}
-
-🟢 Clientes ativos: ${clientesAtivos}
-🔴 Clientes inativos: ${clientesInativos}
-
-🧪 TESTE GRÁTIS
-
-🟢 Em teste: ${planoTeste}
-🔴 Expirados: ${testeExpirado}
-
-📦 PLANOS PAGOS
-
-🥉 Básico: ${planoBasico}
-🥈 Intermediário: ${planoIntermediario}
-🥇 Avançado: ${planoAvancado}
-🏦 Agils Cred: ${planoAgilsCred}
-
-💳 PAGAMENTOS
-
-✅ Aprovados: ${pagamentosAprovados}
-⚠️ Pendentes: ${pagamentosPendentes}
-
-🤖 SISTEMA
-
-🚫 Números bloqueados: ${bloqueados}
-🤖 Bots bloqueados: ${botsBloqueados}
-📝 Treinamentos ativos: ${treinamentosAtivos}
-📅 Agendamentos: ${totalAgendamentos}
-
-💬 Mensagens hoje: ${
-  mensagensHoje._sum.messagesToday || 0
-}
-
-📅 Data: ${hoje}`
-  );
-
-  return res.sendStatus(200);
-     }
-
-  
-  
-    
+// =====================================================  
  // =====================================================
 // SAUDE DO SISTEMA
 // =====================================================
