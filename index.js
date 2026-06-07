@@ -83,49 +83,64 @@ iniciarLembretes(
 );
 
 // =====================================================
+// =====================================================
 // WEBHOOK
 // =====================================================
-console.log("WEBHOOK COMPLETO:");
-console.log(
-  JSON.stringify(req.body, null, 2)
-);
-
 
 app.post("/webhook", async (req, res) => {
 
-console.log("PROCESS ID:");
-console.log(process.pid);
+  console.log("================================");
+  console.log("WEBHOOK RECEBIDO");
+  console.log("================================");
 
-console.log("TESTE SESSION INICIO:");
-console.log(global.testeGratisSession);
+  console.log("PROCESS ID:");
+  console.log(process.pid);
 
-console.log("MEMORIA:");
-console.log(process.memoryUsage().heapUsed);
+  console.log("TESTE SESSION INICIO:");
+  console.log(global.testeGratisSession);
 
+  console.log("MEMORIA:");
+  console.log(process.memoryUsage().heapUsed);
 
-console.log(
-  "TIPO:",
-  req.body?.data?.type
-);
-
-console.log(
-  JSON.stringify(req.body, null, 2)
-);
-  
+  console.log("WEBHOOK COMPLETO:");
   console.log(
-  "TIPO RECEBIDO:",
-  req.body.data?.type
-);
+    JSON.stringify(req.body, null, 2)
+  );
+
+  const tipo =
+    req.body?.data?.type || "";
+
+  let message =
+    req.body?.data?.body ||
+    req.body?.message ||
+    "";
+
+  const phone =
+    req.body?.data?.from ||
+    "";
+
+  console.log("TIPO:");
+  console.log(tipo);
+
+  console.log("MESSAGE:");
+  console.log(message);
+
+  console.log("PHONE:");
+  console.log(phone);
+
+  console.log("MEDIA:");
+  console.log(req.body?.data?.media);
+
+  console.log("URL:");
+  console.log(req.body?.data?.url);
+
+  console.log("IMAGE:");
+  console.log(req.body?.data?.image);
+
+  console.log("DOCUMENT:");
+  console.log(req.body?.data?.document);
+
   try {
-
-    let message =
-  req.body.data?.body ||
-  req.body.message ||
-  "";
-
-const phone =
-  req.body.data?.from ||
-  "";
 
 // =====================================
 // ATUALIZAR SESSÃO
