@@ -3577,10 +3577,12 @@ const mensagemLower =
 .trim();
 
 // =====================================
+// =====================================
 // IGNORAR ADMIN
 // =====================================
-//alterado//
-  console.log("=== DEBUG ADMIN ===");
+
+console.log("=== DEBUG ADMIN ===");
+
 console.log("MESSAGE:");
 console.log(JSON.stringify(message));
 
@@ -3594,18 +3596,6 @@ console.log(
 
 console.log("ADMIN:");
 console.log(adminSessions[phone]);
-if (
-  adminSessions[phone] &&
-  !message.startsWith("/")
-) {
-//fim//
-  console.log(
-    "👑 ADMIN IGNORADO PELO DETECTOR"
-  );
-
-  return;
-
-}
   
 //==≈=≈==============================================
   //IGNORAR COMANDOS
