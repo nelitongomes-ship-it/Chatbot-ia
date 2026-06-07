@@ -158,7 +158,7 @@ app.post("/webhook", async (req, res) => {
 // ATUALIZAR SESSÃO
 // =====================================
 
-
+try {
   await prisma.session.upsert({
 
     where: {
