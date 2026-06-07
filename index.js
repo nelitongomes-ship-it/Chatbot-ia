@@ -39,9 +39,9 @@ const ADMIN_PIN = "151080";
 const ADMIN_PHONE =[ "5516999796559",
  "551637225563"];
 
-const adminSessions = {};
+/*const adminSessions = {};
 const userCooldown = {};
-const pendingDeletes = {};
+const pendingDeletes = {}; */
 
 // interrompido para teste//
 function isAdminPhone(phone) {
