@@ -158,7 +158,7 @@ app.post("/webhook", async (req, res) => {
 // ATUALIZAR SESSÃO
 // =====================================
 
-try {
+//try {//
   await prisma.session.upsert({
 
     where: {
@@ -1810,7 +1810,7 @@ if (
   let bancoStatus = "🟢 Online";
   let prismaStatus = "🟢 Online";
 
-  try {
+  //try {//
 
     await prisma.client.count();
 
@@ -3540,7 +3540,7 @@ Formato:
 
     let dadosAgenda;
 
-    try {
+  //  try {//
 
       const json =
         respostaIA.match(/\{[\s\S]*\}/);
@@ -3637,8 +3637,8 @@ if (!possuiDataNaMensagem) {
 
       return res.sendStatus(200);
     }
-
-     
+//try//
+     try {
         //alterado//
           const nomeCliente =
   clienteAgenda?.name ||
@@ -3683,7 +3683,7 @@ Digite *minha agenda* para consultar seus compromissos.`
 
     return res.sendStatus(200);
 
-  } catch (erro) {
+  //} catch (erro) {//
 
     console.log(
       "❌ ERRO AGENDAMENTO:",
