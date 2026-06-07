@@ -30,9 +30,6 @@ app.use(express.json());
 // =====================================================
 // CONFIGURAÇÕES ADM
 // =====================================================
-console.log("ADMIN:", isAdminPhone(phone));
-console.log("SESSION:", adminSessions[phone]);
-
 
 const ADMIN_USER = "AgilsIA";
 const ADMIN_PASS = "151080Sis*";
