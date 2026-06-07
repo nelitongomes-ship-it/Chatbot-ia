@@ -2019,32 +2019,28 @@ ${contextoSistema === modo1 ? "modo1" : "outro"}`
   return res.sendStatus(200);
 }
 // =====================================================
-// =====================================================
-// VER USUÁRIO
-// =====================================================
+//VER USUARIO
+  //=====================================================
+  if (
+  message === "/listarusuarios" &&
+  adminSessions[phone]
+) {
+  const usuarios = await prisma.user.findMany({
+    orderBy: {
+      createdAt: "desc"
+    }
+  });
 
-if (message.trim() === "/veruser") {
+  let resposta = "👥 Usuários cadastrados:\n\n";
 
-  console.log("🔥 COMANDO VERUSER EXECUTOU");
+  usuarios.forEach((u, i) => {
+    resposta += `${i + 1}. ${u.name || "Sem nome"}\n`;
+    resposta += `📞 ${u.phone}\n\n`;
+  });
 
-  const usuario =
-    await prisma.user.findFirst({
-      where: {
-        phone
-      }
-    });
-
-  console.log("USUARIO:");
-  console.log(usuario);
-
-  await sendMessage(
-    phone,
-`👤 USER
-
-${JSON.stringify(usuario, null, 2)}`
-  );
-
-  return res.sendStatus(200);
+  await sock.sendMessage(phone, {
+    text: resposta || "Nenhum usuário encontrado."
+  });
 }
 
   // =====================================================
