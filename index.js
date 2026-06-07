@@ -1,3 +1,5 @@
+console.log("🚀 VERSAO 07-06-2026 14:40");
+
 const iniciarLembretes =
 require("./lembretes");
 
