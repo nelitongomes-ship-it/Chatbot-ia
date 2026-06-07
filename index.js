@@ -249,7 +249,22 @@ Ativo: ${usuario.isActive ? "SIM" : "NÃO"}`
    // =====================================================
 // ESTATÍSTICAS
 // =====================================================
+//teste//
+   console.log("================================");
+console.log("TESTANDO ESTATISTICAS");
+console.log("PHONE:");
+console.log(phone);
+console.log("MESSAGE:");
+console.log(message);
+console.log("ADMIN SESSION:");
+console.log(adminSessions[phone]);
+console.log("TODAS SESSOES:");
+console.log(adminSessions);
+console.log("================================");
+   //Fim//
 
+
+   
 if (
   message === "/estatisticas" &&
   adminSessions[phone]
