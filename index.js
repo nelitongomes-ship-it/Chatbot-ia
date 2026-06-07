@@ -37,13 +37,13 @@ app.use(express.json());
 
 const ADMIN_USER = "AgilsIA";
 const ADMIN_PASS = "151080Sis*";
-const ADMIN_PIN = "151080";*/
+const ADMIN_PIN = "151080";
 const ADMIN_PHONE = ["5516999796559",
  "551637225563"];
 
 const adminSessions = {};
 const userCooldown = {};
-const pendingDeletes = {}; */
+const pendingDeletes = {}; 
 
 
 function isAdminPhone(phone) {
