@@ -893,7 +893,7 @@ console.log(
       error.response?.data ||
       error.message ||
       error
-    );
+ phone
 
     await sendMessage(
       phone,
@@ -966,6 +966,16 @@ console.log(
     // =====================================================
 
     if (message.startsWith("/login")) {
+
+     //teste//
+     console.log("================================");
+console.log("LOGIN EXECUTOU");
+console.log("PHONE LOGIN:");
+console.log(phone);
+console.log("MESSAGE LOGIN:");
+console.log(message);
+console.log("================================");
+     //fim//
 
   if (!isAdminPhone(phone)) {
 
