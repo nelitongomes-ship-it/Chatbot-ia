@@ -3902,7 +3902,54 @@ if (ehComando) {
       .choices[0]
       .message
       .content;
+// =====================================================
+// REGISTRAR DESPESA
+// =====================================================
 
+const registroDespesa =
+  await processarRegistroDespesa({
+    respostaIA: reply,
+    prisma,
+    phone
+  });
+
+if (registroDespesa?.sucesso) {
+
+  const agora = new Date();
+
+  const data =
+    agora.toLocaleDateString("pt-BR");
+
+  const hora =
+    agora.toLocaleTimeString(
+      "pt-BR",
+      {
+        hour: "2-digit",
+        minute: "2-digit"
+      }
+    );
+
+  const mensagem = `✅ DESPESA REGISTRADA
+
+💰 Valor: R$ ${registroDespesa.despesa.value.toFixed(2)}
+🏷️ Categoria: ${registroDespesa.despesa.category}
+📝 Descrição: ${registroDespesa.despesa.description || "-"}
+
+📅 Data: ${data}
+🕒 Hora: ${hora}
+
+──────────────
+📌 Registro salvo com sucesso.
+Agils IA - Assistente Financeiro
+──────────────`;
+
+  await sendMessage(
+    phone,
+    mensagem
+  );
+
+  return res.sendStatus(200);
+}
     // =====================================================
     // SALVAR MSG IA
     // =====================================================
