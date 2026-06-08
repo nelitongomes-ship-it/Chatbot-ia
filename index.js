@@ -2582,10 +2582,9 @@ return res.sendStatus(200);
 // =====================================================
 
 if (
-  message.trim() === "/testegratis" &&
+  message.trim() === "/testesgratis" &&
   adminSessions[phone]
-) {
-
+)
   const usuariosTeste =
     await prisma.user.findMany({
       where: {
