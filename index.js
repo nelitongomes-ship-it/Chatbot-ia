@@ -459,8 +459,8 @@ if (
   });
 
   if (!cliente) {
-    await client.sendMessage(
-      sender,
+    await sendMessage(
+  phone,
       "❌ Cliente não encontrado."
     );
     return;
