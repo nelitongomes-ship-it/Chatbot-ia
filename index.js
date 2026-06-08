@@ -2582,7 +2582,7 @@ return res.sendStatus(200);
 // =====================================================
 
 if (
-  message.trim() === "/clientetestegratis" &&
+  message.trim() === "/testegratis" &&
   adminSessions[phone]
 ) {
 
