@@ -902,6 +902,17 @@ const usuarioTeste =
       phone
     }
   });
+//teste//
+console.log("PHONE RECEBIDO:");
+console.log(phone);
+
+console.log("AI MODE:");
+console.log(usuarioTeste?.aiMode);
+
+console.log("TEXTO LOWER:");
+console.log(textoLower);
+//fim//
+
 
 console.log("USUARIO TESTE:");
 console.log(usuarioTeste);
@@ -910,7 +921,9 @@ if (
   textoLower === "sim" &&
   usuarioTeste?.aiMode === "AGUARDANDO_TESTE"
 ) {
-
+  
+console.log("🔥🔥🔥 ENTROU NO BLOCO TESTE GRATIS 🔥🔥🔥");
+  
   const agora = new Date();
 
   const fimTeste = new Date(
