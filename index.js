@@ -531,7 +531,36 @@ return res.sendStatus(200);
         isActive: false
       }
     });
+// =====================================================
+// DEBUG TESTE
+// =====================================================
 
+if (
+  message === "/debugteste" &&
+  adminSessions[phone]
+) {
+
+  const userTeste =
+    await prisma.user.findFirst({
+      where: {
+        aiMode: "TESTE_GRATIS"
+      }
+    });
+
+  const clientTeste =
+    await prisma.client.findFirst({
+      where: {
+        aiMode: "TESTE_GRATIS"
+      }
+    });
+
+  await client.sendMessage(
+    sender,
+    `USER:\n${JSON.stringify(userTeste, null, 2)}\n\nCLIENT:\n${JSON.stringify(clientTeste, null, 2)}`
+  );
+
+  return;
+}
   // =====================================
   // PLANOS PAGOS (CLIENT)
   // =====================================
