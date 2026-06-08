@@ -390,8 +390,8 @@ if (
       }
     });
 
-  await client.sendMessage(
-    sender,
+  await sendMessage(
+  phone,
     `USER:\n${JSON.stringify(userTeste, null, 2)}\n\nCLIENT:\n${JSON.stringify(clientTeste, null, 2)}`
   );
 
@@ -440,8 +440,8 @@ if (
   const partes = message.split(" ");
 
   if (partes.length < 2) {
-    await client.sendMessage(
-      sender,
+    await sendMessage(
+  phone,
       "❌ Use:\n/confirmarpagamento NUMERO"
     );
     return;
@@ -477,8 +477,8 @@ if (
     }
   });
 
-  await client.sendMessage(
-    sender,
+  await sendMessage(
+  phone,
     `✅ Pagamento confirmado!\n\nCliente: ${cliente.name}\nTelefone: ${cliente.phone}`
   );
 
@@ -675,8 +675,8 @@ if (
 
   if (!usuariosTeste.length) {
 
-    await client.sendMessage(
-      sender,
+    await sendMessage(
+  phone,
       "🧪 Nenhum cliente em teste encontrado."
     );
 
@@ -711,8 +711,8 @@ if (
       `⏳ Restam: ${diasRestantes} dias\n\n`;
   }
 
-  await client.sendMessage(
-    sender,
+  await sendMessage(
+  phone,
     resposta
   );
 
@@ -737,8 +737,8 @@ if (
   });
 
   if (!usuariosTeste.length) {
-    await client.sendMessage(
-      sender,
+    await sendMessage(
+  phone,
       "🧪 Nenhum cliente em teste encontrado."
     );
     return;
@@ -780,8 +780,8 @@ if (
       `⏳ Restam: ${diasRestantes} dias\n\n`;
   }
 
-  await client.sendMessage(
-    sender,
+  await sendMessage(
+  phone,
     resposta
   );
 }
@@ -806,8 +806,8 @@ if (
   });
 
   if (clientesTeste.length === 0) {
-    await client.sendMessage(
-      sender,
+    await sendMessage(
+  phone,
       "🧪 Nenhum cliente em período de teste."
     );
     return;
@@ -838,7 +838,8 @@ if (
       `⏳ Restam: ${diasRestantes} dias\n\n`;
   }
 
-  await client.sendMessage(sender, resposta);
+  await sendMessage(
+  phone,
 }
 // =====================================================
 // =====================================================
@@ -862,8 +863,8 @@ if (
   });
 
   if (usuariosTeste.length === 0) {
-    await client.sendMessage(
-      sender,
+    await sendMessage(
+  phone,
       "🧪 Nenhum cliente em período de teste."
     );
     return;
@@ -908,7 +909,8 @@ if (
       `⏳ Restam: ${diasRestantes} dias\n\n`;
   }
 
-  await client.sendMessage(sender, resposta);
+  await sendMessage(
+  phone,
 }
 // =====================================================
 // CONFIRMAÇÃO TESTE
