@@ -2576,6 +2576,71 @@ if (
 
 return res.sendStatus(200);
 
+
+   // =====================================================
+// CLIENTE TESTE GRATIS
+// =====================================================
+
+if (
+  message.trim() === "/clientetestegratis" &&
+  adminSessions[phone]
+) {
+
+  const usuariosTeste =
+    await prisma.user.findMany({
+      where: {
+        aiMode: "TESTE_GRATIS"
+      },
+      orderBy: {
+        trialEndAt: "asc"
+      }
+    });
+
+  if (!usuariosTeste.length) {
+
+    await sendMessage(
+      phone,
+      "🧪 Nenhum cliente em teste encontrado."
+    );
+
+    return res.sendStatus(200);
+  }
+
+  let resposta =
+    `🧪 CLIENTES EM TESTE\n\n` +
+    `📊 Total: ${usuariosTeste.length}\n\n`;
+
+  const agora = new Date();
+
+  for (const user of usuariosTeste) {
+
+    const diasRestantes = Math.ceil(
+      (
+        new Date(user.trialEndAt) -
+        agora
+      ) /
+      (1000 * 60 * 60 * 24)
+    );
+
+    resposta +=
+      `👤 ${user.name || "Não informado"}\n` +
+      `📱 ${user.phone.replace("@c.us","")}\n` +
+      `🚀 Início: ${new Date(
+        user.trialStartAt
+      ).toLocaleString("pt-BR")}\n` +
+      `🏁 Término: ${new Date(
+        user.trialEndAt
+      ).toLocaleString("pt-BR")}\n` +
+      `⏳ Restam: ${diasRestantes} dias\n\n`;
+  }
+
+  await sendMessage(
+    phone,
+    resposta
+  );
+
+  return res.sendStatus(200);
+} 
   // =====================================================
 // VER CADASTRO
 // =====================================================
