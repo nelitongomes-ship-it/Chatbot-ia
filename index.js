@@ -600,22 +600,6 @@ if (
    }
 
   /////////////////////////////////
-//VLIENTE TESTE GRATIS
-//////////////////////////////////
-if (
-  message === "/clientetestegratis" &&
-  adminSessions[phone]
-) {
-
-  console.log("🔥 CLIENTE TESTE GRATIS EXECUTOU");
-
-  await client.sendMessage(
-    sender,
-    "COMANDO FUNCIONOU"
-  );
-
-  return;
-}
 // =====================================================
 // =====================================================
 // ATIVAR TESTE GRÁTIS
