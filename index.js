@@ -27,6 +27,107 @@ require("dotenv").config();
 
 const prisma = new PrismaClient();
 
+// =====================================================
+// REGISTRO DE DESPESAS - AGILS IA
+// =====================================================
+
+async function registrarDespesa({
+prisma,
+phone,
+valor,
+categoria,
+descricao
+}) {
+
+try {
+
+const despesa =
+  await prisma.expense.create({
+    data: {
+      phone,
+      value: Number(valor),
+      category: categoria,
+      description: descricao
+    }
+  });
+
+return {
+  sucesso: true,
+  despesa
+};
+
+} catch (erro) {
+
+console.error(
+  "ERRO AO REGISTRAR DESPESA:",
+  erro
+);
+
+return {
+  sucesso: false
+};
+
+}
+
+}
+
+// =====================================================
+// PROCESSA BLOCO [REGISTRAR_DESPESA]
+// =====================================================
+
+async function processarRegistroDespesa({
+respostaIA,
+prisma,
+phone
+}) {
+
+const match =
+respostaIA.match(
+/REGISTRAR_DESPESA([\s\S]*?)/REGISTRAR_DESPESA/
+);
+
+if (!match) {
+return null;
+}
+
+const conteudo = match[1];
+
+const valor =
+conteudo.match(
+/VALOR:\s*(.+)/i
+)?.[1]?.trim();
+
+const categoria =
+conteudo.match(
+/CATEGORIA:\s*(.+)/i
+)?.[1]?.trim();
+
+const descricao =
+conteudo.match(
+/DESCRICAO:\s*(.+)/i
+)?.[1]?.trim();
+
+if (
+!valor ||
+!categoria
+) {
+return {
+sucesso: false
+};
+}
+
+return await registrarDespesa({
+prisma,
+phone,
+valor: parseFloat(
+valor.replace(",", ".")
+),
+categoria,
+descricao
+});
+
+}
+
 const app = express();
 
 app.use(express.json());
