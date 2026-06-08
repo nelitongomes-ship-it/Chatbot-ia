@@ -350,8 +350,7 @@ Ativo: ${usuario.isActive ? "SIM" : "NÃO"}`
 // ESTATÍSTICAS
 // =====================================================
 //teste//
-   
-  /* console.log("================================");
+  console.log("================================");
 console.log("TESTANDO ESTATISTICAS");
 console.log("PHONE:");
 console.log(phone);
@@ -660,7 +659,7 @@ return res.sendStatus(200);
   );
 
   return res.sendStatus(200);
-}*/
+}
    if (
   message === "/estatisticas" &&
   adminSessions[phone]
@@ -860,7 +859,8 @@ Agora você já pode utilizar todos os recursos da Agils IA.`
   );
 
   return res.sendStatus(200);
-}//Alterado//
+}
+//Alterado//
  // =====================================================
 // SAUDE DO SISTEMA teste
 // =====================================================
