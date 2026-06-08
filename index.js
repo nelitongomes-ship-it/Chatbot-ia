@@ -346,27 +346,7 @@ Ativo: ${usuario.isActive ? "SIM" : "NÃO"}`
   return res.sendStatus(200);
          }
 
-   // =====================================================
-
-// =====================================
-  // TESTE GRÁTIS (USER)
-  // =====================================
-
-  const planoTeste =
-    await prisma.user.count({
-      where: {
-        aiMode: "TESTE_GRATIS",
-        isActive: true
-      }
-    });
-
-  const testeExpirado =
-    await prisma.user.count({
-      where: {
-        aiMode: "TESTE_GRATIS",
-        isActive: false
-      }
-    });
+  
 // =====================================================
 // DEBUG TESTE
 // =====================================================
