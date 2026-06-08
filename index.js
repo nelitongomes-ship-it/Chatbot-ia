@@ -1460,8 +1460,8 @@ if (
     }
   });
 
-  await client.sendMessage(
-    sender,
+  await sendMessage(
+  phone,
     `🧪 Total de testes: ${total}`
   );
 
