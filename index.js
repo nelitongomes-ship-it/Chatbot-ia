@@ -1059,9 +1059,11 @@ const texto =
 if (
   texto.toUpperCase().includes("CONTRATO") &&
   texto.includes("Cliente:")
-)
+) {
 
   console.log("🔥🔥🔥 CADASTRO AUTOMÁTICO EXECUTOU 🔥🔥🔥");
+
+
 
   const contrato =
     message.match(/Contrato:\s*(.+)/i)?.[1]?.trim() || "";
@@ -1124,8 +1126,8 @@ if (
 
     return res.sendStatus(200);
   }
-
-  await prisma.client.create({
+//apagar//
+/*  await prisma.client.create({
     data: {
       name: nome,
       fullName: nome,
@@ -1138,49 +1140,16 @@ if (
       totalValue: parseFloat(
         valor
           .replace(/\./g, "")
-          .replace(",", ".")
-      ) || 0,
-      installments: parcelas,
-      contractDate: dataContrato,
-      firstDueDate: primeiraParcela,
-      aiMode: "BASICO",
-      isActive: true
-    }
-  });
+if (
+  texto.toUpperCase().includes("CONTRATO") &&
+  texto.includes("Cliente:")
+) {
 
-  console.log("✅ CLIENTE CADASTRADO");
-  console.log({
-    nome,
-    cpf: cpfLimpo,
-    telefone: telefoneFinal,
-    contrato
-  });
+  console.log("🔥🔥🔥 CADASTRO AUTOMÁTICO EXECUTOU 🔥🔥🔥");
 
-  await sendMessage(
-    phone,
-`✅ CLIENTE CADASTRADO COM SUCESSO
-
-👤 ${nome}
-📋 ${contrato}
-🪪 ${cpfLimpo}
-
-📦 Plano: BÁSICO
-💰 Valor: R$ ${valor}
-
-🔐 Senha inicial: ${cpfLimpo.slice(-4)}
-
-📱 Login:
-${telefoneFinal}`
-  );
-
-  return res.sendStatus(200);
-}
-
- //yeate catch//
- } catch (error) {
-  console.log(error);
-              }
-  // =====================================================
+  ...
+}*/
+      //  =====================================================
 // =====================================================
 // ÁUDIO WHATSAPP
 // =====================================================
