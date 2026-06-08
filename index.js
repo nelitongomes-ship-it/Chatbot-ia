@@ -505,21 +505,7 @@ if (
         paymentStatus: "PENDENTE"
       }
     });
-  /////////////////////////////////
-if (
-  message === "/clientetestegratis" &&
-  adminSessions[phone]
-) {
 
-  console.log("🔥 CLIENTE TESTE GRATIS EXECUTOU");
-
-  await client.sendMessage(
-    sender,
-    "COMANDO FUNCIONOU"
-  );
-
-  return;
-}
   // =====================================
   // ESTATISTICA
   // =====================================
@@ -612,6 +598,24 @@ if (
 
   return res.sendStatus(200);
    }
+
+  /////////////////////////////////
+//VLIENTE TESTE GRATIS
+//////////////////////////////////
+if (
+  message === "/clientetestegratis" &&
+  adminSessions[phone]
+) {
+
+  console.log("🔥 CLIENTE TESTE GRATIS EXECUTOU");
+
+  await client.sendMessage(
+    sender,
+    "COMANDO FUNCIONOU"
+  );
+
+  return;
+}
 // =====================================================
 // =====================================================
 // ATIVAR TESTE GRÁTIS
