@@ -2559,7 +2559,7 @@ if (
 );
 
 return res.sendStatus(200);
-
+  }
 
    // =====================================================
 // CLIENTE TESTE GRATIS
@@ -2568,7 +2568,7 @@ return res.sendStatus(200);
 if (
   message.trim() === "/testesgratis" &&
   adminSessions[phone]
-)
+){
   const usuariosTeste =
     await prisma.user.findMany({
       where: {
