@@ -347,172 +347,8 @@ Ativo: ${usuario.isActive ? "SIM" : "NÃO"}`
          }
 
    // =====================================================
-// ESTATÍSTICAS
-// =====================================================
-//teste//
-  console.log("================================");
-console.log("TESTANDO ESTATISTICAS");
-console.log("PHONE:");
-console.log(phone);
-console.log("MESSAGE:");
-console.log(message);
-console.log("ADMIN SESSION:");
-console.log(adminSessions[phone]);
-console.log("TODAS SESSOES:");
-console.log(adminSessions);
-console.log("================================");
-   //Fim//
 
-
-   
-if (
-  message === "/estatisticas" &&
-  adminSessions[phone]
-) {
-
-  console.log("📊 COMANDO ESTATISTICAS EXECUTOU");
-//yeste//
-
- console.log("PASSO 1");
-const totalClientes =
-  await prisma.client.count();
-
-console.log("PASSO 2");
-const totalUsers =
-  await prisma.user.count();
-
-console.log("PASSO 3");
-const clientesAtivos =
-  await prisma.client.count({
-    where: {
-      isActive: true
-    }
-  });
-
-console.log("PASSO 4");
-const clientesInativos =
-  await prisma.client.count({
-    where: {
-      isActive: false
-    }
-  });
-
-console.log("PASSO 5");
-const planoTeste =
-  await prisma.user.count({
-    where: {
-      aiMode: "TESTE_GRATIS",
-      isActive: true
-    }
-  });
-
-console.log("PASSO 6");
-const testeExpirado =
-  await prisma.user.count({
-    where: {
-      aiMode: "TESTE_GRATIS",
-      isActive: false
-    }
-  });
-
-console.log("PASSO 7");
-const planoBasico =
-  await prisma.client.count({
-    where: {
-      selectedPlan: "basico"
-    }
-  });
-
-console.log("PASSO 8");
-const planoIntermediario =
-  await prisma.client.count({
-    where: {
-      selectedPlan: "intermediario"
-    }
-  });
-
-console.log("PASSO 9");
-const planoAvancado =
-  await prisma.client.count({
-    where: {
-      selectedPlan: "avancado"
-    }
-  });
-
-console.log("PASSO 10");
-const planoAgilsCred =
-  await prisma.client.count({
-    where: {
-      selectedPlan: "agils_cred"
-    }
-  });
-
-console.log("PASSO 11");
-const pagamentosAprovados =
-  await prisma.client.count({
-    where: {
-      paymentStatus: "APROVADO"
-    }
-  });
-
-console.log("PASSO 12");
-const pagamentosPendentes =
-  await prisma.client.count({
-    where: {
-      paymentStatus: "PENDENTE"
-    }
-  });
-
-console.log("PASSO 13");
-const bloqueados =
-  await prisma.blockedNumber.count();
-
-console.log("PASSO 14");
-const botsBloqueados =
-  await prisma.blockedBot.count();
-
-console.log("PASSO 15");
-const treinamentosAtivos =
-  await prisma.training.count({
-    where: {
-      active: true
-    }
-  });
-
-console.log("PASSO 16");
-const totalAgendamentos =
-  await prisma.appointment.count();
-
-console.log("PASSO 17");
-const mensagensHoje =
-  await prisma.client.aggregate({
-    _sum: {
-      messagesToday: true
-    }
-  });
-
-return res.sendStatus(200);
-}
- //fim//
-
-  const totalUsers =
-    await prisma.user.count();
-
-  const clientesAtivos =
-    await prisma.client.count({
-      where: {
-        isActive: true
-      }
-    });
-
-  const clientesInativos =
-    await prisma.client.count({
-      where: {
-        isActive: false
-      }
-    });
-
-  // =====================================
+// =====================================
   // TESTE GRÁTIS (USER)
   // =====================================
 
@@ -671,7 +507,7 @@ if (
     });
 
   // =====================================
-  // SISTEMA
+  // ESTATISTICA
   // =====================================
 
   const bloqueados =
@@ -1593,10 +1429,7 @@ await prisma.training.create({
       return res.sendStatus(200);
     }
 
-    // =====================================================
-// *TREINAMENTOS IA*
-// =====================================================
-    // =====================================================
+ // =====================================================
 // LISTAR TREINAMENTOS
 // =====================================================
 
