@@ -651,14 +651,68 @@ Responda apenas: SIM`
 
   return res.sendStatus(200);
 }
+// =====================================================
+// CLIENTES TESTE GRATIS
+// =====================================================
 
+if (
+  message === "/clientesteste" &&
+  adminSessions[phone]
+) {
+
+  const clientesTeste = await prisma.client.findMany({
+    where: {
+      trialEndAt: {
+        not: null
+      }
+    },
+    orderBy: {
+      trialEndAt: "asc"
+    }
+  });
+
+  if (clientesTeste.length === 0) {
+    await client.sendMessage(
+      sender,
+      "🧪 Nenhum cliente em período de teste."
+    );
+    return;
+  }
+
+  let resposta =
+    `🧪 CLIENTES EM TESTE\n\n` +
+    `📊 Total: ${clientesTeste.length}\n\n`;
+
+  const agora = new Date();
+
+  for (const cliente of clientesTeste) {
+
+    const diasRestantes = Math.ceil(
+      (new Date(cliente.trialEndAt) - agora) /
+      (1000 * 60 * 60 * 24)
+    );
+
+    resposta +=
+      `👤 ${cliente.name}\n` +
+      `📱 ${cliente.phone}\n` +
+      `🚀 Início: ${new Date(
+        cliente.trialStartAt
+      ).toLocaleString("pt-BR")}\n` +
+      `🏁 Término: ${new Date(
+        cliente.trialEndAt
+      ).toLocaleString("pt-BR")}\n` +
+      `⏳ Restam: ${diasRestantes} dias\n\n`;
+  }
+
+  await client.sendMessage(sender, resposta);
+}
 // =====================================================
 // =====================================================
 // CLIENTES PLANO GRÁTIS TABELA USER
 // =====================================================
 
 if (
-  message === "/clientesteste" &&
+  message === "/clientestestouser" &&
   adminSessions[phone]
 ) {
 
