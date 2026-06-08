@@ -2613,6 +2613,8 @@ ${JSON.stringify(cliente, null, 2)}`
   return res.sendStatus(200);
 }
   // =====================================================
+
+  // =====================================================
 // CONSULTAR CLIENTE
 // =====================================================
 
@@ -2632,7 +2634,14 @@ if (
       }
     });
 
-  if (!clienteConsulta) {
+  const usuarioConsulta =
+    await prisma.user.findFirst({
+      where: {
+        phone: telefone
+      }
+    });
+
+  if (!clienteConsulta && !usuarioConsulta) {
 
     await sendMessage(
       phone,
@@ -2642,23 +2651,46 @@ if (
     return res.sendStatus(200);
   }
 
-  await sendMessage(
-    phone,
-`    
-👤 CLIENTE
+  if (clienteConsulta) {
+
+    await sendMessage(
+      phone,
+`👤 CLIENTE
 
 Nome: ${clienteConsulta.name}
 Telefone: ${clienteConsulta.phone}
 Plano: ${clienteConsulta.planType}
 Modo IA: ${clienteConsulta.aiMode}
 Status: ${clienteConsulta.isActive ? "Ativo" : "Inativo"}
-Senha: ${clienteConsulta.password}
-`
- );
+Senha: ${clienteConsulta.password}`
+    );
+
     return res.sendStatus(200);
+  }
+
+  await sendMessage(
+    phone,
+`🧪 USUÁRIO TESTE
+
+Nome: ${usuarioConsulta.name || "Não informado"}
+Telefone: ${usuarioConsulta.phone}
+Plano: ${usuarioConsulta.planType}
+Modo IA: ${usuarioConsulta.aiMode}
+Status: ${usuarioConsulta.isActive ? "Ativo" : "Inativo"}
+
+🚀 Início:
+${usuarioConsulta.trialStartAt
+  ? new Date(usuarioConsulta.trialStartAt).toLocaleString("pt-BR")
+  : "Não informado"}
+
+🏁 Término:
+${usuarioConsulta.trialEndAt
+  ? new Date(usuarioConsulta.trialEndAt).toLocaleString("pt-BR")
+  : "Não informado"}`
+  );
+
+  return res.sendStatus(200);
 }
-  
-  
 // ===================================================== 
     // LIMPAR HISTÓRICO
     // =====================================================
