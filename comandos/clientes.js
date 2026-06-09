@@ -98,6 +98,70 @@ Exemplo:
   return true;
 }
 
+// =====================================================
+// DESATIVAR CLIENTE
+// =====================================================
+
+if (
+  message.startsWith("/desativarcliente") &&
+  adminSessions[phone]
+) {
+
+  const telefone =
+    message.replace("/desativarcliente", "")
+    .trim();
+
+  await prisma.client.updateMany({
+    where: {
+      phone: telefone
+    },
+    data: {
+      isActive: false
+    }
+  });
+
+  await sendMessage(
+    phone,
+`🚫 Cliente desativado
+
+📱 ${telefone}`
+  );
+
+  return true;
+}
+
+// =====================================================
+// REATIVAR CLIENTE
+// =====================================================
+
+if (
+  message.startsWith("/reativarcliente") &&
+  adminSessions[phone]
+) {
+
+  const telefone =
+    message.replace("/reativarcliente", "")
+    .trim();
+
+  await prisma.client.updateMany({
+    where: {
+      phone: telefone
+    },
+    data: {
+      isActive: true
+    }
+  });
+
+  await sendMessage(
+    phone,
+`✅ Cliente reativado
+
+📱 ${telefone}`
+  );
+
+  return true;
+}
+
 //======================================================
 // LISTAR CLIENTES
 // =====================================================
