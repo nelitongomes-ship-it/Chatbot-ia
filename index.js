@@ -114,9 +114,13 @@ conteudo.match(
 
 const descricao =
 conteudo.match(
-/DESCRICAO:\s*(.+)/i
+/DESCRI.*?:\s*(.+)/i
 )?.[1]?.trim();
-
+  
+console.log("🔥 VALOR:", valor);
+console.log("🔥 CATEGORIA:", categoria);
+console.log("🔥 DESCRICAO:", descricao);
+  
 if (
 !valor ||
 !categoria
