@@ -1,5 +1,5 @@
 //≈==========================================
-//  VER CADASTRO TABELA USER
+//  VER CADASTRO TABELA USER VISITANTES 
 //=========================≈======≈==========
 module.exports = async function usuarios({
   message,
