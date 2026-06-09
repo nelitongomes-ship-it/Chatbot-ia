@@ -62,16 +62,6 @@ Responda apenas: SIM`
   return true;
 }
 
-  module.exports = async function ({
-  message,
-  textoLower,
-  phone,
-  prisma,
-  sendMessage,
-  adminSessions,
-  res
-}) {
-
 
 // =====================================================
 // ATIVAR TESTE GRÁTIS
@@ -123,5 +113,7 @@ Deseja ativar agora?
 Responda apenas: SIM`
   );
 
+  return true;
+}
   return true;
 }
