@@ -2606,7 +2606,6 @@ if (
 // =====================================================
 // VER CADASTROS User
 // =====================================================
-
 if (message.trim() === "/vercadastro") {
 
   const usuarios =
@@ -2616,12 +2615,20 @@ if (message.trim() === "/vercadastro") {
       }
     });
 
-  await sendMessage(
-    phone,
-    `📋 TOTAL DE USUÁRIOS: ${usuarios.length}
+  let texto = "📋 CADASTROS USER\n\n";
 
-${JSON.stringify(usuarios, null, 2)}`
-  );
+  usuarios.forEach((u) => {
+    texto +=
+`ID: ${u.id}
+TEL: ${u.phone}
+PLANO: ${u.planType}
+ATIVO: ${u.isActive}
+
+━━━━━━━━━━━━━━━
+`;
+  });
+
+  await sendMessage(phone, texto);
 
   return res.sendStatus(200);
 }
