@@ -162,6 +162,45 @@ if (
   return true;
 }
 
+// =====================================================
+// EXCLUIR CLIENTE
+// =====================================================
+
+if (
+  message.startsWith("/excluircliente") &&
+  adminSessions[phone]
+) {
+
+  const telefone =
+    message.replace("/excluircliente", "")
+    .trim();
+
+  if (!telefone) {
+
+    await sendMessage(
+      phone,
+      "⚠️ Use:\n/excluircliente 5511999999999"
+    );
+
+    return true;
+  }
+
+  await prisma.client.deleteMany({
+    where: {
+      phone: telefone
+    }
+  });
+
+  await sendMessage(
+    phone,
+`🗑️ Cliente excluído com sucesso
+
+📱 ${telefone}`
+  );
+
+  return true;
+}
+
 //======================================================
 // LISTAR CLIENTES
 // =====================================================
