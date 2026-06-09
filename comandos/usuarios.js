@@ -94,4 +94,102 @@ ${usuario.trialEndAt
 
   return true;
 }
-  
+
+  // =====================================================
+// MONITOR USER
+// =====================================================
+
+if (
+  message === "/monitoruser" &&
+  adminSessions[phone]
+) {
+
+  const semCadastro =
+    await prisma.user.count({
+      where: {
+        aiMode: "SEM_CADASTRO"
+      }
+    });
+
+  const aguardandoTeste =
+    await prisma.user.count({
+      where: {
+        aiMode: "AGUARDANDO_TESTE"
+      }
+    });
+
+  const testeGratis =
+    await prisma.user.count({
+      where: {
+        aiMode: "TESTE_GRATIS"
+      }
+    });
+
+  const total =
+    await prisma.user.count();
+
+  await sendMessage(
+    phone,
+`📊 MONITOR USER
+
+👥 SEM_CADASTRO: ${semCadastro}
+
+🎁 AGUARDANDO_TESTE: ${aguardandoTeste}
+
+🧪 TESTE_GRATIS: ${testeGratis}
+
+📈 TOTAL USER: ${total}`
+  );
+
+  return true;
+}
+
+  // =====================================================
+// VISITANTES
+// =====================================================
+
+if (
+  message === "/visitantes" &&
+  adminSessions[phone]
+) {
+
+  const usuarios =
+    await prisma.user.findMany({
+      where: {
+        aiMode: "SEM_CADASTRO"
+      },
+      orderBy: {
+        createdAt: "desc"
+      }
+    });
+
+  if (!usuarios.length) {
+
+    await sendMessage(
+      phone,
+      "📭 Nenhum visitante encontrado."
+    );
+
+    return true;
+  }
+
+  let resposta =
+    `👥 VISITANTES\n\n` +
+    `📊 Total: ${usuarios.length}\n\n`;
+
+  for (const user of usuarios) {
+
+    resposta +=
+      `📱 ${user.phone.replace("@c.us","")}\n` +
+      `📅 ${new Date(
+        user.createdAt
+      ).toLocaleString("pt-BR")}\n\n`;
+  }
+
+  await sendMessage(
+    phone,
+    resposta
+  );
+
+  return true;
+}
