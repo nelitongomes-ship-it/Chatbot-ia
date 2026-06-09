@@ -31,10 +31,6 @@ module.exports = async function clientefree({
     return true;
   }
 
-  return false;
-};
-
-
 // =====================================================
 // CLIENTES TESTE GRATIS (CLIENTE)
 // =====================================================
@@ -105,4 +101,6 @@ if (
 
   return true;
 }
+return false;
 
+};
