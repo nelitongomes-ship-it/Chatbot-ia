@@ -2177,53 +2177,7 @@ ${dataHora}`
 
 
     // =====================================================
-// ALTERAR SENHA
-// =====================================================
-
-if (
-  message.startsWith("/alterarsenha") &&
-  adminSessions[phone]
-) {
-
-  const dados =
-    message.replace("/alterarsenha", "")
-    .trim()
-    .split("|");
-
-  const telefone = dados[0]?.trim();
-  const novaSenha = dados[1]?.trim();
-
-  if (!telefone || !novaSenha) {
-
-    await sendMessage(
-      phone,
-`⚠️ Use:
-
-/alterarsenha Telefone | NovaSenha`
-    );
-
-    return res.sendStatus(200);
-  }
-
-  await prisma.client.updateMany({
-    where: {
-      phone: telefone
-    },
-    data: {
-      password: novaSenha
-    }
-  });
-
-  await sendMessage(
-    phone,
-`🔐 Senha alterada com sucesso
-
-📱 ${telefone}`
-  );
-
-  return res.sendStatus(200);
-  }
-
+//
     // =====================================================
 // ALTERAR PLANO
 // =====================================================
