@@ -1,5 +1,4 @@
-console.log("🔥🔥🔥 VERSAO TESTE 18:06 RODRIGO 🔥🔥🔥");
-
+console.log("🚨🚨🚨 TESTE DEPLOY 09-06-2026 10:55 🚨🚨🚨");
 const iniciarLembretes =
 require("./lembretes");
 
