@@ -99,6 +99,79 @@ Exemplo:
 }
 
 // =====================================================
+// ALTERAR SENHA CLIENTE
+// =====================================================
+
+if (
+  message.startsWith("/alterarsenha") &&
+  adminSessions[phone]
+) {
+
+  const dados =
+    message.replace("/alterarsenha", "")
+    .trim()
+    .split("|");
+
+  const telefone = dados[0]?.trim();
+  const novaSenha = dados[1]?.trim();
+
+  if (!telefone || !novaSenha) {
+
+    await sendMessage(
+      phone,
+`⚠️ Use:
+
+/alterarsenha Telefone | NovaSenha
+
+Exemplo:
+
+/alterarsenha 5516999999999 | 1234`
+    );
+
+    return true;
+  }
+
+  const cliente =
+    await prisma.client.findFirst({
+      where: {
+        phone: telefone
+      }
+    });
+
+  if (!cliente) {
+
+    await sendMessage(
+      phone,
+      "❌ Cliente não encontrado."
+    );
+
+    return true;
+  }
+
+  await prisma.client.update({
+    where: {
+      id: cliente.id
+    },
+    data: {
+      password: novaSenha
+    }
+  });
+
+  await sendMessage(
+    phone,
+`🔐 SENHA ALTERADA COM SUCESSO
+
+👤 Cliente: ${cliente.name}
+📱 Telefone: ${telefone}
+
+🔑 Nova senha:
+${novaSenha}`
+  );
+
+  return true;
+}
+
+// =====================================================
 // DESATIVAR CLIENTE
 // =====================================================
 
