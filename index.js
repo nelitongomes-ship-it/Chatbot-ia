@@ -2603,38 +2603,24 @@ if (
   return res.sendStatus(200);
 } 
   // =====================================================
-// VER CADASTRO
+// =====================================================
+// VER CADASTROS User
 // =====================================================
 
 if (message.trim() === "/vercadastro") {
 
-  const usuario =
-    await prisma.user.findFirst({
-      where: {
-        phone
-      }
-    });
-
-  const cliente =
-    await prisma.client.findFirst({
-      where: {
-        phone
+  const usuarios =
+    await prisma.user.findMany({
+      orderBy: {
+        id: "asc"
       }
     });
 
   await sendMessage(
     phone,
-`📋 DIAGNÓSTICO
+    `📋 TOTAL DE USUÁRIOS: ${usuarios.length}
 
-USER:
-
-${JSON.stringify(usuario, null, 2)}
-
-━━━━━━━━━━━━━━━
-
-CLIENT:
-
-${JSON.stringify(cliente, null, 2)}`
+${JSON.stringify(usuarios, null, 2)}`
   );
 
   return res.sendStatus(200);
@@ -2642,7 +2628,7 @@ ${JSON.stringify(cliente, null, 2)}`
   // =====================================================
 
   // =====================================================
-// CONSULTAR CLIENTE
+// CONSULTAR CLIENTE 
 // =====================================================
 
 if (
