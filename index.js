@@ -1,7 +1,7 @@
 const usuarios = require("./comandos/usuarios");
 const clienteFree = require("./comandos/clientefree");
 const clientes = require("./comandos/clientes");
-
+const cadastroTesteGratis = require("./cadastros/cadastroTesteGratis");
 
 console.log("🚨🚨🚨 TESTE DEPLOY 09-06-2026 10:55 🚨🚨🚨");
 const iniciarLembretes =
