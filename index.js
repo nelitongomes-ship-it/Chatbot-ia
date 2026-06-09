@@ -284,6 +284,43 @@ if (
 ) {
   return;
 }
+
+if (
+  await clienteFree({
+    message,
+    phone,
+    prisma,
+    sendMessage,
+    adminSessions
+  })
+) {
+  return;
+}
+
+if (
+  await clientes({
+    message,
+    phone,
+    prisma,
+    sendMessage,
+    adminSessions
+  })
+) {
+  return;
+}
+
+if (
+  await cadastroTesteGratis({
+    message,
+    phone,
+    prisma,
+    sendMessage,
+    res
+  })
+) {
+  return;
+}
+  
   
   console.log("TIPO:");
   console.log(tipo);
