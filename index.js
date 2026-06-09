@@ -1,3 +1,5 @@
+const usuarios = require("./comandos/usuarios");
+
 console.log("🚨🚨🚨 TESTE DEPLOY 09-06-2026 10:55 🚨🚨🚨");
 const iniciarLembretes =
 require("./lembretes");
@@ -244,7 +246,18 @@ app.post("/webhook", async (req, res) => {
   const phone =
     req.body?.data?.from ||
     "";
-
+if (
+  await usuarios({
+    message,
+    phone,
+    prisma,
+    sendMessage,
+    adminSessions,
+    res
+  })
+) {
+  return;
+}
   console.log("TIPO:");
   console.log(tipo);
 
