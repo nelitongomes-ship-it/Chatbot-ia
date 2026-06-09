@@ -55,7 +55,12 @@ const despesa =
       description: descricao
     }
   });
+console.log("🔥 RETORNANDO:");
+console.log({
+  sucesso: true
+});
 
+  
 return {
   sucesso: true,
   despesa
@@ -4181,6 +4186,8 @@ const registroDespesa =
     prisma,
     phone
   });
+console.log("🔥 RESULTADO REGISTRO:");
+console.log(registroDespesa);
 
 if (registroDespesa?.sucesso) {
 
