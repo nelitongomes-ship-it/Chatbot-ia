@@ -1,3 +1,6 @@
+//≈==========================================
+//  VER CADASTRO
+//=========================≈======≈==========
 module.exports = async function usuarios({
   message,
   phone,
@@ -38,6 +41,40 @@ ATIVO: ${u.isActive}
 
     return true;
   }
+  //==≈==================================
+  //  LISTAR USUARIOS
+  //=======================≈=≈===========
+  if (
+  message === "/listarusuarios" &&
+  adminSessions[phone]
+) {
+
+  const usuarios = await prisma.user.findMany({
+    orderBy: {
+      createdAt: "desc"
+    }
+  });
+
+  let resposta =
+    "👥 Usuários cadastrados:\n\n";
+
+  usuarios.forEach((u, i) => {
+
+    resposta +=
+      `${i + 1}. ${u.name || "Sem nome"}\n`;
+
+    resposta +=
+      `📞 ${u.phone}\n\n`;
+
+  });
+
+  await sendMessage(
+    phone,
+    resposta || "Nenhum usuário encontrado."
+  );
+
+  return true;
+}
 
   return false;
 };
