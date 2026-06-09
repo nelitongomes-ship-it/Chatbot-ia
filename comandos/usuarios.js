@@ -10,6 +10,8 @@ module.exports = async function usuarios({
   res
 }) {
 
+  console.log("🔥 USUARIOS.JS EXECUTOU 🔥");
+
   if (message.trim() === "/vercadastro") {
 
     const usuarios =
