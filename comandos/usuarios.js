@@ -1,5 +1,5 @@
 //≈==========================================
-//  VER CADASTRO
+//  VER CADASTRO TABELA USER
 //=========================≈======≈==========
 module.exports = async function usuarios({
   message,
@@ -42,7 +42,7 @@ ATIVO: ${u.isActive}
     return true;
   }
   //==≈==================================
-  //  LISTAR CLIENTES 
+  //  LISTAR CLIENTES USER
   //=======================≈=≈===========
   
   
