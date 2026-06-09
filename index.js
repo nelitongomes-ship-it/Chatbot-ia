@@ -1,4 +1,5 @@
 const usuarios = require("./comandos/usuarios");
+const clienteFree = require("./comandos/clientefree");
 const clientes = require("./comandos/clientes");
 
 
@@ -260,6 +261,18 @@ if (
 ) {
   return;
 }
+if (
+  await clienteFree({
+    message,
+    phone,
+    prisma,
+    sendMessage,
+    adminSessions
+  })
+) {
+  return;
+}
+  
 if (
   await clientes({
     message,
