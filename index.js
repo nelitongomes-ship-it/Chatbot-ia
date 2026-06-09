@@ -260,6 +260,18 @@ if (
 ) {
   return;
 }
+if (
+  await clientes({
+    message,
+    phone,
+    prisma,
+    sendMessage,
+    adminSessions
+  })
+) {
+  return;
+}
+  
   console.log("TIPO:");
   console.log(tipo);
 
