@@ -299,6 +299,131 @@ Status: ${cliente.isActive ? "ATIVO" : "INATIVO"}`
   return true;
 }
 
+// =====================================================
+// CONSULTAR CLIENTE N° Telefone 
+// =====================================================
+
+if (
+  message.startsWith("/cliente") &&
+  adminSessions[phone]
+) {
+
+  const telefone =
+    message.replace("/cliente", "")
+    .trim();
+
+  const clienteConsulta =
+    await prisma.client.findFirst({
+      where: {
+        phone: telefone
+      }
+    });
+
+  const usuarioConsulta =
+    await prisma.user.findFirst({
+      where: {
+        phone: telefone
+      }
+    });
+
+  if (!clienteConsulta && !usuarioConsulta) {
+
+    await sendMessage(
+      phone,
+      "❌ Cliente não encontrado."
+    );
+
+    return true;
+  }
+
+  if (clienteConsulta) {
+
+    await sendMessage(
+      phone,
+`👤 CLIENTE
+
+Nome: ${clienteConsulta.name}
+Telefone: ${clienteConsulta.phone}
+
+📅 Cadastro:
+${clienteConsulta.createdAt
+  ? new Date(
+      clienteConsulta.createdAt
+    ).toLocaleString("pt-BR")
+  : "Não informado"}
+
+📦 Plano:
+${clienteConsulta.planType}
+
+🤖 Modo IA:
+${clienteConsulta.aiMode}
+
+🟢 Status:
+${clienteConsulta.isActive ? "Ativo" : "Inativo"}
+
+💳 Pagamento:
+${
+  clienteConsulta.paymentStatus === "PAID"
+    ? "✅ Pago"
+    : clienteConsulta.paymentStatus === "PENDENTE"
+    ? "⚠️ Pendente"
+    : clienteConsulta.paymentStatus || "Não informado"
+}
+
+📅 Data Pagamento:
+${clienteConsulta.paymentDate
+  ? new Date(
+      clienteConsulta.paymentDate
+    ).toLocaleString("pt-BR")
+  : "Não registrado"}
+
+🔐 Senha:
+${clienteConsulta.password}`
+    );
+
+    return true;
+  }
+
+  await sendMessage(
+    phone,
+`🧪 USUÁRIO TESTE
+
+Nome: ${usuarioConsulta.name || "Não informado"}
+Telefone: ${usuarioConsulta.phone}
+
+📅 Cadastro:
+${usuarioConsulta.createdAt
+  ? new Date(
+      usuarioConsulta.createdAt
+    ).toLocaleString("pt-BR")
+  : "Não informado"}
+
+📦 Plano:
+${usuarioConsulta.planType}
+
+🤖 Modo IA:
+${usuarioConsulta.aiMode}
+
+🟢 Status:
+${usuarioConsulta.isActive ? "Ativo" : "Inativo"}
+
+🚀 Início:
+${usuarioConsulta.trialStartAt
+  ? new Date(
+      usuarioConsulta.trialStartAt
+    ).toLocaleString("pt-BR")
+  : "Não informado"}
+
+🏁 Término:
+${usuarioConsulta.trialEndAt
+  ? new Date(
+      usuarioConsulta.trialEndAt
+    ).toLocaleString("pt-BR")
+  : "Não informado"}`
+  );
+
+  return true;
+}
 //======================================================
 // LISTAR CLIENTES
 // =====================================================
