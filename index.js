@@ -1,4 +1,6 @@
 const usuarios = require("./comandos/usuarios");
+const clientes = require("./comandos/clientes");
+
 
 console.log("🚨🚨🚨 TESTE DEPLOY 09-06-2026 10:55 🚨🚨🚨");
 const iniciarLembretes =
