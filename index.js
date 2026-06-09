@@ -2226,53 +2226,8 @@ Status: ${cliente.isActive ? "ATIVO" : "INATIVO"}`
 
   
     // =====================================================
-// EXCLUIR CLIENTE POR CPF
-// =====================================================
 
-if (
-  message.startsWith("/excluircpf") &&
-  adminSessions[phone]
-) {
 
-  const cpf =
-    message
-      .replace("/excluircpf", "")
-      .trim()
-      .replace(/\D/g, "");
-
-  const cliente =
-    await prisma.client.findFirst({
-      where: {
-        cpf
-      }
-    });
-
-  if (!cliente) {
-
-    await sendMessage(
-      phone,
-      "❌ Cliente não encontrado."
-    );
-
-    return res.sendStatus(200);
-  }
-
-  await prisma.client.delete({
-    where: {
-      id: cliente.id
-    }
-  });
-
-  await sendMessage(
-    phone,
-`🗑️ Cliente removido
-
-👤 ${cliente.name}
-🪪 ${cliente.cpf}`
-  );
-
-  return res.sendStatus(200);
-}
     // =====================================================
 // ALTERAR SENHA
 // =====================================================
@@ -2574,44 +2529,6 @@ ${usuarioConsulta.trialEndAt
 
       return res.sendStatus(200);
     }
-// =====================================================
-// EXCLUIR CLIENTE
-// =====================================================
-
-if (
-  message.startsWith("/excluircliente") &&
-  adminSessions[phone]
-) {
-
-  const telefone =
-    message.replace("/excluircliente", "")
-    .trim();
-
-  if (!telefone) {
-
-    await sendMessage(
-      phone,
-      "⚠️ Use:\n/excluircliente 5511999999999"
-    );
-
-    return res.sendStatus(200);
-  }
-
-  await prisma.client.deleteMany({
-    where: {
-      phone: telefone
-    }
-  });
-
-  await sendMessage(
-    phone,
-`🗑️ Cliente excluído com sucesso
-
-📱 ${telefone}`
-  );
-
-  return res.sendStatus(200);
-}
 
 // =====================================================
 // LIMPAR AGENDA COMPLETA
