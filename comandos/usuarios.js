@@ -42,7 +42,56 @@ ATIVO: ${u.isActive}
     return true;
   }
   //==≈==================================
-  //  LISTAR CLIENTES USER
+  //  LISTAR CLIENTES VER USUARIO
   //=======================≈=≈===========
   
+if (
+  message.startsWith("/verusuario") &&
+  adminSessions[phone]
+) {
+
+  const telefone =
+    message.replace("/verusuario", "")
+    .trim();
+
+  const usuario =
+    await prisma.user.findFirst({
+      where: {
+        phone: telefone
+      }
+    });
+
+  if (!usuario) {
+
+    await sendMessage(
+      phone,
+      "❌ Usuário não encontrado."
+    );
+
+    return true;
+  }
+
+  await sendMessage(
+    phone,
+`👤 USUÁRIO
+
+Nome: ${usuario.name || "Não informado"}
+Telefone: ${usuario.phone}
+Plano: ${usuario.planType || "Não informado"}
+Modo IA: ${usuario.aiMode}
+Status: ${usuario.isActive ? "Ativo" : "Inativo"}
+
+🚀 Início:
+${usuario.trialStartAt
+  ? new Date(usuario.trialStartAt).toLocaleString("pt-BR")
+  : "Não informado"}
+
+🏁 Término:
+${usuario.trialEndAt
+  ? new Date(usuario.trialEndAt).toLocaleString("pt-BR")
+  : "Não informado"}`
+  );
+
+  return true;
+}
   
