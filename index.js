@@ -38,7 +38,12 @@ valor,
 categoria,
 descricao
 }) {
-
+console.log("🔥 REGISTRAR DESPESA CHAMADO");
+  console.log({
+    phone,
+    valor,
+    categoria,
+    descricao
 try {
 
 const despesa =
