@@ -250,6 +250,55 @@ if (
   return true;
 }
 
+// =====================================================
+// VER CLIENTE POR CPF
+// =====================================================
+
+if (
+  message.startsWith("/verclientecpf") &&
+  adminSessions[phone]
+) {
+
+  const cpfBusca =
+    message
+      .replace("/verclientecpf", "")
+      .trim()
+      .replace(/\D/g, "");
+
+  const cliente =
+    await prisma.client.findFirst({
+      where: {
+        cpf: cpfBusca
+      }
+    });
+
+  if (!cliente) {
+
+    await sendMessage(
+      phone,
+      "❌ Cliente não encontrado."
+    );
+
+    return true;
+  }
+
+  await sendMessage(
+    phone,
+`👤 CLIENTE
+
+Nome: ${cliente.name}
+Telefone: ${cliente.phone}
+CPF: ${cliente.cpf}
+Contrato: ${cliente.contractNumber || "Não informado"}
+Plano: ${cliente.planType}
+Modo IA: ${cliente.aiMode}
+Valor: R$ ${cliente.totalValue || 0}
+Status: ${cliente.isActive ? "ATIVO" : "INATIVO"}`
+  );
+
+  return true;
+}
+
 //======================================================
 // LISTAR CLIENTES
 // =====================================================
