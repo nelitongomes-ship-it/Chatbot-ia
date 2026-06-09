@@ -201,6 +201,55 @@ if (
   return true;
 }
 
+// =====================================================
+// EXCLUIR CLIENTE POR CPF
+// =====================================================
+
+if (
+  message.startsWith("/excluircpf") &&
+  adminSessions[phone]
+) {
+
+  const cpf =
+    message
+      .replace("/excluircpf", "")
+      .trim()
+      .replace(/\D/g, "");
+
+  const cliente =
+    await prisma.client.findFirst({
+      where: {
+        cpf
+      }
+    });
+
+  if (!cliente) {
+
+    await sendMessage(
+      phone,
+      "❌ Cliente não encontrado."
+    );
+
+    return true;
+  }
+
+  await prisma.client.delete({
+    where: {
+      id: cliente.id
+    }
+  });
+
+  await sendMessage(
+    phone,
+`🗑️ Cliente removido
+
+👤 ${cliente.name}
+🪪 ${cliente.cpf}`
+  );
+
+  return true;
+}
+
 //======================================================
 // LISTAR CLIENTES
 // =====================================================
