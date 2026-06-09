@@ -2615,36 +2615,6 @@ if (
   return res.sendStatus(200);
 } 
   // =====================================================
-// =====================================================
-// VER CADASTROS User
-// =====================================================
-if (message.trim() === "/vercadastro") {
-
-  const usuarios =
-    await prisma.user.findMany({
-      orderBy: {
-        id: "asc"
-      }
-    });
-
-  let texto = "📋 CADASTROS USER\n\n";
-
-  usuarios.forEach((u) => {
-    texto +=
-`ID: ${u.id}
-TEL: ${u.phone}
-PLANO: ${u.planType}
-ATIVO: ${u.isActive}
-
-━━━━━━━━━━━━━━━
-`;
-  });
-
-  await sendMessage(phone, texto);
-
-  return res.sendStatus(200);
-}
-  // =====================================================
 
   // =====================================================
 // CONSULTAR CLIENTE 
