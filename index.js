@@ -2108,54 +2108,9 @@ try {
         },
         take: 100
       });
-// =====================================================
-// COTAÇÃO DÓLAR
-// =====================================================
 
-if (
-  message.toLowerCase().includes("dólar") ||
-  message.toLowerCase().includes("dolar")
-) {
 
-  try {
 
-    console.log("Consultando dólar...");
-
-    const response = await axios.get(
-      "https://economia.awesomeapi.com.br/json/last/USD-BRL",
-      {
-        timeout: 10000
-      }
-    );
-
-    console.log(response.data);
-
-    const valor =
-      response.data.USDBRL.bid;
-
-    await sendMessage(
-      phone,
-      `💵 Dólar atual:\nR$ ${valor}`
-    );
-
-  } catch (error) {
-
-    console.log(
-      "ERRO DOLAR:",
-      error.message
-    );
-
-    await sendMessage(
-      phone,
-      "⚠️ Não consegui consultar o dólar agora."
-    );
-
-  }
-
-  return res.sendStatus(200);
-}
-
-   
 // =====================================================
 // COTAÇÃO EURO
 // =====================================================
