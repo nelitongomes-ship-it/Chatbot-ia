@@ -8,9 +8,9 @@ const cadastroTesteGratis = require("./cadastros/cadastroTesteGratis");
 const cadastroAutomaticoCliente = require("./cadastros/cadastroAutomaticoCliente");
 const desbloquearAdm = require("./codigos/desbloquearAdm");
 //
-const { buscarDolar } = require("./pesquisas/dolar");
-const { buscarNoticias } = require("./pesquisas/noticias");
-const { buscarClima } = require("./pesquisas/clima");
+const { buscarDolar } = require("./cod.pesquisa/dolar");
+const { buscarNoticias } = require("./cod.pesquisa/noticias");
+const { buscarClima } = require("./cod.pesquisa/clima");
 
 
 console.log("🚨🚨🚨 TESTE DEPLOY 09-06-2026 10:55 🚨🚨🚨");
