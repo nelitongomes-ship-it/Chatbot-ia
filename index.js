@@ -3004,6 +3004,8 @@ Digite *minha agenda* para consultar seus compromissos.`
 // =====================================================
 // REGISTRAR DESPESA
 // =====================================================
+console.log("🔥 REPLY IA:");
+console.log(reply);
 
 const registroDespesa =
   await processarRegistroDespesa({
