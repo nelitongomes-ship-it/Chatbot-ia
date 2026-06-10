@@ -3,6 +3,8 @@ const usuarios = require("./comandos/usuarios");
 const clienteFree = require("./comandos/clientefree");
 const clientes = require("./comandos/clientes");
 const cadastroTesteGratis = require("./cadastros/cadastroTesteGratis");
+const cadastroAutomaticoCliente = require("./cadastros/cadastroAutomaticoCliente");
+
 
 console.log("🚨🚨🚨 TESTE DEPLOY 09-06-2026 10:55 🚨🚨🚨");
 const iniciarLembretes =
@@ -341,7 +343,17 @@ if (
 
 console.log("❌ NAO ENTROU ESTATISTICAS");
 
-  
+  if (
+  await cadastroAutomaticoCliente({
+    message,
+    phone,
+    prisma,
+    sendMessage
+  })
+) {
+  return;
+  }
+
   
   console.log("TIPO:");
   console.log(tipo);
@@ -595,115 +607,7 @@ if (
       where: {
         paymentStatus: "PENDENTE"
       }
-    });
-
-  
-
-
-// =====================================================    
-// =====================================================
-// CADASTRO AUTOMÁTICO DE CLIENTE
-// =====================================================
-
-console.log("MENSAGEM ANTES DO CADASTRO:");
-console.log(message);
-
-const texto =
-  String(message || "");
-
-if (
-  texto.toUpperCase().includes("CONTRATO") &&
-  texto.includes("Cliente:")
-) {
-
-  console.log("🔥🔥🔥 CADASTRO AUTOMÁTICO EXECUTOU 🔥🔥🔥");
-
-
-
-  const contrato =
-    message.match(/Contrato:\s*(.+)/i)?.[1]?.trim() || "";
-
-  const nome =
-    message.match(/Cliente:\s*(.+)/i)?.[1]?.trim() || "";
-
-  const cpf =
-    message.match(/CPF:\s*(.+)/i)?.[1]?.trim() || "";
-
-  const valor =
-    message.match(/Valor Total:\s*R\$\s*([\d.,]+)/i)?.[1]?.trim() || "";
-
-  const parcelas =
-    message.match(/Parcelas:\s*(.+)/i)?.[1]?.trim() || "";
-
-  const dataContrato =
-    message.match(/Data do Contrato:\s*(.+)/i)?.[1]?.trim() || "";
-
-  const primeiraParcela =
-    message.match(/1ª Parcela:\s*(.+)/i)?.[1]?.trim() || "";
-
-  const telefoneCliente =
-    message.match(/📲\s*(\d{10,13})/)?.[1] || "";
-
-  if (!telefoneCliente) {
-
-    await sendMessage(
-      phone,
-      "❌ Não foi possível localizar o telefone do cliente no contrato."
-    );
-
-    return res.sendStatus(200);
-  }
-
-  const telefoneFinal =
-    telefoneCliente.startsWith("55")
-      ? telefoneCliente
-      : "55" + telefoneCliente;
-
-  const cpfLimpo =
-    cpf.replace(/\D/g, "");
-
-  const clienteExistente =
-    await prisma.client.findFirst({
-      where: {
-        OR: [
-          { cpf: cpfLimpo },
-          { phone: telefoneFinal }
-        ]
-      }
-    });
-
-  if (clienteExistente) {
-
-    await sendMessage(
-      phone,
-      "⚠️ Cliente já cadastrado."
-    );
-
-    return res.sendStatus(200);
-  }
-//apagar//
-/*  await prisma.client.create({
-    data: {
-      name: nome,
-      fullName: nome,
-      cpf: cpfLimpo,
-      phone: telefoneFinal,
-      password: cpfLimpo.slice(-4),
-      serviceType: "ASSESSORIA_FINANCEIRA",
-      planType: "BASICO",
-      contractNumber: contrato,
-      totalValue: parseFloat(
-        valor
-          .replace(/\./g, "")
-if (
-  texto.toUpperCase().includes("CONTRATO") &&
-  texto.includes("Cliente:")
-) {
-
-  console.log("🔥🔥🔥 CADASTRO AUTOMÁTICO EXECUTOU 🔥🔥🔥");
-
-  ...
-}*/
+    
       //  =====================================================
 // =====================================================
 // ÁUDIO WHATSAPP
