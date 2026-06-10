@@ -1,52 +1,62 @@
-// =====================================================
-// CADASTRO AUTOMÁTICO DE CLIENTE
-// =====================================================
+module.exports = async function ({
+  message,
+  phone,
+  prisma,
+  sendMessage
+}) {
 
-console.log("MENSAGEM ANTES DO CADASTRO:");
-console.log(message);
+  const texto =
+    String(message || "");
 
-const texto =
-  String(message || "");
+  if (
+    !texto.toUpperCase().includes("CONTRATO") ||
+    !texto.includes("Cliente:")
+  ) {
+    return false;
+  }
 
-if (
-  texto.toUpperCase().includes("CONTRATO") &&
-  texto.includes("Cliente:")
-) {
-
-  console.log("🔥🔥🔥 CADASTRO AUTOMÁTICO EXECUTOU 🔥🔥🔥");
+  console.log(
+    "🔥 CADASTRO AUTOMÁTICO EXECUTOU 🔥"
+  );
 
   const contrato =
-    message.match(/Contrato:\s*(.+)/i)?.[1]?.trim() || "";
+    texto.match(/Contrato:\s*(.+)/i)?.[1]?.trim() || "";
 
   const nome =
-    message.match(/Cliente:\s*(.+)/i)?.[1]?.trim() || "";
+    texto.match(/Cliente:\s*(.+)/i)?.[1]?.trim() || "";
 
   const cpf =
-    message.match(/CPF:\s*(.+)/i)?.[1]?.trim() || "";
+    texto.match(/CPF:\s*(.+)/i)?.[1]?.trim() || "";
 
   const valor =
-    message.match(/Valor Total:\s*R\$\s*([\d.,]+)/i)?.[1]?.trim() || "";
+    texto.match(
+      /Valor Total:\s*R\$\s*([\d.,]+)/i
+    )?.[1]?.trim() || "";
 
   const parcelas =
-    message.match(/Parcelas:\s*(.+)/i)?.[1]?.trim() || "";
+    texto.match(/Parcelas:\s*(.+)/i)?.[1]?.trim() || "";
 
   const dataContrato =
-    message.match(/Data do Contrato:\s*(.+)/i)?.[1]?.trim() || "";
+    texto.match(
+      /Data do Contrato:\s*(.+)/i
+    )?.[1]?.trim() || "";
 
   const primeiraParcela =
-    message.match(/1ª Parcela:\s*(.+)/i)?.[1]?.trim() || "";
+    texto.match(
+      /1ª Parcela:\s*(.+)/i
+    )?.[1]?.trim() || "";
 
   const telefoneCliente =
-    message.match(/📲\s*(\d{10,13})/)?.[1] || "";
+    texto.match(/📲\s*(\d{10,13})/)?.[1] || "";
 
   if (!telefoneCliente) {
 
     await sendMessage(
       phone,
-      "❌ Não foi possível localizar o telefone do cliente no contrato."
+      "❌ Telefone não encontrado no contrato."
     );
 
-    return res.sendStatus(200);
+    return true;
   }
 
   const telefoneFinal =
@@ -74,8 +84,46 @@ if (
       "⚠️ Cliente já cadastrado."
     );
 
-    return res.sendStatus(200);
+    return true;
   }
 
-  // cadastro continua aqui...
-}
+  await prisma.client.create({
+    data: {
+      name: nome,
+      fullName: nome,
+      cpf: cpfLimpo,
+      phone: telefoneFinal,
+      password: cpfLimpo.slice(-4),
+
+      serviceType:
+        "ASSESSORIA_FINANCEIRA",
+
+      planType: "BASICO",
+
+      contractNumber: contrato,
+
+      totalValue: parseFloat(
+        valor
+          .replace(/\./g, "")
+          .replace(",", ".")
+      ),
+
+      installments: parcelas,
+      contractDate: dataContrato,
+      firstDueDate: primeiraParcela,
+
+      isActive: true
+    }
+  });
+
+  await sendMessage(
+    phone,
+    `✅ Cliente cadastrado com sucesso!
+
+👤 ${nome}
+📱 ${telefoneFinal}
+📄 Contrato: ${contrato}`
+  );
+
+  return true;
+};
