@@ -126,7 +126,7 @@ if (
 
         isActive: true,
 
-        paymentStatus: "APROVADO",
+        paymentStatus: "PAID",
 
         dailyLimit: 20,
 
@@ -152,7 +152,7 @@ if (
 
         isActive: true,
 
-        paymentStatus: "APROVADO",
+        paymentStatus: "PAID",
 
         dailyLimit: 20,
 
