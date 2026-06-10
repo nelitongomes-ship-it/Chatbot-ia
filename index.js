@@ -609,7 +609,7 @@ if (
     },
     data: {
       paymentStatus: "PAID",
-      paymentDate: new Date(),
+      lastPaymentAt: new Date(),
       isActive: true
     }
   });
