@@ -48,15 +48,19 @@ prisma,
 phone,
 valor,
 categoria,
-descricao
+descricao,
+dataRegistro  
+  
 }) {
 console.log("🔥 REGISTRAR DESPESA CHAMADO");
   console.log({
     phone,
     valor,
     categoria,
-    descricao
-try {
+    descricao,
+    dataRegistro
+ 
+   try {
 
 const despesa =
   await prisma.expense.create({
@@ -64,7 +68,9 @@ const despesa =
       phone,
       value: Number(valor),
       category: categoria,
-      description: descricao
+      description: descricao,
+      createdAt: dataRegistro
+      
     }
   });
 console.log("🔥 RETORNANDO:");
@@ -128,6 +134,40 @@ const descricao =
 conteudo.match(
 /DESCRI.*?:\s*(.+)/i
 )?.[1]?.trim();
+//
+
+  const dataInformada =
+conteudo.match(
+/DATA:\s*(.+)/i
+)?.[1]?.trim();
+
+const horaInformada =
+conteudo.match(
+/HORA:\s*(.+)/i
+)?.[1]?.trim();
+
+let dataRegistro = new Date();
+
+if (
+  dataInformada &&
+  horaInformada
+) {
+
+  const [dia, mes, ano] =
+    dataInformada.split("/");
+
+  const [hora, minuto] =
+    horaInformada.split(":");
+
+  dataRegistro = new Date(
+    ano,
+    mes - 1,
+    dia,
+    hora,
+    minuto
+  );
+}
+//
   
 console.log("🔥 VALOR:", valor);
 console.log("🔥 CATEGORIA:", categoria);
