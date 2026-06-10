@@ -1,3 +1,4 @@
+const recuperarSenha = require("./comandos/admin/recuperarsenha");
 const bloqueios = require("./comandos/bloqueios");
 const estatisticas = require("./comandos/estatisticas");
 const usuarios = require("./comandos/usuarios");
@@ -385,7 +386,23 @@ if (
   );
 
 }
+if (
+  await recuperarSenha({
+    message,
+    phone,
+    sendMessage,
+    ADMIN_PIN,
+    ADMIN_USER,
+    ADMIN_PASS
+  })
+) {
 
+  console.log(
+    "🔐 RECUPERAR SENHA EXECUTOU"
+  );
+
+  return res.sendStatus(200);
+}
 
 
   
