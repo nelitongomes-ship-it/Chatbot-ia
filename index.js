@@ -880,34 +880,7 @@ console.log(phone);
 
 
     // =====================================================
-    // RECUPERAR SENHA
-    // =====================================================
-
-    if (message.startsWith("/recuperar")) {
-
-      const args =
-        message.trim().split(" ");
-
-      const pin = args[1];
-
-      if (pin === ADMIN_PIN) {
-
-        await sendMessage(
-          phone,
-          `🔐 Usuário: ${ADMIN_USER}\nSenha: ${ADMIN_PASS}`
-        );
-
-      } else {
-
-        await sendMessage(
-          phone,
-          "❌ PIN inválido."
-        );
-
-      }
-
-      return res.sendStatus(200);
-    }
+    
 
     // =====================================================
     // RESETAR TREINAMENTO
