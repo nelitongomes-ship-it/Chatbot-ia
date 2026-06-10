@@ -8,7 +8,7 @@ module.exports = async function clientefree({
 }) {
 
   // =====================================================
-  // CONTAR TESTES
+  // CONTAR TESTES Tabelas user
   // =====================================================
 
   if (
