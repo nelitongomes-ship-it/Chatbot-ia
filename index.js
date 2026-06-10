@@ -7,8 +7,16 @@ const clientes = require("./comandos/clientes");
 const cadastroTesteGratis = require("./cadastros/cadastroTesteGratis");
 const cadastroAutomaticoCliente = require("./cadastros/cadastroAutomaticoCliente");
 const desbloquearAdm = require("./codigos/desbloquearAdm");
+//
+const {
+const clientes = require("./comandos/clientes");
+const cadastroTesteGratis = require("./cadastros/cadastroTesteGratis");
+const cadastroAutomaticoCliente = require("./cadastros/cadastroAutomaticoCliente");
+const desbloquearAdm = require("./comandos/desbloquearAdm");
 
-
+const { buscarDolar } = require("./pesquisas/dolar");
+const { buscarNoticias } = require("./pesquisas/noticias");
+const { buscarClima } = require("./pesquisas/clima");
 
 
 console.log("🚨🚨🚨 TESTE DEPLOY 09-06-2026 10:55 🚨🚨🚨");
@@ -463,7 +471,22 @@ if (
   return res.sendStatus(200);
 }
 
+if (
+  textoLower === "/dolar"
+) {
 
+  const dolar =
+    await buscarDolar();
+
+  await sendMessage(
+    phone,
+    `💵 Dólar\n\nCompra: R$ ${dolar.compra}\nVenda: R$ ${dolar.venda}`
+  );
+
+  return res.sendStatus(200);
+    }
+
+  
   
   console.log("TIPO:");
   console.log(tipo);
