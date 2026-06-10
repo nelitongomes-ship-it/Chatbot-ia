@@ -1,3 +1,4 @@
+const bloqueios = require("./comandos/bloqueios");
 const estatisticas = require("./comandos/estatisticas");
 const usuarios = require("./comandos/usuarios");
 const clienteFree = require("./comandos/clientefree");
@@ -353,6 +354,21 @@ console.log("❌ NAO ENTROU ESTATISTICAS");
 ) {
   return;
   }
+
+  console.log("🚀 CHAMANDO BLOQUEIOS");
+
+if (
+  await bloqueios({
+    message,
+    phone,
+    prisma,
+    sendMessage,
+    adminSessions
+  })
+) {
+  console.log("✅ RETORNOU BLOQUEIOS");
+  return;
+}
 
   
   console.log("TIPO:");
