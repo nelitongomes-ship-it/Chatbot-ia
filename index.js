@@ -8,7 +8,7 @@ const cadastroTesteGratis = require("./cadastros/cadastroTesteGratis");
 const cadastroAutomaticoCliente = require("./cadastros/cadastroAutomaticoCliente");
 const desbloquearAdm = require("./codigos/desbloquearAdm");
 //
-const { buscarDolar } = require("./cod.pesquisa/dolar");
+const dolar = require("./comandos/dolar");
 const { buscarNoticias } = require("./cod.pesquisa/noticias");
 const { buscarClima } = require("./cod.pesquisa/clima");
 
@@ -466,19 +466,14 @@ if (
 }
 
 if (
-  textoLower === "/dolar"
-) {
-
-  const dolar =
-    await buscarDolar();
-
-  await sendMessage(
+  await dolar({
+    message,
     phone,
-    `💵 Dólar\n\nCompra: R$ ${dolar.compra}\nVenda: R$ ${dolar.venda}`
-  );
-
+    sendMessage
+  })
+) {
   return res.sendStatus(200);
-    }
+  }
 
   
   
