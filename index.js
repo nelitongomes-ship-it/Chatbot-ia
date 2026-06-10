@@ -5,6 +5,9 @@ const clienteFree = require("./comandos/clientefree");
 const clientes = require("./comandos/clientes");
 const cadastroTesteGratis = require("./cadastros/cadastroTesteGratis");
 const cadastroAutomaticoCliente = require("./cadastros/cadastroAutomaticoCliente");
+const desbloquearAdm = require("./codigos/desbloquearAdm");
+
+
 
 
 console.log("🚨🚨🚨 TESTE DEPLOY 09-06-2026 10:55 🚨🚨🚨");
@@ -369,6 +372,21 @@ if (
   console.log("✅ RETORNOU BLOQUEIOS");
   return;
 }
+
+if (
+  await desbloquearAdm({
+    message,
+    phone
+  })
+) {
+
+  console.log(
+    "🚀 PASSOU PELO DESBLOQUEIO"
+  );
+
+}
+
+
 
   
   console.log("TIPO:");
