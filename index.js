@@ -249,6 +249,8 @@ app.post("/webhook", async (req, res) => {
   const phone =
     req.body?.data?.from ||
     "";
+
+  console.log("🚀 CHAMANDO USUARIOS.JS");
 if (
   await usuarios({
     message,
@@ -261,6 +263,8 @@ if (
 ) {
   return;
 }
+console.log("🚀 RETORNOU USUARIOS.JS");
+  
 if (
   await clienteFree({
     message,
