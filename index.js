@@ -108,7 +108,10 @@ respostaIA,
 prisma,
 phone
 }) {
+//
+  console.log("🔥🔥🔥 ENTROU EM processarRegistroDespesa");
 
+  //
 const match =
 respostaIA.match(
 /REGISTRAR_DESPESA([\s\S]*?)/REGISTRAR_DESPESA/
