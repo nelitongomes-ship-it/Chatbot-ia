@@ -3001,6 +3001,9 @@ Digite *minha agenda* para consultar seus compromissos.`
       .choices[0]
       .message
       .content;
+
+console.log("🔥 REPLY IA:");
+console.log(reply);
 // =====================================================
 // REGISTRAR DESPESA
 // =====================================================
