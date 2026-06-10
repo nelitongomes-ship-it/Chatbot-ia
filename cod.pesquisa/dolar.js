@@ -48,10 +48,8 @@ async function buscarDolar() {
 
   } catch (error) {
 
-    console.log(
-      "ERRO CONSULTA DOLAR:",
-      error.message
-    );
+    console.log("🚨 ERRO DOLAR:");
+console.log(error);
 
     return null;
 
