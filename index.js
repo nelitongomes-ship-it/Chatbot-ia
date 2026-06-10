@@ -632,7 +632,7 @@ if (
   const pagamentosAprovados =
     await prisma.client.count({
       where: {
-        paymentStatus: "APROVADO"
+        paymentStatus: "PAID"
       }
     });
 
