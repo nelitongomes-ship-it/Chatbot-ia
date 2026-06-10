@@ -147,6 +147,21 @@ conteudo.match(
 )?.[1]?.trim();
 
 let dataRegistro = new Date();
+  //
+  if (
+  descricao?.toLowerCase().includes("ontem")
+) {
+  dataRegistro.setDate(
+    dataRegistro.getDate() - 1
+  );
+}
+
+if (
+  descricao?.toLowerCase().includes("hoje")
+) {
+  dataRegistro = new Date();
+}
+  //
 
 if (
   dataInformada &&
@@ -189,7 +204,8 @@ valor: parseFloat(
 valor.replace(",", ".")
 ),
 categoria,
-descricao
+descricao,
+dataRegistro
 });
 
 }
