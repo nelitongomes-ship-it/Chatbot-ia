@@ -1,3 +1,4 @@
+const estatisticas = require("./comandos/estatisticas");
 const usuarios = require("./comandos/usuarios");
 const clienteFree = require("./comandos/clientefree");
 const clientes = require("./comandos/clientes");
@@ -324,6 +325,22 @@ if (
 ) {
   return;
 }
+  console.log("🚀 CHAMANDO ESTATISTICAS");
+
+if (
+  await estatisticas({
+    message,
+    phone,
+    sendMessage,
+    adminSessions
+  })
+) {
+  console.log("✅ RETORNOU ESTATISTICAS");
+  return;
+}
+
+console.log("❌ NAO ENTROU ESTATISTICAS");
+
   
   
   console.log("TIPO:");
