@@ -471,7 +471,7 @@ if (message.startsWith("/treinar")) {
     prisma,
     adminSessions,
     res
-  })
+  });
 
 }
 
