@@ -446,11 +446,9 @@ return;
   }
 
   console.log(
-    "🔐 RECUPERAR SENHA EXECUTOU"
-  );
-
-  return res.sendStatus(200);
-}
+    "🔐 RECUPERAR SENHA EXECUTOU"  
+  
+};
 
 if (
   await dolar({
