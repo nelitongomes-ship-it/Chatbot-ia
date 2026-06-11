@@ -7,6 +7,7 @@ const clientes = require("./comandos/clientes");
 const cadastroTesteGratis = require("./cadastros/cadastroTesteGratis");
 const cadastroAutomaticoCliente = require("./cadastros/cadastroAutomaticoCliente");
 const desbloquearAdm = require("./codigos/desbloquearAdm");
+const carregarTreinamentos = require("./IA.treinamentos/treinar");
 //
 const dolar = require("./comandos/dolar");
 const { buscarNoticias } = require("./cod.pesquisa/noticias");
