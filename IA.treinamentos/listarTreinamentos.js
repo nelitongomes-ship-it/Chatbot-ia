@@ -21,7 +21,7 @@ module.exports = async function listarTreinamentos({
       "⛔ Faça login administrativo."
     );
 
-    return res.sendStatus(200);
+    return true;
   }
 
   const treinamentos =
@@ -38,7 +38,7 @@ module.exports = async function listarTreinamentos({
       "📚 Nenhum treinamento cadastrado."
     );
 
-    return res.sendStatus(200);
+    return true;
   }
 
   let texto =
@@ -62,5 +62,5 @@ module.exports = async function listarTreinamentos({
     texto
   );
 
-  return res.sendStatus(200);
+  return true;
 };
