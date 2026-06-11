@@ -683,7 +683,7 @@ if (
       where: {
         paymentStatus: "PENDENTE"
       }
-    
+    });
       //  =====================================================
 // =====================================================
 // ÁUDIO WHATSAPP
@@ -825,24 +825,23 @@ console.log(
       fs.unlinkSync(mp3Path);
     }
 
-//  } catch (error) {//
+} catch (error) {
 
-    console.log(
-      "ERRO ÁUDIO:",
-      error.response?.data ||
-      error.message ||
-      error
- phone
+  console.log(
+    "ERRO ÁUDIO:",
+    error.response?.data ||
+    error.message ||
+    error
+  );
 
-    await sendMessage(
-      phone,
-      "⚠️ Não consegui entender o áudio."
-    );
+  await sendMessage(
+    phone,
+    "⚠️ Não consegui entender o áudio."
+  );
 
-    return res.sendStatus(200);
-  }
-           }
-      
+  return res.sendStatus(200);
+
+    }
     // =====================================================
     // IGNORAR GRUPOS
     // =====================================================
