@@ -1,0 +1,83 @@
+module.exports = async function treinar({
+  message,
+  phone,
+  sendMessage,
+  prisma,
+  adminSessions,
+  res
+}) {
+
+  if (!adminSessions[phone]) {
+
+    await sendMessage(
+      phone,
+      "⛔ Faça login administrativo."
+    );
+
+    return res.sendStatus(200);
+  }
+
+  const novoPrompt =
+    message.replace("/treinar", "").trim();
+
+  if (!novoPrompt) {
+
+    await sendMessage(
+      phone,
+      "⚠️ Digite um treinamento.\n\nExemplo:\n/treinar Atendimento|Sempre seja educado e profissional."
+    );
+
+    return res.sendStatus(200);
+  }
+
+  const partes =
+    novoPrompt.split("|");
+
+  const titulo =
+    partes[0]?.trim();
+
+  const conteudo =
+    partes.slice(1).join("|").trim();
+
+  if (!titulo || !conteudo) {
+
+    await sendMessage(
+      phone,
+      "⚠️ Use o formato:\n\n/treinar Título|Conteúdo"
+    );
+
+    return res.sendStatus(200);
+  }
+
+  try {
+
+    await prisma.training.create({
+      data: {
+        title: titulo,
+        content: conteudo,
+        category: "GERAL",
+        active: true
+      }
+    });
+
+    await sendMessage(
+      phone,
+      `✅ IA treinada com sucesso.\n\n📚 Título: ${titulo}\n🧠 Conhecimento armazenado.`
+    );
+
+  } catch (error) {
+
+    console.error(
+      "ERRO AO SALVAR TREINAMENTO:"
+    );
+
+    console.error(error);
+
+    await sendMessage(
+      phone,
+      "❌ Erro ao salvar treinamento."
+    );
+  }
+
+  return res.sendStatus(200);
+};
