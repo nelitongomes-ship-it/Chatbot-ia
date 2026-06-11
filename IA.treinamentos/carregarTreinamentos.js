@@ -1,4 +1,5 @@
-/*module.exports = async function carregarTreinamentos(
+/*
+module.exports = async function carregarTreinamentos(
   prisma
 ) {
 
@@ -50,3 +51,4 @@ ${t.content}
 
   return memoriaTreinamentos;
 };
+*/
