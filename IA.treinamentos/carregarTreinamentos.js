@@ -1,4 +1,4 @@
-module.exports = async function carregarTreinamentos(
+/*module.exports = async function carregarTreinamentos(
   prisma
 ) {
 
