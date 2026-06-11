@@ -14,7 +14,7 @@ const { buscarNoticias } = require("./cod.pesquisa/noticias");
 const { buscarClima } = require("./cod.pesquisa/clima");
 
 
-console.log("🚨🚨🚨 TESTE DEPLOY 09-06-2026 10:55 🚨🚨🚨");
+console.log("🚀 VERSAO 11-06-2026 17:40");
 const iniciarLembretes =
 require("./lembretes");
 
