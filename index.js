@@ -41,7 +41,7 @@ const modo8 = require("./modo8");
 require("dotenv").config();
 
 const prisma = new PrismaClient();
-
+/*
 // =====================================================
 // REGISTRO DE DESPESAS - AGILS IA
 // =====================================================
@@ -222,7 +222,7 @@ dataRegistro
 const app = express();
 
 app.use(express.json());
-
+*/
 // =====================================================
 // CONFIGURAÇÕES ADM
 // =====================================================
