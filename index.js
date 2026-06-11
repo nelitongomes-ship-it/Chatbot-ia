@@ -7,8 +7,8 @@ const clientes = require("./comandos/clientes");
 const cadastroTesteGratis = require("./cadastros/cadastroTesteGratis");
 const cadastroAutomaticoCliente = require("./cadastros/cadastroAutomaticoCliente");
 const desbloquearAdm = require("./codigos/desbloquearAdm");
-const carregarTreinamentos = require("./IA.treinamentos/treinar");
-//
+const treinar = require("./IA.treinamentos/treinar");
+const carregarTreinamentos = require("./IA.treinamentos/carregarTreinamentos");
 const dolar = require("./comandos/dolar");
 const { buscarNoticias } = require("./cod.pesquisa/noticias");
 const { buscarClima } = require("./cod.pesquisa/clima");
@@ -1022,7 +1022,7 @@ if (
   );
 
   return res.sendStatus(200);
-}
+}/*
     // =====================================================
     // TREINAR IA
     // =====================================================
@@ -1083,7 +1083,7 @@ await prisma.training.create({
 
       return res.sendStatus(200);
     }
-
+*/
  // =====================================================
 // LISTAR TREINAMENTOS
 // =====================================================
@@ -1940,47 +1940,40 @@ ${JSON.stringify(cliente, null, 2)}`
 }
     
     // =====================================================
+// =====================================================
 // PROMPT
 // =====================================================
-//alterado//
-    const settings =
+
+const settings =
   await prisma.adminSettings.findFirst();
 
-const treinamentos =
-  await prisma.training.findMany({
-    where: {
-      active: true
-    },
-    orderBy: {
-      id: "asc"
-    }
-  });
-
-let memoriaTreinamentos = "";
-
-for (const t of treinamentos) {
-
-  memoriaTreinamentos += `
-
-━━━━━━━━━━━━━━━
-TREINAMENTO
-━━━━━━━━━━━━━━━
-
-Título: ${t.title}
-
-${t.content}
-
-`;
-}
+const memoriaTreinamentos =
+  await carregarTreinamentos(
+    prisma
+  );
 
 const systemPrompt = `
 ${settings?.systemPrompt || contextoSistema}
 
 ${memoriaTreinamentos}
 `;
-    console.log("TREINAMENTOS CARREGADOS:");
+
+console.log("================================");
+console.log("TREINAMENTOS CARREGADOS");
+console.log("================================");
 console.log(memoriaTreinamentos);
-//fim//
+
+console.log("================================");
+console.log("SYSTEM PROMPT");
+console.log("================================");
+console.log(
+  `TAMANHO: ${systemPrompt.length}`
+);
+
+// =====================================================
+// DIAGNOSTICO MIDIA
+// =====================================================
+
 console.log("================================");
 console.log("DIAGNOSTICO MIDIA");
 console.log("================================");
@@ -2006,9 +1999,9 @@ console.log(req.body?.data?.document);
 console.log("WEBHOOK:");
 console.log(
   JSON.stringify(req.body, null, 2)
-); 
-  
-  console.log("TESTE 1");
+);
+
+console.log("TESTE 1");
 
 console.log("MESSAGE:");
 console.log(message);
@@ -2024,7 +2017,7 @@ console.log("SYSTEM PROMPT OK");
 
 console.log("TESTE 4");
 
-    console.log("CHEGOU ANTES DO TESTEBANCO");
+console.log("CHEGOU ANTES DO TESTEBANCO");
 
 if (message === "/testebanco") {
 
