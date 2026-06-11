@@ -9,6 +9,7 @@ const cadastroAutomaticoCliente = require("./cadastros/cadastroAutomaticoCliente
 const desbloquearAdm = require("./codigos/desbloquearAdm");
 const treinar = require("./IA.treinamentos/treinar");
 const carregarTreinamentos = require("./IA.treinamentos/carregarTreinamentos");
+const listarTreinamentos = require("./IA.treinamentos/listarTreinamentos");
 const dolar = require("./comandos/dolar");
 const { buscarNoticias } = require("./cod.pesquisa/noticias");
 const { buscarClima } = require("./cod.pesquisa/clima");
@@ -434,6 +435,9 @@ if (
     adminSessions
   })
 ) {
+  return;
+  }
+
   console.log("✅ RETORNOU BLOQUEIOS");
   return;
 }
@@ -444,6 +448,8 @@ if (
     phone
   })
 ) {
+return;
+  }
 
   console.log(
     "🚀 PASSOU PELO DESBLOQUEIO"
@@ -460,6 +466,8 @@ if (
     ADMIN_PASS
   })
 ) {
+return;
+  }
 
   console.log(
     "🔐 RECUPERAR SENHA EXECUTOU"
@@ -487,10 +495,20 @@ if (message.startsWith("/treinar")) {
     prisma,
     adminSessions,
     res
-  });
+  })
 
 }
-  
+  await listarTreinamentos({
+  message,
+  phone,
+  sendMessage,
+  prisma,
+  adminSessions,
+  res
+})
+  return;
+  }
+
   
   console.log("TIPO:");
   console.log(tipo);
