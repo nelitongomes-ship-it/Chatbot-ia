@@ -111,10 +111,10 @@ respostaIA,
 prisma,
 phone
 }) {
-//
+
   console.log("🔥🔥🔥 ENTROU EM processarRegistroDespesa");
 
-  //
+  
 const match =
   respostaIA.match(
     /\[REGISTRAR_DESPESA\]([\s\S]*?)\[\/REGISTRAR_DESPESA\]/
@@ -140,7 +140,7 @@ const descricao =
 conteudo.match(
 /DESCRI.*?:\s*(.+)/i
 )?.[1]?.trim();
-//
+
 
   const dataInformada =
 conteudo.match(
@@ -153,7 +153,8 @@ conteudo.match(
 )?.[1]?.trim();
 
 let dataRegistro = new Date();
-  //
+
+  
   if (
   descricao?.toLowerCase().includes("ontem")
 ) {
@@ -167,7 +168,8 @@ if (
 ) {
   dataRegistro = new Date();
 }
-  //
+
+  
 
 if (
   dataInformada &&
@@ -188,7 +190,8 @@ if (
     minuto
   );
 }
-//
+
+  
   
 console.log("🔥 VALOR:", valor);
 console.log("🔥 CATEGORIA:", categoria);
@@ -287,7 +290,6 @@ app.post("/webhook", async (req, res) => {
   console.log("NOVO WEBHOOK 999");
   console.log("################################");
 
- // try {//
 
   
   console.log("================================");
