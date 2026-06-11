@@ -337,30 +337,6 @@ if (
   return;
 }
 console.log("🚀 RETORNOU USUARIOS.JS");
-  
-if (
-  await clienteFree({
-    message,
-    phone,
-    prisma,
-    sendMessage,
-    adminSessions
-  })
-) {
-  return;
-}
-  
-if (
-  await clientes({
-    message,
-    phone,
-    prisma,
-    sendMessage,
-    adminSessions
-  })
-) {
-  return;
-}
 
 if (
   await clienteFree({
