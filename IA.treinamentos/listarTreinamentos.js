@@ -64,3 +64,4 @@ module.exports = async function listarTreinamentos({
 
   return true;
 };
+
