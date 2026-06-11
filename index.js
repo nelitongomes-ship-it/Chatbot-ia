@@ -439,7 +439,7 @@ if (
   }
 
   console.log("✅ RETORNOU BLOQUEIOS");
-  return;
+  
 }
 
 if (
@@ -498,6 +498,8 @@ if (message.startsWith("/treinar")) {
   })
 
 }
+
+if (
   await listarTreinamentos({
   message,
   phone,
@@ -506,6 +508,7 @@ if (message.startsWith("/treinar")) {
   adminSessions,
   res
 })
+  ){
   return;
   }
 
