@@ -475,7 +475,19 @@ if (
 ) {
   return res.sendStatus(200);
   }
+  
+if (message.startsWith("/treinar")) {
 
+  return treinar({
+    message,
+    phone,
+    sendMessage,
+    prisma,
+    adminSessions,
+    res
+  });
+
+}
   
   
   console.log("TIPO:");
