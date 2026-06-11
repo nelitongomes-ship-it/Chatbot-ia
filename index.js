@@ -62,7 +62,7 @@ console.log("🔥 REGISTRAR DESPESA CHAMADO");
     categoria,
     descricao,
     dataRegistro
- 
+ });
    try {
 
 const despesa =
