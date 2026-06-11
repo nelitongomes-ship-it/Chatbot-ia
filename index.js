@@ -44,7 +44,7 @@ const prisma = new PrismaClient();
 // =====================================================
 // REGISTRO DE DESPESAS - AGILS IA
 // =====================================================
-/*
+
 async function registrarDespesa({
 prisma,
 phone,
@@ -218,7 +218,7 @@ dataRegistro
 const app = express();
 
 app.use(express.json());
-*/
+
 // =====================================================
 // CONFIGURAÇÕES ADM
 // =====================================================
