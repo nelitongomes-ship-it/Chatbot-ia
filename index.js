@@ -431,7 +431,7 @@ return;
     "🚀 PASSOU PELO DESBLOQUEIO"
   );
 
-}
+
 if (
   await recuperarSenha({
     message,
