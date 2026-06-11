@@ -448,7 +448,6 @@ return;
   console.log(
     "🔐 RECUPERAR SENHA EXECUTOU"  
   
-};
 
 if (
   await dolar({
