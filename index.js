@@ -1568,7 +1568,7 @@ if (
   let bancoStatus = "🟢 Online";
   let prismaStatus = "🟢 Online";
 
-  //try {//
+  try {
 
     await prisma.client.count();
 
