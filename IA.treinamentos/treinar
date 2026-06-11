@@ -14,7 +14,7 @@ module.exports = async function treinar({
       "⛔ Faça login administrativo."
     );
 
-    return res.sendStatus(200);
+    return false;
   }
 
   const novoPrompt =
@@ -27,7 +27,7 @@ module.exports = async function treinar({
       "⚠️ Digite um treinamento.\n\nExemplo:\n/treinar Atendimento|Sempre seja educado e profissional."
     );
 
-    return res.sendStatus(200);
+    return true;
   }
 
   const partes =
@@ -46,7 +46,7 @@ module.exports = async function treinar({
       "⚠️ Use o formato:\n\n/treinar Título|Conteúdo"
     );
 
-    return res.sendStatus(200);
+    return true;
   }
 
   try {
@@ -79,5 +79,5 @@ module.exports = async function treinar({
     );
   }
 
-  return res.sendStatus(200);
+  return true;
 };
