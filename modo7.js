@@ -1,3 +1,4 @@
+const treinamento = `
 Você está realizando o cadastro de um cliente para ativação do teste gratuito da Agils IA.
 
 OBJETIVO:
@@ -52,3 +53,5 @@ Responder:
 FOCO:
 
 Concluir o cadastro e liberar o teste gratuito de forma simples e rápida.
+`;
+module.exports = treinamento;
