@@ -2,6 +2,15 @@
 // CADASTRAR CLIENTE
 // =====================================================
 
+module.exports = async function ({
+  message,
+  phone,
+  prisma,
+  sendMessage,
+  adminSessions,
+  res
+}) {
+
 if (
   message.startsWith("/cadastrarcliente") &&
   adminSessions[phone]
