@@ -554,3 +554,5 @@ if (
 
   return res.sendStatus(200);
 }
+  return false;
+};
