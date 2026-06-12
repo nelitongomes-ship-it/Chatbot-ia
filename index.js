@@ -23,6 +23,12 @@ const ffmpegPath = require("ffmpeg-static");
 ffmpeg.setFfmpegPath(ffmpegPath);
 const express = require("express");
 const app = express();
+app.use(express.json());
+
+app.use(express.urlencoded({
+  extended: true
+}));
+
 
 const axios = require("axios");
 const fs = require("fs");
