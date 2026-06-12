@@ -1793,6 +1793,7 @@ if (cliente?.aiMode === "PAGAMENTO_PENDENTE") {
   console.log("💳 MODO PAGAMENTO_PENDENTE CARREGADO");
 }  
 //teste temporario//
+  /*
     // =====================================================
 // TESTE EMAIL
 // =====================================================
@@ -1836,7 +1837,7 @@ ${JSON.stringify(cliente, null, 2)}`
 
   return res.sendStatus(200);
 }
-    
+*/    
     // =====================================================
 // =====================================================
 // PROMPT
