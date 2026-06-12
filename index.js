@@ -1,4 +1,4 @@
-const recuperarSenha = require("./comandos/admin/recuperarsenha");
+const recuperarSenha = require("./comandos/admin");
 const bloqueios = require("./comandos/bloqueios");
 const estatisticas = require("./comandos/estatisticas");
 const usuarios = require("./comandos/usuarios");
@@ -11,8 +11,6 @@ const treinar = require("./IA.treinamentos/treinar");
 const carregarTreinamentos = require("./IA.treinamentos/carregarTreinamentos");
 const listarTreinamentos = require("./IA.treinamentos/listarTreinamentos");
 const dolar = require("./comandos/dolar");
-const { buscarNoticias } = require("./cod.pesquisa/noticias");
-const { buscarClima } = require("./cod.pesquisa/clima");
 
 
 console.log("🚀 VERSAO 11-06-2026 17:40");
