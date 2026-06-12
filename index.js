@@ -708,7 +708,11 @@ console.log("5");
 // ÁUDIO WHATSAPP
 // =====================================================
 
+console.log("6.1");
+
 let audioText = "";
+
+console.log("6.2");
 
 if (
   req.body.data?.type === "audio"
