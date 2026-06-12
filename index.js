@@ -1889,7 +1889,7 @@ const memoriaTreinamentos =
  await carregarTreinamentos(
  prisma
   );
-  const memoriaTreinamentos = "";
+ // const memoriaTreinamentos = "";
 
 const systemPrompt = `
 ${settings?.systemPrompt || contextoSistema}
