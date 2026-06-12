@@ -5,7 +5,7 @@ const usuarios = require("./comandos/usuarios");
 const clienteFree = require("./comandos/clientefree");
 const clientes = require("./comandos/clientes");
 //const cadastroTesteGratis = require("./cadastros/cadastroTesteGratis");
-//const cadastroAutomatico = require("./cadastros/cadastroAutomatico");
+const cadastroAutomatico = require("./cadastros/cadastroAutomatico");
 const desbloquearAdm = require("./codigos/desbloquearAdm");
 const treinar = require("./IA.treinamentos/treinar");
 const carregarTreinamentos = require("./IA.treinamentos/carregarTreinamentos");
@@ -386,7 +386,7 @@ if (retornoClientes) {
   return;
 }
 
-if (
+/* if (
   await cadastroTesteGratis({
     message,
     textoLower,
@@ -398,6 +398,7 @@ if (
 ) {
   return;
 }
+  */
   console.log("🚀 CHAMANDO ESTATISTICAS");
 
 if (
