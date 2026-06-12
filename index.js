@@ -581,6 +581,8 @@ if (req.body?.data?.fromMe) {
 console.log(textoLower);
     //
 console.log("🔥 PASSOU DO TEXTO LOWER");
+console.log("1");
+  
 //====================================================
 // STATUS DA CONTA
 // =====================================================
