@@ -1,3 +1,4 @@
+const iniciarLembretes = require("./lembretes");
 const recuperarSenha = require("./comandos/admin");
 const bloqueios = require("./comandos/bloqueios");
 const estatisticas = require("./comandos/estatisticas");
