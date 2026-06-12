@@ -366,16 +366,23 @@ if (
 ) {
   return;
 }
+console.log("ANTES CLIENTES");
 
-if (
+const retornoClientes =
   await clientes({
     message,
     phone,
     prisma,
     sendMessage,
     adminSessions
-  })
-) {
+  });
+
+console.log(
+  "RETORNO CLIENTES:",
+  retornoClientes
+);
+
+if (retornoClientes) {
   return;
 }
 
