@@ -714,6 +714,8 @@ console.log("6.1");
 let audioText = "";
 
 console.log("6.2");
+console.log("TIPO:",
+req.body.data?.type);
 
 if (
   req.body.data?.type === "audio"
