@@ -717,6 +717,8 @@ console.log("6.2");
 
 if (
   req.body.data?.type === "audio"
+  ||
+  req.body.data?.type === "ptt"
 ) {
   
 console.log("AUDIO RECEBIDO");
