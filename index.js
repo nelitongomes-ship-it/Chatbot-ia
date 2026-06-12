@@ -740,6 +740,7 @@ if (!audioUrl) {
 
   return res.sendStatus(200);
 }
+    console.log("POS AUDIO");
 console.log("7");
     // =====================================================
     // BAIXAR ÁUDIO
