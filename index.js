@@ -365,6 +365,7 @@ if (
 if (
   await cadastroTesteGratis({
     message,
+    textoLower,
     phone,
     prisma,
     sendMessage,
