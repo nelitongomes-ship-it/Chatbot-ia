@@ -2563,7 +2563,7 @@ const ehAgendamento =
     if (ehAgendamento) {
    console.log("📅 ENTROU NO AGENDAMENTO");
 
-  
+ // 
   try {
 
     const numeroCliente =
@@ -2668,7 +2668,7 @@ Formato:
 
     let dadosAgenda;
 
-  //  try {//
+   try {
 
       const json =
         respostaIA.match(/\{[\s\S]*\}/);
