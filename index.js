@@ -726,6 +726,7 @@ console.log("AUDIO RECEBIDO");
       phone,
       "🎤 Áudio recebido. Transcrevendo..."
     );
+console.log("6.3");
 
     const audioUrl =
   req.body.data?.url ||
