@@ -730,6 +730,13 @@ if (
   ||
   req.body.data?.type === "ptt"
 ) {
+  // Processa áudio
+  } else if (req.body.data?.type === "chat") {
+    const textMessage = req.body.data.body;
+    console.log("Texto recebido:", textMessage);
+// Chamando sua IA ou serviço de processamento
+    const respostaIA = await suaFuncaoIA(textMessage);
+
   
 console.log("AUDIO RECEBIDO");
   
