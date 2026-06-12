@@ -286,6 +286,9 @@ iniciarLembretes(
 // =====================================================
 
 app.post("/webhook", async (req, res) => {
+console.log("HEADERS:");
+console.log(req.headers);
+  
 
   console.log("🔥🔥🔥 WEBHOOK ACIONADO 🔥🔥🔥");
 console.log("METODO:", req.method);
