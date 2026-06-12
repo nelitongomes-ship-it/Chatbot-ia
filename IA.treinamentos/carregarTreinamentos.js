@@ -14,6 +14,9 @@ module.exports = async function carregarTreinamentos(
       take: 30
     });
 
+console.log("📚 TREINAMENTOS ENCONTRADOS:");
+console.log(treinamentos.map(t => t.title));
+  
   let memoriaTreinamentos = "";
 
   for (const t of treinamentos) {
