@@ -399,7 +399,7 @@ if (
 console.log("❌ NAO ENTROU ESTATISTICAS");
 
   if (
-  await cadastroAutomaticoCliente({
+  await cadastroAutomatico({
     message,
     phone,
     prisma,
