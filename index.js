@@ -558,12 +558,7 @@ if (req.body.data?.fromMe) {
   return res.sendStatus(200);
 }
 
-    //// 
-
-const textoLower =
-  (message || "")
-    .toLowerCase()
-    .trim();
+    //
 
     console.log("TEXTO LOWER:");
 console.log(textoLower);
