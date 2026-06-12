@@ -588,7 +588,7 @@ console.log("1");
 // =====================================================
 console.log("2");
 
-if (textoLower === "status") {
+
 if (textoLower === "status") {
 
   const usuario = await prisma.user.findFirst({
