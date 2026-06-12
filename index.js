@@ -580,7 +580,7 @@ if (req.body?.data?.fromMe) {
     console.log("TEXTO LOWER:");
 console.log(textoLower);
     //
-
+console.log("🔥 PASSOU DO TEXTO LOWER");
 //====================================================
 // STATUS DA CONTA
 // =====================================================
