@@ -2904,6 +2904,7 @@ Digite *minha agenda* para consultar seus compromissos.`
 
 console.log("🔥 REPLY IA:");
 console.log(reply);
+  /*
 // =====================================================
 // REGISTRAR DESPESA
 // =====================================================
@@ -2956,6 +2957,7 @@ Agils IA - Assistente Financeiro
 
   return res.sendStatus(200);
 }
+*/
     // =====================================================
     // SALVAR MSG IA
     // =====================================================
