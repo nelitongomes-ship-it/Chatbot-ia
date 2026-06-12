@@ -318,6 +318,10 @@ app.post("/webhook", async (req, res) => {
     req.body?.data?.body ||
     req.body?.message ||
     "";
+  
+const textoLower =
+String(message || "").toLowerCase();
+  
 
   const phone =
     req.body?.data?.from ||
