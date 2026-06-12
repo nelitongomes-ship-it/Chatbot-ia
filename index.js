@@ -561,10 +561,14 @@ console.log("ADMIN SESSION:");
 console.log(adminSessions[phone]);
 console.log("================================");
 
-if (req.body.data?.fromMe) {
+if (!req.body) {
+  console.log("❌ BODY VAZIO");
   return res.sendStatus(200);
 }
 
+if (req.body?.data?.fromMe) {
+  return res.sendStatus(200);
+}
     //
 
     console.log("TEXTO LOWER:");
