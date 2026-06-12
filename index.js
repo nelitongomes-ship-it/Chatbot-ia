@@ -1863,10 +1863,11 @@ ${JSON.stringify(cliente, null, 2)}`
 const settings =
   await prisma.adminSettings.findFirst();
 
-const memoriaTreinamentos =
-  await carregarTreinamentos(
-    prisma
-  );
+//const memoriaTreinamentos =
+ // await carregarTreinamentos(
+  //  prisma
+ // );
+  const memoriaTreinamentos = "";
 
 const systemPrompt = `
 ${settings?.systemPrompt || contextoSistema}
