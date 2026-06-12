@@ -117,9 +117,9 @@ phone
 
   
 const match =
-  respostaIA.match(
-    /\[REGISTRAR_DESPESA\]([\s\S]*?)\[\/REGISTRAR_DESPESA\]/
-  );
+respostaIA.match(
+/\[REGISTRAR_DESPESA\]([\s\S]*?)\[\/REGISTRAR_DESPESA\]/
+);
 
 if (!match) {
 return null;
