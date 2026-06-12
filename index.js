@@ -2564,7 +2564,7 @@ const ehAgendamento =
    console.log("📅 ENTROU NO AGENDAMENTO");
 
  // 
-  try {
+ // try {
 
     const numeroCliente =
       phone;
