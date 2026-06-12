@@ -118,7 +118,7 @@ if (
         phone: phone,
 
         serviceType: "AGILS_IA",
-        planType: ""TESTE_GRATIS",
+        planType: "TESTE_GRATIS",
 
         selectedPlan: "teste",
 
