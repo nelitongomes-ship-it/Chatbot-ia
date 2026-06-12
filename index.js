@@ -724,19 +724,15 @@ let audioText = "";
 console.log("6.2");
 console.log("TIPO:",
 req.body.data?.type);
-
+  
+  
+// Processamento de áudio ⬇️
 if (
   req.body.data?.type === "audio"
   ||
   req.body.data?.type === "ptt"
 ) {
-  // Processa áudio
-  } else if (req.body.data?.type === "chat") {
-    const textMessage = req.body.data.body;
-    console.log("Texto recebido:", textMessage);
-// Chamando sua IA ou serviço de processamento
-    
-
+  
   
 console.log("AUDIO RECEBIDO");
   
