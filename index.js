@@ -586,7 +586,9 @@ console.log("1");
 //====================================================
 // STATUS DA CONTA
 // =====================================================
+console.log("2");
 
+if (textoLower === "status") {
 if (textoLower === "status") {
 
   const usuario = await prisma.user.findFirst({
