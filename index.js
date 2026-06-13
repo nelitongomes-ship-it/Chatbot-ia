@@ -2349,8 +2349,10 @@ if (
 ].includes(message.toLowerCase().trim())
 ) {
 
+// const numeroCliente =
+//    phone;
   const numeroCliente =
-    phone;
+  normalizarTelefone(phone);
 
   console.log("WHATSAPP RECEBIDO:", phone);
   console.log("NUMERO CLIENTE:", numeroCliente);
