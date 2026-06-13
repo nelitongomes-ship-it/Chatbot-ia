@@ -2608,7 +2608,7 @@ console.log(
 //
     const dataBrasil =
       new Date()
-        .toLocaleDateString("pt-BR");
+        .toLocaleDateString("pt-BR",
       {
         timeZone:
           "America/Sao_Paulo"
