@@ -2605,11 +2605,16 @@ console.log(
   "✅ CLIENTE OU USUÁRIO ENCONTRADO"
 );
     
-
+//
     const dataBrasil =
       new Date()
         .toLocaleDateString("pt-BR");
-
+      {
+        timeZone:
+          "America/Sao_Paulo"
+      }
+    );
+//
     console.log(
       "📅 DATA BRASIL:",
       dataBrasil
