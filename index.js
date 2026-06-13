@@ -2690,22 +2690,30 @@ Formato:
       dadosAgenda =
         JSON.parse(json[0]);
 //alteracao//
-      const possuiDataNaMensagem =
+    /*  const possuiDataNaMensagem =
   /\d{1,2}\/\d{1,2}\/\d{2,4}/.test(texto) ||
   texto.includes("hoje") ||
   texto.includes("amanhã") ||
   texto.includes("amanha");
 
-if (!possuiDataNaMensagem) {
+if (!possuiDataNaMensagem) { */
 
-  console.log(
+/*  console.log(
     "📅 SEM DATA INFORMADA - USANDO DATA DE HOJE"
   );
 
   dadosAgenda.data = dataBrasil;
 }
 //Fim//
-      
+*/
+   if (!dadosAgenda.data) {
+
+  console.log(
+    "📅 SEM DATA INFORMADA - USANDO DATA DE HOJE"
+  );
+
+  dadosAgenda.data = dataBrasil;
+   }   
     } catch (erroJson) {
 
       console.log(
