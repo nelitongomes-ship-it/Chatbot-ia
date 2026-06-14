@@ -2403,7 +2403,7 @@ if (
 //// =====================================================
 // AGENDAMENTO NATURAL IA
 // =====================================================
-
+/*
 const texto = message.toLowerCase();
 const ehAgendamento =
   
@@ -2681,7 +2681,7 @@ Digite *minha agenda* para consultar seus compromissos.`
     return res.sendStatus(200);
   }
     }
-    
+   */ 
   //===========≈====================≈==============
   
 // =====================================================
