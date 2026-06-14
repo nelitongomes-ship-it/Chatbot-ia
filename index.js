@@ -2912,7 +2912,7 @@ Digite *minha agenda* para consultar seus compromissos.`
     ];
     */
   //
-try{
+//try{
     const openaiResponse =
       await axios.post(
         "https://api.openai.com/v1/chat/completions",
