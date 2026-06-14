@@ -23,7 +23,7 @@ const carregarTreinamentos = require("./IA.treinamentos/carregarTreinamentos");
 const listarTreinamentos = require("./IA.treinamentos/listarTreinamentos");
 const {resetarTreinamento} = require("./IA.treinamentos/resetarTreinamento");
 const {verTreinamento} = require("./IA.treinamentos/vertreinamento");
-
+const {editarTreinamento} = require("./IA.treinamentos/editarTreinamento");
 
 const dolar = require("./comandos/dolar");
 const {consultarEuro} = require("./config/servicos/euro");
@@ -424,6 +424,18 @@ if (
 
   if (
   await resetarTreinamento({
+    message,
+    phone,
+    prisma,
+    sendMessage,
+    adminSessions
+  })
+) {
+  return res.sendStatus(200);
+  }
+
+  if (
+  await editarTreinamento({
     message,
     phone,
     prisma,
