@@ -4,6 +4,9 @@ const {testeBanco} = require("./config/banco/testebanco");
 
 const {processarAgendamentoNatural} = require("./config/servicos/agendamentoNatural");
 const {consultarAgenda,agendarCompromissoAdmin,testarTotalAgendamentos,debugAgenda} = require("./config/servicos/agendamentos/agendamentos");
+const {limparAgendaCliente} = require("./agendamentos/limparAgendaCliente");
+
+
 const {processarRegistroDespesa} = require("./servicos/despesas");
 const prisma = require("./config/prisma");
 const normalizarTelefone = require("./utils/normalizarTelefone");
@@ -628,6 +631,17 @@ if (
 }
 
 if (
+  await limparAgendaCliente({
+    message,
+    phone,
+    prisma,
+    sendMessage
+  })
+) {
+  return res.sendStatus(200);
+}
+  
+if (
   await debugAgenda({
     message,
     phone,
@@ -649,6 +663,8 @@ if (
 ) {
   return res.sendStatus(200);
   }
+
+  
   
 ////////////////////////////////////////////////
 if (
