@@ -2196,7 +2196,7 @@ Entre em contato com a Agils IA.`
 // =====================================================
 // AGENDAR COMPROMISSO
 // =====================================================
-
+/*
 if (
   message.trim().startsWith("/agendar") &&
   adminSessions[phone]
@@ -2290,7 +2290,7 @@ Exemplo:
 
   return res.sendStatus(200);
 }
-
+*/
   // =====================================================
 // TESTAR TOTAL DE AGENDAMENTOS
 // =====================================================
