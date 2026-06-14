@@ -2900,7 +2900,7 @@ Digite *minha agenda* para consultar seus compromissos.`
     // OPENAI
     // =====================================================
 
-    const messages = [
+ /*   const messages = [
       {
         role: "system",
         content: systemPrompt
@@ -2910,6 +2910,7 @@ Digite *minha agenda* para consultar seus compromissos.`
         content: msg.content
       }))
     ];
+    */
   //
 try{
     const openaiResponse =
