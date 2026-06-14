@@ -24,6 +24,9 @@ const listarTreinamentos = require("./IA.treinamentos/listarTreinamentos");
 const {resetarTreinamento} = require("./IA.treinamentos/resetarTreinamento");
 const {verTreinamento} = require("./IA.treinamentos/vertreinamento");
 const {editarTreinamento} = require("./IA.treinamentos/editarTreinamento");
+const {desativarTreinamento} = require("./IA.treinamentos/desativarTreinamento");
+
+
 
 const dolar = require("./comandos/dolar");
 const {consultarEuro} = require("./config/servicos/euro");
@@ -381,7 +384,8 @@ if (
 ) {
   return res.sendStatus(200);
   }
-
+////////////////////////////////////////////
+  //TREINAR IA ⬇️
 ///////////////////////////////////////////
   
 if (message.startsWith("/treinar")) {
@@ -445,7 +449,21 @@ if (
 ) {
   return res.sendStatus(200);
   }
-  
+
+  if (
+  await desativarTreinamento({
+    message,
+    phone,
+    prisma,
+    sendMessage,
+    adminSessions
+  })
+) {
+  return res.sendStatus(200);
+  }
+
+  /////////////////////////////////////////
+  //AGENDAR ⬇️
  ////////////////////////////////////////// 
 if (
   await consultarAgenda({
