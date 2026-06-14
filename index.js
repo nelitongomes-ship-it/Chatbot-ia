@@ -20,6 +20,8 @@ const carregarTreinamentos = require("./IA.treinamentos/carregarTreinamentos");
 const listarTreinamentos = require("./IA.treinamentos/listarTreinamentos");
 const dolar = require("./comandos/dolar");
 const {consultarEuro} = require("./config/servicos/euro");
+const {consultarBitcoin} = require("./config/servicos/bitcoin");
+
 
 console.log("🚀 VERSAO 11-06-2026 17:40");
 
@@ -329,6 +331,17 @@ if (
 ) {
   return res.sendStatus(200);
 }
+
+if (
+  await consultarBitcoin({
+    message,
+    phone,
+    sendMessage
+  })
+) {
+  return res.sendStatus(200);
+}
+  
 //  
 if (message.startsWith("/treinar")) {
 
