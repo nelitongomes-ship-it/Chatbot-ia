@@ -15,6 +15,7 @@ const {verificarBloqueio} = require("./bloqueio/verificarBloqueio");
 const {bloquearNumero} = require("./bloqueio/bloquearNumero");
 const {desbloquearNumero} = require("./bloqueio/desbloquearNumero");
 const {listarBloqueados} = require("./bloqueio/listarBloqueados");
+const { verBloqueado } = require("./bloqueio/verBloqueado");
 
 /////////////////////////////////////////////////////////////////////////////////
 const estatisticas = require("./comandos/estatisticas");
@@ -348,6 +349,18 @@ if (
 
   if (
   await listarBloqueados({
+    message,
+    phone,
+    prisma,
+    sendMessage,
+    adminSessions
+  })
+) {
+  return res.sendStatus(200);
+  }
+
+  if (
+  await verBloqueado({
     message,
     phone,
     prisma,
@@ -1103,53 +1116,7 @@ console.log("17");
     // =====================================================
     
     
-// =====================================================
-// VER NUMERO BLOQUEADO
-// =====================================================
 
-if (
-  message.startsWith("/verbloqueado") &&
-  adminSessions[phone]
-) {
-
-  const numero =
-    message.replace("/verbloqueado", "").trim();
-
-  if (!numero) {
-
-    await sendMessage(
-      phone,
-      "⚠️ Informe um número.\n\nExemplo:\n/verbloqueado 5516999999999"
-    );
-
-    return res.sendStatus(200);
-  }
-
-  const bloqueado =
-    await prisma.blockedNumber.findFirst({
-      where: {
-        phone: numero
-      }
-    });
-
-  if (bloqueado) {
-
-    await sendMessage(
-      phone,
-      `🚫 O número ${numero} está bloqueado.`
-    );
-
-  } else {
-
-    await sendMessage(
-      phone,
-      `✅ O número ${numero} não está bloqueado.`
-    );
-
-  }
-
-  return res.sendStatus(200);
-}
 // =====================================================
 // =====================================================  
  // =====================================================
