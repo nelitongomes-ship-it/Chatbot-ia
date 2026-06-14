@@ -1067,44 +1067,7 @@ console.log("17");
   // =====================================================
     
     
-    // =====================================================
-    // BLOQUEAR
-    // =====================================================
-
-    if (
-      message.startsWith("/bloquear") &&
-      adminSessions[phone]
-    ) {
-
-      const numero =
-        message.replace("/bloquear", "").trim();
-
-  
-  const bloqueado =
-  await prisma.blockedNumber.findFirst({
-    where: {
-      phone: numero
-    }
-  });
-
-
-  if (!bloqueado) {
-
-  await prisma.blockedNumber.create({
-    data: {
-      phone: numero
-    }
-  });
-
-}
-
-      await sendMessage(
-        phone,
-        `🚫 Número bloqueado: ${numero}`
-      );
-
-      return res.sendStatus(200);
-    }
+    
 
     // =====================================================
     // DESBLOQUEAR
