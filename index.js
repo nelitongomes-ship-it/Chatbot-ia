@@ -1051,49 +1051,6 @@ console.log("17");
     
     
     // =====================================================
-// EXCLUIR TREINAMENTO
-// =====================================================
-
-if (message.startsWith("/excluirtreinamento")) {
-
-  if (!adminSessions[phone]) {
-
-    await sendMessage(
-      phone,
-      "⛔ Faça login administrativo."
-    );
-
-    return res.sendStatus(200);
-  }
-
-  const id = parseInt(
-    message.replace("/excluirtreinamento", "").trim()
-  );
-
-  if (!id) {
-
-    await sendMessage(
-      phone,
-      "⚠️ Use:\n/excluirtreinamento ID"
-    );
-
-    return res.sendStatus(200);
-  }
-
-  await prisma.training.delete({
-    where: {
-      id
-    }
-  });
-
-  await sendMessage(
-    phone,
-    "🗑️ Treinamento excluído."
-  );
-
-  return res.sendStatus(200);
-}
-    // =====================================================
     // BLOQUEAR
     // =====================================================
 
