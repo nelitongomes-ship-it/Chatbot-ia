@@ -27,6 +27,8 @@ const {verTreinamento} = require("./IA.treinamentos/vertreinamento");
 const {editarTreinamento} = require("./IA.treinamentos/editarTreinamento");
 const {desativarTreinamento} = require("./IA.treinamentos/desativarTreinamento");
 const {ativarTreinamento} = require("./IA.treinamentos/ativarTreinamento");
+const {excluirTreinamento} = require("./IA.treinamentos/excluirTreinamento");
+////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 const dolar = require("./comandos/dolar");
@@ -465,6 +467,18 @@ if (
 
   if (
   await ativarTreinamento({
+    message,
+    phone,
+    prisma,
+    sendMessage,
+    adminSessions
+  })
+) {
+  return res.sendStatus(200);
+  }
+
+  if (
+  await excluirTreinamento({
     message,
     phone,
     prisma,
