@@ -8,7 +8,9 @@ const normalizarTelefone = require("./utils/normalizarTelefone");
 const validarTexto = require("./validadores/validarTexto");
 const iniciarLembretes = require("./lembretes");
 const recuperarSenha = require("./comandos/admin");
-const bloqueios = require("./comandos/bloqueios");
+///////////////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////////////////
 const estatisticas = require("./comandos/estatisticas");
 const usuarios = require("./comandos/usuarios");
 /////////////////////////////////////////////////////////////////////////////////////
@@ -280,7 +282,9 @@ console.log("❌ NAO ENTROU ESTATISTICAS");
   }
 
   console.log("🚀 CHAMANDO BLOQUEIOS");
-
+//////////////////////////////////////////////////////////////
+  //BLOQUEIOS ⬇️
+  /////////////////////////////////////////////////////////////
 if (
   await bloqueios({
     message,
@@ -310,7 +314,7 @@ return;
     "🚀 PASSOU PELO DESBLOQUEIO"
   );
 
-
+////////////////////////////////////////////////////////////////////
 if (
   await recuperarSenha({
     message,
