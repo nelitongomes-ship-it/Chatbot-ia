@@ -1282,81 +1282,8 @@ if (
 }
     
 // =====================================================
-// LIMPAR AGENDA CLIENTE
-// =====================================================
-
-if (
-  message.startsWith("/limparagendacliente")
-) {
-
-  const telefone =
-    message
-      .replace("/limparagendacliente", "")
-      .trim();
-
-  if (!telefone) {
-
-    await sendMessage(
-      phone,
-      "⚠️ Informe o telefone.\n\nExemplo:\n/limparagendacliente 5516992040119"
-    );
-
-    return res.sendStatus(200);
-  }
-
-  const resultado =
-    await prisma.appointment.deleteMany({
-      where: {
-        phone: telefone
-      }
-    });
-
-  await sendMessage(
-    phone,
-`🗑️ Compromissos removidos
-
-📱 ${telefone}
-
-📋 Total removido: ${resultado.count}`
-  );
-
-  return res.sendStatus(200);
-}
 
  // =====================================================
-// DEBUG MODO
-// =====================================================
-
-if (message.trim() === "/debugmodo") {
-
-  const cliente =
-    await prisma.client.findFirst({
-      where: { phone }
-    });
-
-  const usuario =
-    await prisma.user.findFirst({
-      where: { phone }
-    });
-
-  await sendMessage(
-    phone,
-`DEBUG
-
-CLIENT:
-${cliente?.aiMode || "NULL"}
-
-USER:
-${usuario?.aiMode || "NULL"}
-
-CONTEXTO:
-${contextoSistema === modo1 ? "modo1" : "outro"}`
-  );
-
-  return res.sendStatus(200);
-} 
-  
-    // ============================
    
 
     // =====================================================
