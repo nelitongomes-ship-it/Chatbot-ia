@@ -201,3 +201,43 @@ return true;
   consultarAgenda,
   agendarCompromissoAdmin
 };
+
+  // =====================================================
+// TESTAR TOTAL DE AGENDAMENTOS
+// =====================================================
+
+async function testarTotalAgendamentos({
+  message,
+  phone,
+  prisma,
+  sendMessage,
+  adminSessions
+}) {
+
+  if (
+    message.trim() !== "/testeagenda" ||
+    !adminSessions[phone]
+  ) {
+    return false;
+  }
+
+  const total =
+    await prisma.appointment.count();
+
+  console.log(
+    "TOTAL NO BANCO:",
+    total
+  );
+
+  await sendMessage(
+    phone,
+    `📅 TOTAL DE AGENDAMENTOS: ${total}`
+  );
+
+  return true;
+}
+  module.exports = {
+  consultarAgenda,
+  agendarCompromissoAdmin,
+  testarTotalAgendamentos
+};
