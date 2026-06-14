@@ -607,37 +607,7 @@ Ativo: ${usuario.isActive ? "SIM" : "NÃO"}`
          }
 
   console.log("3");
-// =====================================================
-// DEBUG TESTE
-// =====================================================
 
-if (
-  message === "/debugteste" &&
-  adminSessions[phone]
-) {
-
-  const userTeste =
-    await prisma.user.findFirst({
-      where: {
-        aiMode: "TESTE_GRATIS"
-      }
-    });
-
-  const clientTeste =
-    await prisma.client.findFirst({
-      where: {
-        aiMode: "TESTE_GRATIS"
-      }
-    });
-
-  await sendMessage(
-  phone,
-    `USER:\n${JSON.stringify(userTeste, null, 2)}\n\nCLIENT:\n${JSON.stringify(clientTeste, null, 2)}`
-  );
-
-  return;
-}
-  console.log("4");
   // =====================================
   // PLANOS PAGOS (CLIENT)
   // =====================================
