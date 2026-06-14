@@ -1,3 +1,4 @@
+const {limparBanco} = require("./config/banco/limparBanco");
 const {testeBanco} = require("./config/banco/testebanco");
 const {processarAgendamentoNatural} = require("./config/servicos/agendamentoNatural");
 const {consultarAgenda,agendarCompromissoAdmin,testarTotalAgendamentos,debugAgenda} = require("./config/servicos/agendamentos");
@@ -473,6 +474,18 @@ if (
 ) {
   return res.sendStatus(200);
 }
+
+  if (
+  await limparBanco({
+    message,
+    phone,
+    prisma,
+    sendMessage,
+    adminSessions
+  })
+) {
+  return res.sendStatus(200);
+  }
   
   
   
