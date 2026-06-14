@@ -1077,34 +1077,7 @@ console.log("17");
     
 
     // =====================================================
-    // DESBLOQUEAR
-    // =====================================================
-
-    if (
-      message.startsWith("/desbloquear") &&
-      adminSessions[phone]
-    ) {
-
-      const numero =
-        message.replace("/desbloquear", "").trim();
-
-      await prisma.blockedNumber.deleteMany({
-        where: {
-          phone: numero
-        }
-      });
-
-      await sendMessage(
-        phone,
-        `✅ Número desbloqueado: ${numero}`
-      );
-
-      return res.sendStatus(200);
-    }
-
-console.log("MENSAGEM RECEBIDA:");
-console.log(message);
-
+    
     // =====================================================
 // LISTAR BLOQUEADOS
 // =====================================================
