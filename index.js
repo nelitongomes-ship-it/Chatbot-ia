@@ -343,7 +343,16 @@ if (
   ){
   return;
   }
-
+if (
+  await consultarAgenda({
+    message,
+    phone,
+    prisma,
+    sendMessage
+  })
+) {
+  return res.sendStatus(200);
+}
   
   console.log("TIPO:");
   console.log(tipo);
