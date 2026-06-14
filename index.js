@@ -19,6 +19,9 @@ const { verBloqueado } = require("./bloqueio/verBloqueado");
 
 /////////////////////////////////////////////////////////////////////////////////
 const estatisticas = require("./comandos/estatisticas");
+const {saudeSistema} = require("./monitoramento/saudeSistema");
+/////////////////////////////////////////////////////////////////////////////////
+
 const usuarios = require("./comandos/usuarios");
 /////////////////////////////////////////////////////////////////////////////////////
 const clienteFree = require("./comandos/clientefree");
@@ -260,7 +263,9 @@ if (retornoClientes) {
 ) {
   return;
 }
-  
+ ///////////////////////////////////////////////////////////
+  //MONITORAMENTO DO SISTEMA ⬇️
+  //////////////////////////////////////////////////////////
   console.log("🚀 CHAMANDO ESTATISTICAS");
 
 if (
@@ -277,6 +282,22 @@ if (
 
 console.log("❌ NAO ENTROU ESTATISTICAS");
 
+if (
+  await saudeSistema({
+    message,
+    phone,
+    prisma,
+    sendMessage,
+    adminSessions
+  })
+) {
+  return res.sendStatus(200);
+}
+
+  ////////////////////////////////////////////////////////////////
+  // CADASTRO ⬇️
+  ////////////////////////////////////////////////////////////////
+  
   if (
   await cadastroAutomatico({
     message,
