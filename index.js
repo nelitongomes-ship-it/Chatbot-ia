@@ -19,7 +19,7 @@ const treinar = require("./IA.treinamentos/treinar");
 const carregarTreinamentos = require("./IA.treinamentos/carregarTreinamentos");
 const listarTreinamentos = require("./IA.treinamentos/listarTreinamentos");
 const dolar = require("./comandos/dolar");
-
+const {consultarEuro} = require("./config/servicos/euro");
 
 console.log("🚀 VERSAO 11-06-2026 17:40");
 
@@ -319,7 +319,17 @@ if (
 ) {
   return res.sendStatus(200);
   }
-  
+
+if (
+  await consultarEuro({
+    message,
+    phone,
+    sendMessage
+  })
+) {
+  return res.sendStatus(200);
+}
+//  
 if (message.startsWith("/treinar")) {
 
   return treinar({
