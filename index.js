@@ -346,6 +346,18 @@ if (
   return res.sendStatus(200);
   }
 
+  if (
+  await listarBloqueados({
+    message,
+    phone,
+    prisma,
+    sendMessage,
+    adminSessions
+  })
+) {
+  return res.sendStatus(200);
+  }
+
 /////////////////////////////////////////////////////////////////////  
 // SENHA ⬇️
 ////////////////////////////////////////////////////////////////////
