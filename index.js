@@ -22,6 +22,9 @@ const dolar = require("./comandos/dolar");
 const {consultarEuro} = require("./config/servicos/euro");
 const {consultarBitcoin} = require("./config/servicos/bitcoin");
 const {consultarSelic} = require("./config/servicos/selic");
+const {consultarCDI} = require("./config/servicos/cdi");
+
+
 
 console.log("🚀 VERSAO 11-06-2026 17:40");
 
@@ -351,8 +354,19 @@ if (
 ) {
   return res.sendStatus(200);
 }
+
+  if (
+  await consultarCDI({
+    message,
+    phone,
+    sendMessage
+  })
+) {
+  return res.sendStatus(200);
+    }
+// 
+//
   
-//  
 if (message.startsWith("/treinar")) {
 
   return treinar({
