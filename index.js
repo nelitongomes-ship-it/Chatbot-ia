@@ -13,13 +13,18 @@ const estatisticas = require("./comandos/estatisticas");
 const usuarios = require("./comandos/usuarios");
 const clienteFree = require("./comandos/clientefree");
 const clientes = require("./comandos/clientes");
+////////////////////////////////////////////////////////////////////////////////////
 const cadastroTesteGratis = require("./cadastros/cadastroTesteGratis");
 const cadastroAutomatico = require("./cadastros/cadastroAutomatico");
 const desbloquearAdm = require("./codigos/desbloquearAdm");
+////////////////////////////////////////////////////////////////////////////////////
 const treinar = require("./IA.treinamentos/treinar");
 const carregarTreinamentos = require("./IA.treinamentos/carregarTreinamentos");
 const listarTreinamentos = require("./IA.treinamentos/listarTreinamentos");
 const {resetarTreinamento} = require("./IA.treinamentos/resetarTreinamento");
+const {verTreinamento} = require("./IA.treinamentos/vertreinamento");
+
+
 const dolar = require("./comandos/dolar");
 const {consultarEuro} = require("./config/servicos/euro");
 const {consultarBitcoin} = require("./config/servicos/bitcoin");
@@ -376,8 +381,8 @@ if (
 ) {
   return res.sendStatus(200);
   }
-// 
-//
+
+///////////////////////////////////////////
   
 if (message.startsWith("/treinar")) {
 
@@ -406,6 +411,18 @@ if (
   }
 
   if (
+  await verTreinamento({
+    message,
+    phone,
+    prisma,
+    sendMessage,
+    adminSessions
+  })
+) {
+  return res.sendStatus(200);
+  }
+
+  if (
   await resetarTreinamento({
     message,
     phone,
@@ -417,7 +434,7 @@ if (
   return res.sendStatus(200);
   }
   
-  
+ ////////////////////////////////////////// 
 if (
   await consultarAgenda({
     message,
@@ -476,7 +493,7 @@ if (
   return res.sendStatus(200);
   }
   
-////
+////////////////////////////////////////////////
 if (
   await testeBanco({
     message,
@@ -988,120 +1005,9 @@ console.log("16");
 console.log("17");
   
   // =====================================================
-// VER TREINAMENTO
-// =====================================================
 
-if (message.startsWith("/vertreinamento")) {
-
-  if (!adminSessions[phone]) {
-
-    await sendMessage(
-      phone,
-      "⛔ Faça login administrativo."
-    );
-
-    return res.sendStatus(200);
-  }
-
-  const id = parseInt(
-    message.replace("/vertreinamento", "").trim()
-  );
-
-  if (!id) {
-
-    await sendMessage(
-      phone,
-      "⚠️ Use:\n/vertreinamento ID"
-    );
-
-    return res.sendStatus(200);
-  }
-
-  const treinamento =
-    await prisma.training.findUnique({
-      where: {
-        id
-      }
-    });
-
-  if (!treinamento) {
-
-    await sendMessage(
-      phone,
-      "❌ Treinamento não encontrado."
-    );
-
-    return res.sendStatus(200);
-  }
-
-  await sendMessage(
-    phone,
-`📚 TREINAMENTO #${treinamento.id}
-
-📝 Título:
-${treinamento.title}
-
-📖 Conteúdo:
-${treinamento.content}
-
-📌 Status:
-${treinamento.active ? "Ativo" : "Inativo"}`
-  );
-
-  return res.sendStatus(200);
-}
-  console.log("20");
-    // =====================================================
-// EDITAR TREINAMENTO
-// =====================================================
-
-if (message.startsWith("/editartreinamento")) {
-
-  if (!adminSessions[phone]) {
-
-    await sendMessage(
-      phone,
-      "⛔ Faça login administrativo."
-    );
-
-    return res.sendStatus(200);
-  }
-
-  const dados =
-    message.replace("/editartreinamento", "").trim();
-
-  const partes = dados.split("|");
-
-  const id = parseInt(partes[0]?.trim());
-
-  const novoConteudo = partes[1]?.trim();
-
-  if (!id || !novoConteudo) {
-
-    await sendMessage(
-      phone,
-      "⚠️ Use:\n/editartreinamento ID|Novo conteúdo"
-    );
-
-    return res.sendStatus(200);
-  }
-
-  await prisma.training.update({
-    where: {
-      id
-    },
-    data: {
-      content: novoConteudo
-    }
-  });
-
-  await sendMessage(
-    phone,
-    "✅ Treinamento atualizado."
-  );
-
-  return res.sendStatus(200);
-}
+  
+    
     // =====================================================
 // DESATIVAR TREINAMENTO
 // =====================================================
