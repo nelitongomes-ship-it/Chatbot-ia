@@ -1017,55 +1017,7 @@ console.log("16");
 console.log("17");
   
   // =====================================================
-
-  
     
-    // =====================================================
-// DESATIVAR TREINAMENTO
-// =====================================================
-
-if (message.startsWith("/desativartreinamento")) {
-
-  if (!adminSessions[phone]) {
-
-    await sendMessage(
-      phone,
-      "⛔ Faça login administrativo."
-    );
-
-    return res.sendStatus(200);
-  }
-
-  const id = parseInt(
-    message.replace("/desativartreinamento", "").trim()
-  );
-
-  if (!id) {
-
-    await sendMessage(
-      phone,
-      "⚠️ Use:\n/desativartreinamento ID"
-    );
-
-    return res.sendStatus(200);
-  }
-
-  await prisma.training.update({
-    where: {
-      id
-    },
-    data: {
-      active: false
-    }
-  });
-
-  await sendMessage(
-    phone,
-    "🔴 Treinamento desativado."
-  );
-
-  return res.sendStatus(200);
-      }
     // =====================================================
 // ATIVAR TREINAMENTO
 // =====================================================
