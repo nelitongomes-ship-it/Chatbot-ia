@@ -19,6 +19,7 @@ const desbloquearAdm = require("./codigos/desbloquearAdm");
 const treinar = require("./IA.treinamentos/treinar");
 const carregarTreinamentos = require("./IA.treinamentos/carregarTreinamentos");
 const listarTreinamentos = require("./IA.treinamentos/listarTreinamentos");
+const {resetarTreinamento} = require("./IA.treinamentos/resetarTreinamento");
 const dolar = require("./comandos/dolar");
 const {consultarEuro} = require("./config/servicos/euro");
 const {consultarBitcoin} = require("./config/servicos/bitcoin");
@@ -403,6 +404,19 @@ if (
   ){
   return;
   }
+
+  if (
+  await resetarTreinamento({
+    message,
+    phone,
+    prisma,
+    sendMessage,
+    adminSessions
+  })
+) {
+  return res.sendStatus(200);
+  }
+  
   
 if (
   await consultarAgenda({
@@ -972,40 +986,8 @@ console.log("16");
     }
 ///////
 console.log("17");
-
-    // =====================================================
-    
-
-    // =====================================================
-    // RESETAR TREINAMENTO
-    // =====================================================
-
-    if (
-      message.startsWith("/resettreino") &&
-      adminSessions[phone]
-    ) {
-
-      await prisma.adminSettings.deleteMany();
-
-      await prisma.adminSettings.create({
-        data: {
-          systemPrompt:
-            "Você é uma IA empresarial profissional."
-        }
-      });
-
-      await sendMessage(
-        phone,
-        "🧠 Treinamentos resetados com sucesso."
-      );
-
-      return res.sendStatus(200);
-    }
-console.log("18");
-    
-
-
-    // =====================================================
+  
+  // =====================================================
 // VER TREINAMENTO
 // =====================================================
 
