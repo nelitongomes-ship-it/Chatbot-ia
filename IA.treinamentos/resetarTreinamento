@@ -1,0 +1,35 @@
+async function resetarTreinamento({
+  message,
+  phone,
+  prisma,
+  sendMessage,
+  adminSessions
+}) {
+
+  if (
+    !message.startsWith("/resettreino") ||
+    !adminSessions[phone]
+  ) {
+    return false;
+  }
+
+  await prisma.adminSettings.deleteMany();
+
+  await prisma.adminSettings.create({
+    data: {
+      systemPrompt:
+        "Você é uma IA empresarial profissional."
+    }
+  });
+
+  await sendMessage(
+    phone,
+    "🧠 Treinamentos resetados com sucesso."
+  );
+
+  return true;
+}
+
+module.exports = {
+  resetarTreinamento
+};
