@@ -1950,51 +1950,7 @@ try {
 
 
 
-// =====================================================
-// COTAÇÃO EURO
-// =====================================================
 
-if (
-  message.toLowerCase().includes("euro")
-) {
-
-  try {
-
-    console.log("Consultando euro...");
-
-    const response = await axios.get(
-      "https://economia.awesomeapi.com.br/json/last/EUR-BRL",
-      {
-        timeout: 10000
-      }
-    );
-
-    console.log(response.data);
-
-    const valor =
-      response.data?.EURBRL?.bid;
-
-    await sendMessage(
-      phone,
-      `💶 Euro atual:\nR$ ${valor}`
-    );
-
-  } catch (error) {
-
-    console.log(
-      "ERRO EURO:",
-      error.message
-    );
-
-    await sendMessage(
-      phone,
-      "⚠️ Não consegui consultar o euro agora."
-    );
-
-  }
-
-  return res.sendStatus(200);
-}
    
 // =====================================================
 // SELIC
@@ -2099,48 +2055,7 @@ if (
 }
 
 // =====================================================
-// BITCOIN
-// =====================================================
 
-if (
-  message.toLowerCase().includes("bitcoin")
-) {
-
-  try {
-
-    console.log("Consultando Bitcoin...");
-
-    const response = await axios.get(
-      "https://economia.awesomeapi.com.br/json/last/BTC-BRL",
-      {
-        timeout: 10000
-      }
-    );
-
-    const valor =
-      response.data?.BTCBRL?.bid;
-
-    await sendMessage(
-      phone,
-      `🪙 Bitcoin atual:\nR$ ${valor}`
-    );
-
-  } catch (error) {
-
-    console.log(
-      "ERRO BITCOIN:",
-      error.message
-    );
-
-    await sendMessage(
-      phone,
-      "⚠️ Não consegui consultar o Bitcoin agora."
-    );
-
-  }
-
-  return res.sendStatus(200);
-}
 
 // =====================================================
 // NOTÍCIAS FINANCEIRAS
