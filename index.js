@@ -286,34 +286,27 @@ console.log("❌ NAO ENTROU ESTATISTICAS");
   //BLOQUEIOS ⬇️
   /////////////////////////////////////////////////////////////
 if (
-  await bloqueios({
-    message,
-    phone,
-    prisma,
-    sendMessage,
-    adminSessions
-  })
-) {
-  return;
-  }
-
-  console.log("✅ RETORNOU BLOQUEIOS");
-  
-
-
-if (
-  await desbloquearAdm({
+  await liberarComandoAdmin({
     message,
     phone
   })
 ) {
-return;
-  }
-
   console.log(
-    "🚀 PASSOU PELO DESBLOQUEIO"
+    "✅ COMANDO ADMIN LIBERADO"
   );
+}
+else if (
+  await verificarBloqueio({
+    phone,
+    prisma,
+    sendMessage
+  })
+) {
+  return;
+}
 
+/////////////////////////////////////////////////////////////////////  
+// SENHA ⬇️
 ////////////////////////////////////////////////////////////////////
 if (
   await recuperarSenha({
