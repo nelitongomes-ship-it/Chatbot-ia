@@ -1278,26 +1278,6 @@ if (
     }
 
 // =====================================================
-// LIMPAR AGENDA COMPLETA
-// =====================================================
-
-if (
-  message.trim() === "/limparagenda"
-) {
-
-  console.log("LIMPANDO AGENDA COMPLETA");
-
-  await prisma.appointment.deleteMany({});
-
-  await sendMessage(
-    phone,
-    "🗑️ Todos os compromissos foram removidos."
-  );
-
-  return res.sendStatus(200);
-}
-    
-// =====================================================
 
  // =====================================================
    
