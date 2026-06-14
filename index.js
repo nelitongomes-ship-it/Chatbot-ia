@@ -38,7 +38,6 @@ const axios = require("axios");
 const fs = require("fs");
 const FormData = require("form-data");
 
-const { PrismaClient } = require("@prisma/client");
 
 const modo1 = require("./modo1");
 const modo2 = require("./modo2");
