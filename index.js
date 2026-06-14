@@ -1,3 +1,4 @@
+const normalizarTelefone = require("./utils/normalizarTelefone");
 const validarTexto = require("./validadores/validarTexto");
 const iniciarLembretes = require("./lembretes");
 const recuperarSenha = require("./comandos/admin");
