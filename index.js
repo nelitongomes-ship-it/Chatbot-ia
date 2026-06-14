@@ -1,3 +1,4 @@
+const {processarRegistroDespesa} = require("./servicos/despesas");
 const prisma = require("./config/prisma");
 const normalizarTelefone = require("./utils/normalizarTelefone");
 const validarTexto = require("./validadores/validarTexto");
