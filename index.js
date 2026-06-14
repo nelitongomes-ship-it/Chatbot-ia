@@ -3,7 +3,7 @@ const {testeBanco} = require("./config/banco/testebanco");
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 const {processarAgendamentoNatural} = require("./config/servicos/agendamentoNatural");
-const {consultarAgenda,agendarCompromissoAdmin,testarTotalAgendamentos,debugAgenda} = require("./config/servicos/agendamentos");
+const {consultarAgenda,agendarCompromissoAdmin,testarTotalAgendamentos,debugAgenda} = require("./config/servicos/agendamentos/agendamentos");
 const {processarRegistroDespesa} = require("./servicos/despesas");
 const prisma = require("./config/prisma");
 const normalizarTelefone = require("./utils/normalizarTelefone");
