@@ -3034,7 +3034,7 @@ Agils IA - Assistente Financeiro
 
   return res.sendStatus(200);
 
-} catch (error) {
+ } catch (error) {
 
   console.log("ERRO SENDMESSAGE:");
   console.log(
@@ -3044,7 +3044,7 @@ Agils IA - Assistente Financeiro
 
   return res.sendStatus(500);
 
-}
+
 
 // =====================================================
 // PORTA
