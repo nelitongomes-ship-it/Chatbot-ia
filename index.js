@@ -3016,7 +3016,7 @@ Agils IA - Assistente Financeiro
 
     return res.sendStatus(200);
 
-//  } catch (error) {//
+ } catch (error) {
 
     console.log(
       error.response?.data ||
