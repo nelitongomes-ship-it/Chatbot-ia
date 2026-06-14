@@ -1,4 +1,4 @@
-
+const {processarAgendamentoNatural} = require("./config/servicos/agendamentoNatural");
 const { consultarAgenda } = require("./config/servicos/agendamentos");
 const {processarRegistroDespesa} = require("./servicos/despesas");
 const prisma = require("./config/prisma");
@@ -354,6 +354,19 @@ if (
 ) {
   return res.sendStatus(200);
 }
+
+  if (
+  await processarAgendamentoNatural({
+    message,
+    phone,
+    prisma,
+    sendMessage
+  })
+) {
+  return res.sendStatus(200);
+  }
+
+  
   
   console.log("TIPO:");
   console.log(tipo);
