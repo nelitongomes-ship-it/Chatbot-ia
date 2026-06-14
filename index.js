@@ -3025,7 +3025,7 @@ Agils IA - Assistente Financeiro
     // =====================================================
 
 
-   try {
+ //  try {
 
   await sendMessage(
     phone,
@@ -3034,7 +3034,7 @@ Agils IA - Assistente Financeiro
 
   return res.sendStatus(200);
 
- } catch (error) {
+// } catch (error) {
 
   console.log("ERRO SENDMESSAGE:");
   console.log(
