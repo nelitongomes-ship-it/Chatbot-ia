@@ -1,3 +1,4 @@
+const validarTexto = require("./validadores/validarTexto");
 const iniciarLembretes = require("./lembretes");
 const recuperarSenha = require("./comandos/admin");
 const bloqueios = require("./comandos/bloqueios");
