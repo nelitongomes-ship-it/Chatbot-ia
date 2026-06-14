@@ -18,7 +18,7 @@ const {listarBloqueados} = require("./bloqueio/listarBloqueados");
 const { verBloqueado } = require("./bloqueio/verBloqueado");
 
 /////////////////////////////////////////////////////////////////////////////////
-const estatisticas = require("./comandos/estatisticas");
+const estatisticas =require("./monitoramento/estatisticas");
 const {saudeSistema} = require("./monitoramento/saudeSistema");
 /////////////////////////////////////////////////////////////////////////////////
 
@@ -266,21 +266,17 @@ if (retornoClientes) {
  ///////////////////////////////////////////////////////////
   //MONITORAMENTO DO SISTEMA ⬇️
   //////////////////////////////////////////////////////////
-  console.log("🚀 CHAMANDO ESTATISTICAS");
-
-if (
+  if (
   await estatisticas({
     message,
     phone,
+    prisma,
     sendMessage,
     adminSessions
   })
 ) {
-  console.log("✅ RETORNOU ESTATISTICAS");
-  return;
+  return res.sendStatus(200);
 }
-
-console.log("❌ NAO ENTROU ESTATISTICAS");
 
 if (
   await saudeSistema({
