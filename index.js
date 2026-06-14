@@ -21,7 +21,7 @@ const listarTreinamentos = require("./IA.treinamentos/listarTreinamentos");
 const dolar = require("./comandos/dolar");
 const {consultarEuro} = require("./config/servicos/euro");
 const {consultarBitcoin} = require("./config/servicos/bitcoin");
-
+const {consultarSelic} = require("./config/servicos/selic");
 
 console.log("🚀 VERSAO 11-06-2026 17:40");
 
@@ -334,6 +334,16 @@ if (
 
 if (
   await consultarBitcoin({
+    message,
+    phone,
+    sendMessage
+  })
+) {
+  return res.sendStatus(200);
+}
+
+if (
+  await consultarSelic({
     message,
     phone,
     sendMessage
