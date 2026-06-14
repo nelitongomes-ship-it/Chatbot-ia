@@ -1717,30 +1717,7 @@ ${contextoSistema === modo1 ? "modo1" : "outro"}`
 } 
   
     // ============================
-    // TESTE BANCO
-// =====================================================
-console.log("CHEGOU ANTES DO TESTEBANCO");
-
-if (
-  message === "/testebanco"
-){
-
-console.log("🔥 TESTEBANCO EXECUTOU 🔥");
-  console.log("PHONE:");
-console.log(phone);
-
-console.log("ADMIN:");
-console.log(isAdminPhone(phone));
-  const cliente =
-    await prisma.client.findFirst();
-
-  await sendMessage(
-    phone,
-    JSON.stringify(cliente, null, 2)
-  );
-
-  return res.sendStatus(200);
-}
+   
 
     // =====================================================
 // VALIDAR CLIENTE
@@ -1795,52 +1772,7 @@ if (cliente?.aiMode === "PAGAMENTO_PENDENTE") {
   contextoSistema = modo8;
   console.log("💳 MODO PAGAMENTO_PENDENTE CARREGADO");
 }  
-//teste temporario//
-  /*
-    // =====================================================
-// TESTE EMAIL
-// =====================================================
 
-if (
-  message.trim() === "/testeemail"
-) {
-
-  console.log("🔥 TESTEEMAIL EXECUTOU");
-
-  const cliente =
-    await prisma.client.findFirst();
-
-  await sendMessage(
-    phone,
-    JSON.stringify(cliente, null, 2)
-  );
-
-  return res.sendStatus(200);
-}
-
-
-  const usuario =
-    await prisma.user.findFirst({
-      where: { phone }
-    });
-
-  const cliente =
-    await prisma.client.findFirst({
-      where: { phone }
-    });
-
-  await sendMessage(
-    phone,
-`USER:
-${JSON.stringify(usuario, null, 2)}
-
-CLIENT:
-${JSON.stringify(cliente, null, 2)}`
-  );
-
-  return res.sendStatus(200);
-}
-*/    
     // =====================================================
 // =====================================================
 // PROMPT
