@@ -11,10 +11,10 @@ const recuperarSenha = require("./comandos/admin");
 ///////////////////////////////////////////////////////////////////////////////
 
 const liberarComandoAdmin = require("./bloqueio/liberarComandoAdmin");
-const {verificarBloqueio} = require("./bloqueio/verificarBloqueio");
+//const {verificarBloqueio} = require("./bloqueio/verificarBloqueio");
 const {bloquearNumero} = require("./bloqueio/bloquearNumero");
-const {desbloquearNumero} = require("./bloqueio/desbloquearNumero");
-const {listarBloqueados} = require("./bloqueio/listarBloqueados");
+//const {desbloquearNumero} = require("./bloqueio/desbloquearNumero");
+//const {listarBloqueados} = require("./bloqueio/listarBloqueados");
 
 /////////////////////////////////////////////////////////////////////////////////
 const estatisticas = require("./comandos/estatisticas");
@@ -297,11 +297,13 @@ if (
     phone
   })
 ) {
+  
   console.log(
     "✅ COMANDO ADMIN LIBERADO"
   );
 }
-else if (
+  
+/*else if (
   await verificarBloqueio({
     phone,
     prisma,
@@ -309,6 +311,18 @@ else if (
   })
 ) {
   return;
+}*/
+  
+  if (
+  await bloquearNumero({
+    message,
+    phone,
+    prisma,
+    sendMessage,
+    adminSessions
+  })
+) {
+  return res.sendStatus(200);
 }
 
 /////////////////////////////////////////////////////////////////////  
