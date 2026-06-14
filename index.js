@@ -1019,35 +1019,8 @@ console.log("17");
       return res.sendStatus(200);
     }
 console.log("18");
-    // =====================================================
-// LIMPAR BANCO
-// =====================================================
+    
 
-if (
-  message === "/limparbanco" &&
-  adminSessions[phone]
-) {
-
-  await prisma.payment.deleteMany({});
-  await prisma.contract.deleteMany({});
-  await prisma.appointment.deleteMany({});
-  await prisma.expense.deleteMany({});
-  await prisma.product.deleteMany({});
-  await prisma.client.deleteMany({});
-  await prisma.user.deleteMany({});
-  await prisma.message.deleteMany({});
-  await prisma.blockedNumber.deleteMany({});
-
-  await sendMessage(
-    phone,
-    "✅ Banco limpo com sucesso."
-  );
-
-  return res.sendStatus(200);
-}
-  
-          
- console.log("19");
 
     // =====================================================
 // VER TREINAMENTO
