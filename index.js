@@ -11,7 +11,7 @@ const recuperarSenha = require("./comandos/admin");
 ///////////////////////////////////////////////////////////////////////////////
 
 const liberarComandoAdmin = require("./bloqueio/liberarComandoAdmin");
-//const {verificarBloqueio} = require("./bloqueio/verificarBloqueio");
+const {verificarBloqueio} = require("./bloqueio/verificarBloqueio");
 const {bloquearNumero} = require("./bloqueio/bloquearNumero");
 //const {desbloquearNumero} = require("./bloqueio/desbloquearNumero");
 //const {listarBloqueados} = require("./bloqueio/listarBloqueados");
@@ -324,6 +324,15 @@ if (
 ) {
   return res.sendStatus(200);
 }
+
+  if (
+  await verificarBloqueio({
+    phone,
+    prisma
+  })
+) {
+  return res.sendStatus(200);
+  }
 
 /////////////////////////////////////////////////////////////////////  
 // SENHA ⬇️
