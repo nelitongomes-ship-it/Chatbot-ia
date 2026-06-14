@@ -18,11 +18,6 @@ const dolar = require("./comandos/dolar");
 
 console.log("🚀 VERSAO 11-06-2026 17:40");
 
-function normalizarTelefone(phone) {
-  return phone
-    .replace("@c.us", "")
-    .replace(/\D/g, "");
-}
 
 
 const ffmpeg = require("fluent-ffmpeg");
