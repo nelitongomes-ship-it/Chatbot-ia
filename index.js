@@ -1,3 +1,4 @@
+const { consultarAgenda } = require("./config/servicos/agendamentos");
 const {processarRegistroDespesa} = require("./servicos/despesas");
 const prisma = require("./config/prisma");
 const normalizarTelefone = require("./utils/normalizarTelefone");
