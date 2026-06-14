@@ -338,6 +338,11 @@ console.log("BODY:", JSON.stringify(req.body, null, 2));
     req.body?.data?.body ||
     req.body?.message ||
     "";
+  //
+  if (!validarTexto(message)) {
+  return res.sendStatus(200);
+  }
+  //
   
 const textoLower =
 String(message || "").toLowerCase();
