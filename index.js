@@ -2910,6 +2910,7 @@ Digite *minha agenda* para consultar seus compromissos.`
         content: msg.content
       }))
     ];
+  //
 try{
     const openaiResponse =
       await axios.post(
@@ -2938,7 +2939,21 @@ try{
 
 console.log("🔥 REPLY IA:");
 console.log(reply);
+//
+  } catch (error) {
+
+  console.log("ERRO OPENAI:");
+  console.log(
+    error.response?.data ||
+    error.message
+  );
+
+  return res.sendStatus(500);
+
+}
+  
   /*
+  
 // =====================================================
 // REGISTRAR DESPESA
 // =====================================================
@@ -3009,25 +3024,26 @@ Agils IA - Assistente Financeiro
     // =====================================================
 
 
-    await sendMessage(
-      phone,
-      reply
-    );
+   try {
 
-    return res.sendStatus(200);
+  await sendMessage(
+    phone,
+    reply
+  );
 
- } catch (error) {
+  return res.sendStatus(200);
 
-    console.log(
-      error.response?.data ||
-      error.message
-    );
+} catch (error) {
 
-    return res.sendStatus(500);
+  console.log("ERRO SENDMESSAGE:");
+  console.log(
+    error.response?.data ||
+    error.message
+  );
 
-  }
+  return res.sendStatus(500);
 
-});
+}
 
 // =====================================================
 // PORTA
