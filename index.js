@@ -303,17 +303,7 @@ if (
     "✅ COMANDO ADMIN LIBERADO"
   );
 }
-  
-/*else if (
-  await verificarBloqueio({
-    phone,
-    prisma,
-    sendMessage
-  })
-) {
-  return;
-}*/
-  
+    
   if (
   await bloquearNumero({
     message,
