@@ -981,23 +981,7 @@ console.log("13");
     userCooldown[phone] = now;
 console.log("14");
     // =====================================================
-    // BLOQUEADOS
-    // =====================================================
-
-    const blocked =
-      await prisma.blockedNumber.findFirst({
-        where: {
-          phone
-        }
-      });
-
-    if (blocked) {
-
-      console.log("Número bloqueado");
-
-      return res.sendStatus(200);
-    }
-console.log("15");
+    
     // =====================================================
     // LOGIN ADMIN
     // =====================================================
