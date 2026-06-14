@@ -76,7 +76,12 @@ if (
     resposta
   );
 
-  return res.sendStatus(200);
+  return true;
 }
 
+return false;
+}
 
+module.exports = {
+  consultarAgenda
+};
