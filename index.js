@@ -1,3 +1,4 @@
+const prisma = require("./config/prisma");
 const normalizarTelefone = require("./utils/normalizarTelefone");
 const validarTexto = require("./validadores/validarTexto");
 const iniciarLembretes = require("./lembretes");
