@@ -1,0 +1,62 @@
+async function excluirTreinamento({
+  message,
+  phone,
+  prisma,
+  sendMessage,
+  adminSessions
+}) {
+
+  if (
+    !message.startsWith(
+      "/excluirtreinamento"
+    )
+  ) {
+    return false;
+  }
+
+  if (!adminSessions[phone]) {
+
+    await sendMessage(
+      phone,
+      "⛔ Faça login administrativo."
+    );
+
+    return true;
+  }
+
+  const id = parseInt(
+    message
+      .replace(
+        "/excluirtreinamento",
+        ""
+      )
+      .trim()
+  );
+
+  if (!id) {
+
+    await sendMessage(
+      phone,
+      "⚠️ Use:\n/excluirtreinamento ID"
+    );
+
+    return true;
+  }
+
+  await prisma.training.delete({
+    where: {
+      id
+    }
+  });
+
+  await sendMessage(
+    phone,
+    "🗑️ Treinamento excluído."
+  );
+
+  return true;
+}
+
+module.exports = {
+  excluirTreinamento
+};
