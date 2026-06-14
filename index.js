@@ -1,4 +1,4 @@
-
+const {testeBanco} = require("./config/banco/testebanco");
 const {processarAgendamentoNatural} = require("./config/servicos/agendamentoNatural");
 const {consultarAgenda,agendarCompromissoAdmin,testarTotalAgendamentos,debugAgenda} = require("./config/servicos/agendamentos");
 const {processarRegistroDespesa} = require("./servicos/despesas");
@@ -460,7 +460,20 @@ if (
 ) {
   return res.sendStatus(200);
   }
-
+  
+////
+if (
+  await testeBanco({
+    message,
+    phone,
+    prisma,
+    sendMessage,
+    isAdminPhone
+  })
+) {
+  return res.sendStatus(200);
+}
+  
   
   
   console.log("TIPO:");
