@@ -1,6 +1,6 @@
 
 const {processarAgendamentoNatural} = require("./config/servicos/agendamentoNatural");
-const {consultarAgenda,agendarCompromissoAdmin} = require("./config/servicos/agendamentos");
+const {consultarAgenda,agendarCompromissoAdmin,testarTotalAgendamentos} = require("./config/servicos/agendamentos");
 const {processarRegistroDespesa} = require("./servicos/despesas");
 const prisma = require("./config/prisma");
 const normalizarTelefone = require("./utils/normalizarTelefone");
@@ -345,6 +345,7 @@ if (
   ){
   return;
   }
+  
 if (
   await consultarAgenda({
     message,
@@ -355,6 +356,7 @@ if (
 ) {
   return res.sendStatus(200);
 }
+  
   if (
   await agendarCompromissoAdmin({
     message,
@@ -366,7 +368,19 @@ if (
 ) {
   return res.sendStatus(200);
   }
-
+  
+if (
+  await testarTotalAgendamentos({
+    message,
+    phone,
+    prisma,
+    sendMessage,
+    adminSessions
+  })
+) {
+  return res.sendStatus(200);
+}
+  
   if (
   await processarAgendamentoNatural({
     message,
