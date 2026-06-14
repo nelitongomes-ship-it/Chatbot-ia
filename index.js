@@ -11,6 +11,7 @@ const recuperarSenha = require("./comandos/admin");
 const bloqueios = require("./comandos/bloqueios");
 const estatisticas = require("./comandos/estatisticas");
 const usuarios = require("./comandos/usuarios");
+/////////////////////////////////////////////////////////////////////////////////////
 const clienteFree = require("./comandos/clientefree");
 const clientes = require("./comandos/clientes");
 ////////////////////////////////////////////////////////////////////////////////////
@@ -1036,52 +1037,7 @@ console.log("17");
   
   // =====================================================
     
-    // =====================================================
-// ATIVAR TREINAMENTO
-// =====================================================
-
-if (message.startsWith("/ativartreinamento")) {
-
-  if (!adminSessions[phone]) {
-
-    await sendMessage(
-      phone,
-      "⛔ Faça login administrativo."
-    );
-
-    return res.sendStatus(200);
-  }
-
-  const id = parseInt(
-    message.replace("/ativartreinamento", "").trim()
-  );
-
-  if (!id) {
-
-    await sendMessage(
-      phone,
-      "⚠️ Use:\n/ativartreinamento ID"
-    );
-
-    return res.sendStatus(200);
-  }
-
-  await prisma.training.update({
-    where: {
-      id
-    },
-    data: {
-      active: true
-    }
-  });
-
-  await sendMessage(
-    phone,
-    "🟢 Treinamento ativado."
-  );
-
-  return res.sendStatus(200);
-}
+    
     // =====================================================
 // EXCLUIR TREINAMENTO
 // =====================================================
