@@ -1,5 +1,7 @@
 const {limparBanco} = require("./config/banco/limparBanco");
 const {testeBanco} = require("./config/banco/testebanco");
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 const {processarAgendamentoNatural} = require("./config/servicos/agendamentoNatural");
 const {consultarAgenda,agendarCompromissoAdmin,testarTotalAgendamentos,debugAgenda} = require("./config/servicos/agendamentos");
 const {processarRegistroDespesa} = require("./servicos/despesas");
@@ -40,8 +42,10 @@ const {editarTreinamento} = require("./IA.treinamentos/editarTreinamento");
 const {desativarTreinamento} = require("./IA.treinamentos/desativarTreinamento");
 const {ativarTreinamento} = require("./IA.treinamentos/ativarTreinamento");
 const {excluirTreinamento} = require("./IA.treinamentos/excluirTreinamento");
-////////////////////////////////////////////////////////////////////////////////////////////////
 
+////////////////////////////////////////////////////////////////////////////////////////////////
+//PESQUISAS ⬇️
+////////////////////////////////////////////////////////////////////////////////////////////////
 
 const dolar = require("./comandos/dolar");
 const {consultarEuro} = require("./config/servicos/euro");
@@ -49,6 +53,13 @@ const {consultarBitcoin} = require("./config/servicos/bitcoin");
 const {consultarSelic} = require("./config/servicos/selic");
 const {consultarCDI} = require("./config/servicos/cdi");
 const {consultarNoticias} = require("./config/servicos/noticias");
+
+////////////////////////////////////////////////////////////////////////////////////////////
+const {debugModo} = require("./pesquisa.tabela/debugModo");
+
+
+
+
 
 
 console.log("🚀 VERSAO 11-06-2026 17:40");
@@ -397,6 +408,9 @@ return;
   console.log(
     "🔐 RECUPERAR SENHA EXECUTOU"  
   );
+  /////////////////////////////////////////////////////
+  //CONSULTAS ⬇️
+  /////////////////////////////////////////////////////
 
 if (
   await dolar({
@@ -457,6 +471,22 @@ if (
 ) {
   return res.sendStatus(200);
   }
+/////////////////////////////////////////////////
+  //TABELAS ⬇️
+  
+  if (
+  await debugModo({
+    message,
+    phone,
+    prisma,
+    sendMessage,
+    contextoSistema,
+    modo1
+  })
+) {
+  return res.sendStatus(200);
+}
+  
 ////////////////////////////////////////////
   //TREINAR IA ⬇️
 ///////////////////////////////////////////
