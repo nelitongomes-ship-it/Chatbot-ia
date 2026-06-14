@@ -1,11 +1,21 @@
+const normalizarTelefone =
+require("../../utils/normalizarTelefone");
+
+async function consultarAgenda({
+  message,
+  phone,
+  prisma,
+  sendMessage
+}) {
+
+
 // =====================================================
 // MEUS COMPROMISSOS
 // =====================================================
 
 if (
   [
-
-  "lembre",   
+  
   "meus compromisso",
   "meus compromissos",
   "agenda",
@@ -68,4 +78,5 @@ if (
 
   return res.sendStatus(200);
 }
-    
+
+
