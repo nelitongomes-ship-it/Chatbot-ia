@@ -241,3 +241,48 @@ async function testarTotalAgendamentos({
   agendarCompromissoAdmin,
   testarTotalAgendamentos
 };
+
+  // =====================================================
+// DEBUG AGENDA
+// =====================================================
+
+async function debugAgenda({
+  message,
+  phone,
+  prisma,
+  sendMessage,
+  adminSessions
+}) {
+
+  if (
+    message.trim() !== "/debugagenda" ||
+    !adminSessions[phone]
+  ) {
+    return false;
+  }
+
+  const agenda =
+    await prisma.appointment.findMany();
+
+  console.log("AGENDA:");
+  console.log(
+    JSON.stringify(
+      agenda,
+      null,
+      2
+    )
+  );
+
+  await sendMessage(
+    phone,
+    `📋 Total encontrados: ${agenda.length}`
+  );
+
+  return true;
+}
+  module.exports = {
+  consultarAgenda,
+  agendarCompromissoAdmin,
+  testarTotalAgendamentos,
+  debugAgenda
+};
