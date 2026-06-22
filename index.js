@@ -32,7 +32,7 @@ const usuarios = require("./comandos/usuarios");
 const salvarUsuario =require("./usuarios/salvarUsuario");
 const salvarMensagem =require("./usuarios/salvarMensagem");
 const carregarHistorico =require("./usuarios/carregarHistorico");
-
+const verificarClienteAtivo =require("./clientes/verificarClienteAtivo");
 /////////////////////////////////////////////////////////////////////////////////////
 //PLANOS
 /////////////////////////////////////////////////////////////////////////////////////
@@ -1241,19 +1241,17 @@ await salvarUsuario({
   });
 
 // =====================================================
-//CADASTRO DESATIVADO//
+//CLIENTE ATIVO//
     
-if (cliente && !cliente.isActive) {
-
-  await sendMessage(
+if (
+  await verificarClienteAtivo({
+    cliente,
     phone,
-`🚫 Seu acesso está desativado.
-
-Entre em contato com a Agils IA.`
-  );
-
+    sendMessage
+  })
+) {
   return res.sendStatus(200);
-    }  
+            }
 
 // =====================================================
 
