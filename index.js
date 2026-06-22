@@ -29,6 +29,9 @@ const {saudeSistema} = require("./monitoramento/saudeSistema");
 
 const usuarios = require("./comandos/usuarios");
 /////////////////////////////////////////////////////////////////////////////////////
+//PLANOS
+/////////////////////////////////////////////////////////////////////////////////////
+const {alterarPlano} = require("./planos/alterarPlano");
 const clienteFree = require("./comandos/clientefree");
 const clientes = require("./comandos/clientes");
 ////////////////////////////////////////////////////////////////////////////////////
@@ -264,7 +267,21 @@ console.log(
 if (retornoClientes) {
   return;
 }
-
+///////////////////////////////////////////////
+  //PLANOS
+  /////////////////////////////////////////////
+if (
+  await alterarPlano({
+    message,
+    phone,
+    prisma,
+    sendMessage,
+    adminSessions
+  })
+) {
+  return res.sendStatus(200);
+}
+  
  if (
   await cadastroTesteGratis({
     message,
