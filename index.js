@@ -63,7 +63,7 @@ const {consultarNoticias} = require("./config/servicos/noticias");
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 const {debugModo} = require("./pesquisa.tabela/debugModo");
-
+const carregarContexto =require("./modos/carregarContexto");
 
 
 
@@ -90,15 +90,6 @@ const axios = require("axios");
 const fs = require("fs");
 const FormData = require("form-data");
 
-
-const modo1 = require("./modo1");
-const modo2 = require("./modo2");
-const modo3 = require("./modo3");
-const modo4 = require("./modo4");
-const modo5 = require("./modo5");
-const modo6 = require("./modo6");
-const modo7 = require("./modo7");
-const modo8 = require("./modo8");
 
 require("dotenv").config();
 
@@ -279,6 +270,7 @@ console.log(
 if (retornoClientes) {
   return;
 }
+  
 ///////////////////////////////////////////////
   //PLANOS
   /////////////////////////////////////////////
@@ -1117,56 +1109,13 @@ console.log("14");
 // VALIDAR CLIENTE
 // =====================================================
 
-const telefoneCliente =
-phone;
-
-const cliente =
-await prisma.client.findFirst({
-where: {
-phone: telefoneCliente
-}
+const {
+  cliente,
+  contextoSistema
+} = await carregarContexto({
+  prisma,
+  phone
 });
-
-console.log("CLIENTE ENCONTRADO:", cliente);
-if (!cliente) {
-console.log("❌ CLIENTE NÃO CADASTRADO");
-} else {
-console.log("✅ CLIENTE CADASTRADO");
-}
-
-let contextoSistema = modo1;
-
-if (cliente?.aiMode === "BASICO") {
-contextoSistema = modo2;
-}
-
-if (cliente?.aiMode === "INTERMEDIARIO") {
-contextoSistema = modo3;
-}
-
-if (cliente?.aiMode === "AGILS_CRED") {
-contextoSistema = modo4;
-}
-
-if (cliente?.aiMode === "AVANCADO") {
-contextoSistema = modo5;
-}
-
-if (cliente?.aiMode === "TESTE_GRATIS") {
-contextoSistema = modo6;
-console.log("🎁 MODO TESTE_GRATIS CARREGADO");
-}
-
-if (cliente?.aiMode === "AGUARDANDO_DADOS_TESTE") {
-  contextoSistema = modo7;
-  console.log("📝 MODO AGUARDANDO_DADOS_TESTE CARREGADO");
-}
-    
-if (cliente?.aiMode === "PAGAMENTO_PENDENTE") {
-  contextoSistema = modo8;
-  console.log("💳 MODO PAGAMENTO_PENDENTE CARREGADO");
-}  
-
     // =====================================================
 // =====================================================
 // PROMPT
