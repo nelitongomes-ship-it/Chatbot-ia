@@ -5,8 +5,7 @@ const {testeBanco} = require("./config/banco/testebanco");
 const {processarAgendamentoNatural} = require("./config/servicos/agendamentoNatural");
 const {consultarAgenda,agendarCompromissoAdmin,testarTotalAgendamentos,debugAgenda} = require("./config/servicos/agendamentos/agendamentos");
 const {limparAgendaCliente} = require("./agendamentos/limparAgendaCliente");
-const {limparAgenda} = require(
-"./config/servicos/agendamentos/limparAgenda");
+const {limparAgenda} = require("./config/servicos/agendamentos/limparAgenda");
 
 const {processarRegistroDespesa} = require("./servicos/despesas");
 const prisma = require("./config/prisma");
@@ -15,7 +14,7 @@ const validarTexto = require("./validadores/validarTexto");
 const iniciarLembretes = require("./lembretes");
 const recuperarSenha = require("./comandos/admin");
 ///////////////////////////////////////////////////////////////////////////////
-
+const loginLogout =require("./comandos/admin/loginLogout");
 const liberarComandoAdmin = require("./bloqueio/liberarComandoAdmin");
 const {verificarBloqueio} = require("./bloqueio/verificarBloqueio");
 const {bloquearNumero} = require("./bloqueio/bloquearNumero");
@@ -397,6 +396,21 @@ if (
 // SENHA ⬇️
 ////////////////////////////////////////////////////////////////////
 if (
+  await loginLogout({
+    message,
+    phone,
+    sendMessage,
+    adminSessions,
+    ADMIN_USER,
+    ADMIN_PASS,
+    isAdminPhone
+  })
+) {
+  return res.sendStatus(200);
+}
+  
+  
+  if (
   await recuperarSenha({
     message,
     phone,
