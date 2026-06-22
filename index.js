@@ -27,7 +27,7 @@ const limparHistorico = require("./historico/limparHistorico");
 const estatisticas =require("./monitoramento/estatisticas");
 const {saudeSistema} = require("./monitoramento/saudeSistema");
 /////////////////////////////////////////////////////////////////////////////////
-
+const statusConta =require("./usuarios/statusConta");
 const usuarios = require("./comandos/usuarios");
 /////////////////////////////////////////////////////////////////////////////////////
 //PLANOS
@@ -238,6 +238,17 @@ if (
 }
 console.log("🚀 RETORNOU USUARIOS.JS");
 
+if (
+  await statusConta({
+    textoLower,
+    phone,
+    prisma,
+    sendMessage
+  })
+) {
+  return res.sendStatus(200);
+}
+  
 if (
   await clienteFree({
     message,
@@ -831,44 +842,6 @@ console.log("🔥 PASSOU DO TEXTO LOWER");
 console.log("1");
   
 //====================================================
-// STATUS DA CONTA
-// =====================================================
-console.log("2");
-
-
-if (textoLower === "status") {
-
-  const usuario = await prisma.user.findFirst({
-    where: {
-      phone
-    }
-  });
-
-  if (!usuario) {
-
-    await sendMessage(
-      phone,
-      "❌ Usuário não encontrado."
-    );
-
-    return res.sendStatus(200);
-  }
-
-  await sendMessage(
-    phone,
-    `📋 Status da conta
-
-Plano: ${usuario.planType}
-
-Modo: ${usuario.aiMode}
-
-Ativo: ${usuario.isActive ? "SIM" : "NÃO"}`
-  );
-
-  return res.sendStatus(200);
-         }
-
-  console.log("3");
 
   // =====================================
   // PLANOS PAGOS (CLIENT)
