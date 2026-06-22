@@ -1125,45 +1125,6 @@ console.log("13");
 console.log("14");
     // =====================================================
     
-    // =====================================================
-// ALTERAR PLANO
-// =====================================================
-
-if (
-  message.startsWith("/alterarplano") &&
-  adminSessions[phone]
-) {
-
-  const dados =
-    message.replace("/alterarplano", "")
-    .trim()
-    .split("|");
-
-  const telefone = dados[0]?.trim();
-  const novoPlano = dados[1]?.trim();
-
-  await prisma.client.updateMany({
-    where: {
-      phone: telefone
-    },
-    data: {
-      planType: novoPlano
-    }
-  });
-
-  await sendMessage(
-  phone,
-`
-📦 Plano alterado
-
-📱 Telefone: ${telefone}
-📦 Novo plano: ${novoPlano}
-`
-);
-
-
-  return res.sendStatus(200);
-}
       
 // ===================================================== 
     // LIMPAR HISTÓRICO
