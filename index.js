@@ -29,6 +29,8 @@ const {saudeSistema} = require("./monitoramento/saudeSistema");
 /////////////////////////////////////////////////////////////////////////////////
 const statusConta =require("./usuarios/statusConta");
 const usuarios = require("./comandos/usuarios");
+const salvarUsuario =require("./usuarios/salvarUsuario");
+
 /////////////////////////////////////////////////////////////////////////////////////
 //PLANOS
 /////////////////////////////////////////////////////////////////////////////////////
@@ -1212,37 +1214,10 @@ if (message === "/testebanco") {
 // SALVAR USUÁRIO
 // =====================================================
 
-console.log("ANTES DO USER");
-
-try {
-
-  const usuario = await prisma.user.findFirst({
-    where: {
-      phone
-    }
-  });
-
-  console.log("USUARIO ENCONTRADO:");
-  console.log(usuario);
-
-  if (!usuario) {
-
-    await prisma.user.create({
-      data: {
-        phone
-      }
-    });
-
-    console.log("USUARIO CRIADO");
-  }
-
-} catch (erro) {
-
-  console.log("ERRO USER:");
-  console.log(erro);
-
-}
-
+await salvarUsuario({
+  prisma,
+  phone
+});
     // =====================================================
     // SALVAR MSG USER
     // =====================================================
