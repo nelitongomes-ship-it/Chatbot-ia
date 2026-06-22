@@ -31,6 +31,7 @@ const statusConta =require("./usuarios/statusConta");
 const usuarios = require("./comandos/usuarios");
 const salvarUsuario =require("./usuarios/salvarUsuario");
 const salvarMensagem =require("./usuarios/salvarMensagem");
+const carregarHistorico =require("./usuarios/carregarHistorico");
 
 /////////////////////////////////////////////////////////////////////////////////////
 //PLANOS
@@ -1234,16 +1235,10 @@ await salvarUsuario({
     // =====================================================
 
     const historico =
-      await prisma.message.findMany({
-        where: {
-          phone
-        },
-        orderBy: {
-          createdAt: "asc"
-        },
-        take: 100
-      });
-
+  await carregarHistorico({
+    prisma,
+    phone
+  });
 
 // =====================================================
 //CADASTRO DESATIVADO//
