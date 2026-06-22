@@ -30,6 +30,7 @@ const {saudeSistema} = require("./monitoramento/saudeSistema");
 const statusConta =require("./usuarios/statusConta");
 const usuarios = require("./comandos/usuarios");
 const salvarUsuario =require("./usuarios/salvarUsuario");
+const salvarMensagem =require("./usuarios/salvarMensagem");
 
 /////////////////////////////////////////////////////////////////////////////////////
 //PLANOS
@@ -1222,14 +1223,12 @@ await salvarUsuario({
     // SALVAR MSG USER
     // =====================================================
 
-    await prisma.message.create({
-      data: {
-        phone,
-        role: "user",
-        content: message
-      }
-    });
-
+    await salvarMensagem({
+  prisma,
+  phone,
+  role: "user",
+  content: message
+});
     // =====================================================
     // HISTÓRICO
     // =====================================================
@@ -1429,13 +1428,12 @@ Agils IA - Assistente Financeiro
     // SALVAR MSG IA
     // =====================================================
 
-    await prisma.message.create({
-      data: {
-        phone,
-        role: "assistant",
-        content: reply
-      }
-    });
+    await salvarMensagem({
+  prisma,
+  phone,
+  role: "assistant",
+  content: reply
+});
 
     // =====================================================
     // RESPONDER
